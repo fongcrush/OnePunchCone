@@ -6,7 +6,7 @@ public class EnemyTraceState : EnemyBaseState
 {
     public override void Begin(EnemyController ctrl)
     {
-        Debug.Log("EnemyTraceState Begin");
+        
     }
     public override void Update(EnemyController ctrl)
     {
@@ -31,14 +31,14 @@ public class EnemyTraceState : EnemyBaseState
             return;
         }
 
-        ctrl.moveTarget();
+        ctrl.TraceTarget();
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {
-        Debug.Log("EnemyTraceState OnCollisionEnter");
+        
     }
     public override void End(EnemyController ctrl)
     {
-        Debug.Log("EnemyTraceState End");
+        
     }
 }

@@ -6,7 +6,7 @@ public class EnemyIdleState : EnemyBaseState
 {
     public override void Begin(EnemyController ctrl)
     {
-        Debug.Log("EnemyIdleState Begin");
+        
     }
     public override void Update(EnemyController ctrl)
     {
@@ -23,10 +23,10 @@ public class EnemyIdleState : EnemyBaseState
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {
-        Debug.Log("EnemyIdleState OnCollisionEnter");
+        
     }
     public override void End(EnemyController ctrl)
     {
-        Debug.Log("EnemyIdleState End");
+        
     }
 }
