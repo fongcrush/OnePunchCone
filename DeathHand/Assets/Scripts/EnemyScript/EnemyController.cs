@@ -7,10 +7,16 @@ public class EnemyController : MonoBehaviour
     private EnemyBaseState currentState;
     private EnemyBaseState prevState;
 
+    public GameObject EnemyAttackCollider;
+    private MeshRenderer EnemyAttackColliderMesh;
+
     public float TraceRange = 5.0f;
     public float AttackRange = 2.0f;
-    public float Speed = 0.75f;
+    public float Speed = 7.5f;
+
     public Transform targetTransform;
+
+    private bool isActivation = false;
 
     public EnemyBaseState CurrentState
     {
@@ -24,6 +30,7 @@ public class EnemyController : MonoBehaviour
 
     private void Awake()
     {
+        EnemyAttackColliderMesh = EnemyAttackCollider.GetComponent<MeshRenderer>();
         currentState = IdleState;
     }
     private void Start()
@@ -36,6 +43,11 @@ public class EnemyController : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "PlayerAttackCollider")
+        {
+            // 데미지 조정 필요
+            gameObject.GetComponent<Enemy>().OnDamage(50.0f);
+        }
         currentState.OnCollisionEnter(this);
     }
     public void ChangeState(EnemyBaseState state)
@@ -51,15 +63,15 @@ public class EnemyController : MonoBehaviour
     }
     public bool CheckInTraceRange()
     {
-        return ((CalcTargetDistance() < TraceRange) ? true : false);
+        return (CalcTargetDistance() < TraceRange) ? true : false;
     }
     public bool CheckInAttackRange()
     {
-        return ((CalcTargetDistance() < AttackRange) ? true : false);
+        return (CalcTargetDistance() < AttackRange && Mathf.Abs(transform.position.y - targetTransform.position.y) < 0.3f) ? true : false;
     }
     public bool IsAlive()
     {
-        return false;
+        return (gameObject.GetComponent<Enemy>().GetEnemyHp() > 0) ? true : false;
     }
     public bool IsAliveTarget()
     {
@@ -67,9 +79,55 @@ public class EnemyController : MonoBehaviour
 
         return true;
     }
-    public void moveTarget()
+    public void CheckTargetPosition()
     {
+        // 타겟이 왼쪽
+        if (transform.position.x - targetTransform.position.x > 0 && transform.rotation != Quaternion.Euler(0f, 0f, 0f))
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        // 타겟이 오른쪽
+        else if (transform.position.x - targetTransform.position.x < 0 && transform.rotation != Quaternion.Euler(0f, 180f, 0f))
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+    }
+    public void TraceTarget()
+    {
+        CheckTargetPosition();
+
         Vector3 velo = Vector3.zero;
-        transform.position = Vector3.SmoothDamp(transform.position, targetTransform.position, ref velo, Speed);
+        transform.position = Vector3.Lerp(transform.position, targetTransform.position, Speed * Time.deltaTime);
+    }
+    public void Attack()
+    {
+        CheckTargetPosition();
+
+        StartCoroutine("AttackActivation");
+    }
+    public bool GetIsActivation()
+    {
+        return isActivation;
+    }
+    IEnumerator AttackActivation()
+    {
+        // 적 공격 박스 활성화
+        EnemyAttackCollider.SetActive(true);
+        isActivation = true;
+
+        // 적 공격 박스의 투명도를 0에서 0.5까지 조정
+        for (var f = 0f; f <= 0.5f; f += 0.05f)
+        {
+            var c = EnemyAttackColliderMesh.material.color;
+            c.a = f;
+            EnemyAttackColliderMesh.material.color = c;
+            yield return new WaitForSeconds(.1f);
+        }
+        // Damage
+
+        // n초 후 공격 종료
+        // yield return new WaitForSeconds();
+
+        // 0.2초 후 코루틴 종료 및 적 공격 박스 비활성화
+        yield return new WaitForSeconds(0.2f);
+
+        EnemyAttackCollider.SetActive(false);
+        isActivation = false;
     }
 }

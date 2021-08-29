@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class Player : Actor
 {
+    PlayerFSM playerState;
     PlayerController playerController;
 
     private void Awake()
     {        
         Hp = 10.0f;
+        Debug.Log("Player Hp: " + Hp);
     }
 
     // Start is called before the first frame update
     void Start()
     {        
-        playerController = GetComponent<PlayerController>();   
+        playerController = GetComponent<PlayerController>();        
     }
 
     // Update is called once per frame

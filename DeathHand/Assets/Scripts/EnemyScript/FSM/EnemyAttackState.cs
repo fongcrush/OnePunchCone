@@ -6,10 +6,13 @@ public class EnemyAttackState : EnemyBaseState
 {
     public override void Begin(EnemyController ctrl)
     {
-        Debug.Log("EnemyAttackState Begin");
+        
     }
     public override void Update(EnemyController ctrl)
     {
+        if (ctrl.GetIsActivation())
+            return;
+
         if(!ctrl.IsAlive())
         {
             ctrl.ChangeState(ctrl.DeadState);
@@ -25,13 +28,15 @@ public class EnemyAttackState : EnemyBaseState
             ctrl.ChangeState(ctrl.TraceState);
             return;
         }
+
+        ctrl.Attack();
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {
-        Debug.Log("EnemyAttackState OnCollisionEnter");
+        
     }
     public override void End(EnemyController ctrl)
     {
-        Debug.Log("EnemyAttackState End");
+        
     }
 }

@@ -25,8 +25,7 @@ public class PlayerFSM : MonoBehaviour
     }
     private void Walk()
     {
-        if(playerState != States.Run)
-            playerState = States.Walk;
+        playerState = States.Walk;
     }
     private void Run()
     {

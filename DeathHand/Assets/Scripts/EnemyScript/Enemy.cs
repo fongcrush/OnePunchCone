@@ -6,8 +6,17 @@ public class Enemy : Actor
 {
     private void Awake()
     {
-        Hp = 10.0f;
+        Hp = 700.0f;
         Debug.Log("Enemy Hp: " + Hp);
+    }
+
+    public void OnDamage(float Damage)
+    {
+        Hp -= Damage;
+    }
+    public float GetEnemyHp()
+    {
+        return Hp;
     }
 
     // Start is called before the first frame update
