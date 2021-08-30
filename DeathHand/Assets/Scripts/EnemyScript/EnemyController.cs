@@ -16,7 +16,8 @@ public class EnemyController : MonoBehaviour
 
     public Transform targetTransform;
 
-    private bool isActivation = false;
+    private bool isAttackColliderActivation = false;
+    private bool isOnDamage = false;
 
     public EnemyBaseState CurrentState
     {
@@ -67,7 +68,7 @@ public class EnemyController : MonoBehaviour
     }
     public bool CheckInAttackRange()
     {
-        return (CalcTargetDistance() < AttackRange && Mathf.Abs(transform.position.y - targetTransform.position.y) < 0.3f) ? true : false;
+        return (CalcTargetDistance() < AttackRange && Mathf.Abs(transform.position.z - targetTransform.position.z) < 0.3f) ? true : false;
     }
     public bool IsAlive()
     {
@@ -94,6 +95,16 @@ public class EnemyController : MonoBehaviour
 
         Vector3 velo = Vector3.zero;
         transform.position = Vector3.Lerp(transform.position, targetTransform.position, Speed * Time.deltaTime);
+
+        if(Mathf.Abs(transform.position.x - targetTransform.position.x) <= 0.5f)
+        {
+            if (transform.position.x - targetTransform.position.x > 0)
+                transform.position = new Vector3(targetTransform.position.x + 0.5f, transform.position.y, transform.position.z);
+            else
+                transform.position = new Vector3(targetTransform.position.x - 0.5f, transform.position.y, transform.position.z);
+        }
+
+        transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
     }
     public void Attack()
     {
@@ -101,15 +112,15 @@ public class EnemyController : MonoBehaviour
 
         StartCoroutine("AttackActivation");
     }
-    public bool GetIsActivation()
+    public bool GetIsAttackColliderActivation()
     {
-        return isActivation;
+        return isAttackColliderActivation;
     }
     IEnumerator AttackActivation()
     {
         // 적 공격 박스 활성화
         EnemyAttackCollider.SetActive(true);
-        isActivation = true;
+        isAttackColliderActivation = true;
 
         // 적 공격 박스의 투명도를 0에서 0.5까지 조정
         for (var f = 0f; f <= 0.5f; f += 0.05f)
@@ -128,6 +139,6 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         EnemyAttackCollider.SetActive(false);
-        isActivation = false;
+        isAttackColliderActivation = false;
     }
 }
