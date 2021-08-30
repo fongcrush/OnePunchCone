@@ -17,10 +17,17 @@ public class PlayerController : MonoBehaviour
         Up
     }
 
+    enum CharacterDirection
+	{
+        Right,
+        Left
+	}
+
     PlayerFSM playerState;
 
     [SerializeField]
     private MoveDirection moveDirection;
+    private CharacterDirection characterDirection;
 
     [SerializeField]
     private int dashCount;
@@ -33,7 +40,10 @@ public class PlayerController : MonoBehaviour
 
     private const float MinWallDistance = 0.5f;
     private float[] FirstTime;
-    private bool[] canRun;   
+    private bool[] canRun;
+
+    [SerializeField]
+    private float maxAttackRange = 1.0f;           // 기본 공격 최대사거리
 
     private void Awake()
     {
@@ -41,6 +51,7 @@ public class PlayerController : MonoBehaviour
         FirstTime = new float[4];
         canRun = new bool[4];
         moveDirection = MoveDirection.None;
+        characterDirection = CharacterDirection.Right;
         dashCount = 2;
         useDash = false;
     }
@@ -81,18 +92,28 @@ public class PlayerController : MonoBehaviour
             WalkOrRun("LeftArrow", canRun[0]);
         }
         // 달리기 변수 초기화, 대쉬용 방향 처리
-        if (Input.GetKeyUp(KeyCode.LeftArrow)) { canRun[0] = false; if (moveDirection == MoveDirection.LeftDown) { moveDirection = MoveDirection.Down; } if (moveDirection == MoveDirection.LeftUp) { moveDirection = MoveDirection.Up; } }
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            canRun[0] = false; if (moveDirection == MoveDirection.LeftDown) moveDirection = MoveDirection.Down;
+            if (moveDirection == MoveDirection.LeftUp) moveDirection = MoveDirection.Up;
+        }
         if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) == false)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow)) { canRun[1] = CheckRun("RightArrow"); }
             WalkOrRun("RightArrow", canRun[1]);
         }
-        if (Input.GetKeyUp(KeyCode.RightArrow)) { canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down; } if (moveDirection == MoveDirection.RightUp) { moveDirection = MoveDirection.Up; } }
+
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+        {
+            canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down;} 
+            if (moveDirection == MoveDirection.RightUp) { moveDirection = MoveDirection.Up; }
+        }
         if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow) == false)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow)) { canRun[2] = CheckRun("DownArrow"); }
             WalkOrRun("DownArrow", canRun[2]);
         }
+
         if (Input.GetKeyUp(KeyCode.DownArrow)) { canRun[2] = false; }
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) == false)
         {
@@ -126,15 +147,34 @@ public class PlayerController : MonoBehaviour
         // 공격
         if (Input.GetKeyDown(KeyCode.Z)) 
         {
-            
+            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+			{
+                if(characterDirection == CharacterDirection.Left)
+                {
+                    RayCast("Left", maxAttackRange);
+                }
+                else
+                {
+                    RayCast("Right", maxAttackRange);
+                }
+            }
         }
+        // 스킬 1
         if (Input.GetKeyDown(KeyCode.X))
         {
-
+            //곻격중 또는 죽지 않았을 경우 공격 가능.
+            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+            {
+                
+            }
         }
+        //스킬 2
         if (Input.GetKeyDown(KeyCode.C))
         {
+            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+            {
 
+            }
         }
     }
 
