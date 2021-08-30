@@ -10,15 +10,14 @@ public class EnemyAttackState : EnemyBaseState
     }
     public override void Update(EnemyController ctrl)
     {
-        if (ctrl.GetIsActivation())
-            return;
-
         if(!ctrl.IsAlive())
         {
             ctrl.ChangeState(ctrl.DeadState);
             return;
         }
-        if(!ctrl.IsAliveTarget())
+        if (ctrl.GetIsAttackColliderActivation())
+            return;
+        if (!ctrl.IsAliveTarget())
         {
             ctrl.ChangeState(ctrl.IdleState);
             return;
