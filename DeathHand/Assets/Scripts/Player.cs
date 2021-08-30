@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : Actor
 {
-    PlayerFSM playerState;
     PlayerController playerController;
 
     private void Awake()
