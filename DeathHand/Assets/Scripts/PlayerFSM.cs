@@ -52,44 +52,42 @@ public class PlayerFSM : MonoBehaviour
         playerState = States.Dead;
     }
 
-    public string State 
+    public void SetState(string state) 
     {
-        get
+        switch (state) 
         {
-            return playerState.ToString();
+            case "Idle":
+                Idle();
+                break;
+            case "Walk":
+                Walk();
+                break;
+            case "Run":
+                Run();
+                break;
+            case "Desh":
+                Desh();
+                break;
+            case "Attack":
+                Attack();
+                break;
+            case "Skill1":
+                Skill1();
+                break;
+            case "Skill2":
+                Skill2();
+                break;
+            case "Dead":
+                Dead();
+                break;
+            default:
+                Debug.LogWarning("Error: Can't Find String to Set State");
+                break;
         }
-        set 
-        {
-            switch (value)
-            {
-                case "Idle":
-                    Idle();
-                    break;
-                case "Walk":
-                    Walk();
-                    break;
-                case "Run":
-                    Run();
-                    break;
-                case "Desh":
-                    Desh();
-                    break;
-                case "Attack":
-                    Attack();
-                    break;
-                case "Skill1":
-                    Skill1();
-                    break;
-                case "Skill2":
-                    Skill2();
-                    break;
-                case "Dead":
-                    Dead();
-                    break;
-                default:
-                    Debug.LogWarning("Error: Can't Find String to Set State");
-                    break;
-            }
-        }
+    }
+
+    public string GetState() 
+    {
+        return playerState.ToString();
     }
 }
