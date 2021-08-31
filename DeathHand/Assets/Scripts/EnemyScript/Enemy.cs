@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Enemy : Actor
 {
+    public StatusManager stat;
     private void Awake()
     {
-        Hp = 700.0f;
-        Debug.Log("Enemy Hp: " + Hp);
+        stat = new StatusManager(700, 0, 10);
+        Debug.Log("Enemy Hp: " + stat.curHP);
     }
 
     public void OnDamage(float Damage)
@@ -28,6 +29,6 @@ public class Enemy : Actor
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(stat.curHP);
     }
 }

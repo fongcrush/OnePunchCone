@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
         Left
 	}
 
+    Player player;
     PlayerFSM playerState;
 
     [SerializeField]
@@ -42,8 +43,7 @@ public class PlayerController : MonoBehaviour
     private float[] FirstTime;
     private bool[] canRun;
 
-    [SerializeField]
-    private float maxAttackRange = 1.0f;           // 기본 공격 최대사거리
+    private Transform AttackCollObject;
 
     private void Awake()
     {
@@ -54,11 +54,13 @@ public class PlayerController : MonoBehaviour
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
         useDash = false;
+        AttackCollObject = GameObject.Find("Player").transform.Find("AttackColl");
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GetComponent<Player>();
         playerState = GetComponent<PlayerFSM>();
         playerState.State = "Idle";
     }
@@ -66,7 +68,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputKey();
+        if(playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+        {
+            MoveInput();
+            ActionInput();
+        }
     }
 
     public int DashCount
@@ -80,12 +86,25 @@ public class PlayerController : MonoBehaviour
         set { useDash = value; }
     }
 
+    /// <summary>
+    /// 캐릭터가 왼쪽 방향을 보면 return false
+    /// 오른쪽 방향을 보면 return true
+    /// </summary>
+    /// <returns></returns>
+    public bool LeftOrRight()
+	{
+        if(characterDirection == CharacterDirection.Left)
+            return true;
+        else
+            return false;
+	}
 
-    void InputKey()
+    void MoveInput()
     {
         // 방향키 누르다가 반대편 방향키 누르면 양 방향 키입력 무시
         if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow) == false)
         {
+            characterDirection = CharacterDirection.Left;
             // 연속키입력 확인용
             if (Input.GetKeyDown(KeyCode.LeftArrow)) { canRun[0] = CheckRun("LeftArrow"); }
             // 움직이는 함수
@@ -99,6 +118,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) == false)
         {
+            characterDirection = CharacterDirection.Right;
             if (Input.GetKeyDown(KeyCode.RightArrow)) { canRun[1] = CheckRun("RightArrow"); }
             WalkOrRun("RightArrow", canRun[1]);
         }
@@ -106,11 +126,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.RightArrow))
         {
             canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down;} 
-            if (moveDirection == MoveDirection.RightUp) { moveDirection = MoveDirection.Up; }
+            if (moveDirection == MoveDirection.RightUp) moveDirection = MoveDirection.Up;
         }
         if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow) == false)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow)) { canRun[2] = CheckRun("DownArrow"); }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) canRun[2] = CheckRun("DownArrow");
             WalkOrRun("DownArrow", canRun[2]);
         }
 
@@ -144,38 +164,39 @@ public class PlayerController : MonoBehaviour
                 DoDesh(moveDirection.ToString());
             }
         }
+    }
+
+    void ActionInput()
+    {
         // 공격
-        if (Input.GetKeyDown(KeyCode.Z)) 
+        if(Input.GetKeyDown(KeyCode.Z))
         {
-            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
-			{
-                if(characterDirection == CharacterDirection.Left)
-                {
-                    RayCast("Left", maxAttackRange);
-                }
-                else
-                {
-                    RayCast("Right", maxAttackRange);
-                }
-            }
+            StartCoroutine(AttackRountine(0.5f, 1f));
         }
         // 스킬 1
-        if (Input.GetKeyDown(KeyCode.X))
+        if(Input.GetKeyDown(KeyCode.X))
         {
-            //곻격중 또는 죽지 않았을 경우 공격 가능.
-            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
-            {
-                
-            }
         }
         //스킬 2
-        if (Input.GetKeyDown(KeyCode.C))
+        if(Input.GetKeyDown(KeyCode.C))
         {
-            if(playerState.State != "Dead" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
-            {
-
-            }
         }
+    }
+
+    IEnumerator AttackRountine(float delay, float attackSpeed)
+    {
+        playerState.State = "Attack";
+        player.stat.Power = player.AttackDamage;
+        AttackCollObject.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        AttackCollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+        Debug.Log("공격");
+        yield return new WaitForSeconds(0.1f);
+        Debug.Log("공격 완료");
+        AttackCollObject.gameObject.SetActive(false);
+        AttackCollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
+        yield return new WaitForSeconds(attackSpeed - delay);
+        playerState.State = "Idle";
     }
 
     bool CheckRun(string keyCode)
@@ -336,41 +357,69 @@ public class PlayerController : MonoBehaviour
     bool RayCast(string direction, float maxDistance)
     {
         RaycastHit[] raycastHit;
-        switch (direction)
+
+        switch(direction)
         {
-            case "Left":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 0), maxDistance);
-                break;
-            case "LeftUp":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 1), maxDistance);
-                break;
-            case "LeftDown":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, -1), maxDistance);
-                break;
-            case "Right":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), maxDistance);
-                break;
-            case "RightUp":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 1), maxDistance);
-                break;
-            case "RightDown":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, -1), maxDistance);
-                break;
-            case "Down":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, -1), maxDistance);
-                break;
-            case "Up":
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, 1), maxDistance);
-                break;
-            default:
-                Debug.LogWarning("RayCast No Direction");
-                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), 0.0f);
-                break;
+        case "Left":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 0), maxDistance);
+            break;
+        case "LeftUp":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 1), maxDistance);
+            break;
+        case "LeftDown":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, -1), maxDistance);
+            break;
+        case "Right":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), maxDistance);
+            break;
+        case "RightUp":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 1), maxDistance);
+            break;
+        case "RightDown":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, -1), maxDistance);
+            break;
+        case "Down":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, -1), maxDistance);
+            break;
+        case "Up":
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, 1), maxDistance);
+            break;
+        default:
+            Debug.LogWarning("RayCast No Direction");
+            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), 0.0f);
+            break;
         }
-        for (int i = 0; i < raycastHit.Length; i++)
+        for(int i = 0; i < raycastHit.Length; i++)
         {
-            if (raycastHit[i].transform.tag == "Wall")
+            if(raycastHit[i].transform.tag == "Wall")
             {
+                switch(direction)
+                {
+                case "Left":
+                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, transform.position.z);
+                    break;
+                case "LeftUp":
+                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                    break;
+                case "LeftDown":
+                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                    break;
+                case "Right":
+                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, transform.position.z);
+                    break;
+                case "RightUp":
+                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                    break;
+                case "RightDown":
+                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                    break;
+                case "Down":
+                    transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z + 0.5f);
+                    break;
+                case "Up":
+                    transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z - 0.5f);
+                    break;
+                }
                 Debug.LogWarning("RayToWall You Can't Dash of Move");
                 return false;
             }
