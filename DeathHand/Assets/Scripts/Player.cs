@@ -83,6 +83,13 @@ public class Player : Actor
             }
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Arrow")
+        {
+            Destroy(other.gameObject);
+        }
+    }
 
     void UpdateDashGodMode() 
     {
