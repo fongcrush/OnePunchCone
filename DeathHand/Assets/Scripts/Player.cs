@@ -8,9 +8,9 @@ public class Player : Actor
     PlayerController playerController;
 
     [SerializeField]
-    bool deshGodMode;
-    float deshGodModeTime;
-    const float MaxDeshGodModeTimer = 0.3f;
+    bool dashGodMode;
+    float dashGodModeTime;
+    const float MaxDashGodModeTimer = 0.3f;
     public StatusManager stat;
     private int attackDamage = 50;
     private int skill1Damage = 250;
@@ -35,8 +35,8 @@ public class Player : Actor
     private void Awake()
     {
         stat = new StatusManager(100, 100, 50);
-        deshGodMode = false;
-        deshGodModeTime = 0.0f;
+        dashGodMode = false;
+        dashGodModeTime = 0.0f;
         dashTime = 0.0f;
         skill1CollDown = 0.0f;
         skill2CollDown = 0.0f;
@@ -77,7 +77,7 @@ public class Player : Actor
     {
         if(collision.transform.tag == "Enemy") 
         {
-            if (deshGodMode == false) 
+            if (dashGodMode == false) 
             {
                 Hp -= 0.5f;
             }
@@ -86,13 +86,13 @@ public class Player : Actor
 
     void UpdateDashGodMode() 
     {
-        deshGodMode = true;
-        deshGodModeTime += Time.deltaTime;
-        if (deshGodModeTime >= MaxDeshGodModeTimer) 
+        dashGodMode = true;
+        dashGodModeTime += Time.deltaTime;
+        if (dashGodModeTime >= MaxDashGodModeTimer) 
         {
             playerController.UseDash = false;
-            deshGodMode = false;
-            deshGodModeTime = 0.0f;
+            dashGodMode = false;
+            dashGodModeTime = 0.0f;
         }
     }
 }

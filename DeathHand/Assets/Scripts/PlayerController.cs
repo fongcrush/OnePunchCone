@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     private const float WalkSpeed = 1;
     private float runSpeed;
-    private const float DeshSpeed = 10;
+    private const float DashSpeed = 10;
 
     private const float MinWallDistance = 0.5f;
     private float[] FirstTime;
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
-                DoDesh(moveDirection.ToString());
+                DoDash(moveDirection.ToString());
                 playerState.State = "Idle";
             }
         }
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
             isTiming = false;
         }
     }
-    /* LeftShift(DoDesh)
+    /* LeftShift(DoDash)
     
         if(isTiming)
         {
@@ -210,11 +210,11 @@ public class PlayerController : MonoBehaviour
         {
             if (playerState.State == "Run" || playerState.State == "Walk")
             {
-                DoDesh(moveDirection.ToString());
+                DoDash(moveDirection.ToString());
             }
             if (playerState.State == "Idle")
             {
-                DoDesh(moveDirection.ToString());
+                DoDash(moveDirection.ToString());
             }
         }
     }
@@ -450,28 +450,28 @@ public class PlayerController : MonoBehaviour
         switch (direction)
         {
             case "Left":
-                Debug.DrawRay(transform.position, new Vector3(-DeshSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
                 break;
             case "LeftUp":
-                Debug.DrawRay(transform.position, new Vector3(-DeshSpeed, 0, DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
             case "LeftDown":
-                Debug.DrawRay(transform.position, new Vector3(-DeshSpeed, 0, -DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
             case "Right":
-                Debug.DrawRay(transform.position, new Vector3(DeshSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
                 break;
             case "RightUp":
-                Debug.DrawRay(transform.position, new Vector3(DeshSpeed, 0, DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
             case "RightDown":
-                Debug.DrawRay(transform.position, new Vector3(DeshSpeed, 0, -DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
             case "Down":
-                Debug.DrawRay(transform.position, new Vector3(0, 0, -DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(0, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
             case "Up":
-                Debug.DrawRay(transform.position, new Vector3(0, 0, DeshSpeed), new Color(0, 1, 0), 1.0f);
+                Debug.DrawRay(transform.position, new Vector3(0, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
                 break;
         }
     }
@@ -549,7 +549,7 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    void DoDesh(string direction)
+    void DoDash(string direction)
     {
 
         switch (direction)
@@ -560,7 +560,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x - DeshSpeed, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
                 }
                 break;
             case "LeftUp":
@@ -569,7 +569,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x - DeshSpeed, transform.position.y, transform.position.z + DeshSpeed);
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
             case "LeftDown":
@@ -578,7 +578,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x - DeshSpeed, transform.position.y, transform.position.z - DeshSpeed);
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
             case "Right":
@@ -587,7 +587,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
                 }
                 break;
             case "RightUp":
@@ -596,7 +596,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z + DeshSpeed);
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
             case "RightDown":
@@ -605,7 +605,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z - DeshSpeed);
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
             case "Down":
@@ -614,7 +614,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - DeshSpeed);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
             case "Up":
@@ -623,7 +623,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + DeshSpeed);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
             case "None":
@@ -634,7 +634,7 @@ public class PlayerController : MonoBehaviour
                     {
                         dashCount -= 1;
                         useDash = true;
-                        transform.position = new Vector3(transform.position.x - DeshSpeed, transform.position.y, transform.position.z);
+                        transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
                     }
                 }
                 else
@@ -644,7 +644,7 @@ public class PlayerController : MonoBehaviour
                     {
                         dashCount -= 1;
                         useDash = true;
-                        transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z);
+                        transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
                     }
                 }
                 break;
