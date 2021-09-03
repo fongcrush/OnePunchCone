@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - PlayerAttackCollider
   - Arrow
+  - PerfectTiming
   layers:
   - Default
   - TransparentFX

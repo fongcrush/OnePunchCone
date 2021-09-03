@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
 
     public GameObject enemyAttackCollider;
     public GameObject enemyWarningBox;
+    public GameObject enemyTimingBox;
     public GameObject arrow;
 
     private GameObject arrowObject;
@@ -75,8 +76,12 @@ public class EnemyController : MonoBehaviour
     {
         if (attType == AttackType.RANGED)
         {
+            enemyAttackCollider.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
+            enemyAttackCollider.transform.localScale = new Vector3(4f, 1f, 1f);
             enemyWarningBox.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
             enemyWarningBox.transform.localScale = new Vector3(4f, 1f, 1f);
+            enemyTimingBox.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
+            enemyTimingBox.transform.localScale = new Vector3(4f, 1f, 1f);
             range = 1.99f;
         }
 
@@ -199,11 +204,20 @@ public class EnemyController : MonoBehaviour
         // 적 공격 박스의 투명도 설정
         var c = enemyWarningBoxMesh.material.color;
         c.a = 0.2f;
+        enemyWarningBoxMesh.material.color = c;
+        yield return new WaitForSeconds(attackDelay - 0.5f);
+
+        // 완벽한 회피 타이밍 활성화
+        enemyTimingBox.SetActive(true);
+        c.a = 0.4f;
+        enemyWarningBoxMesh.material.color = c;
 
         yield return new WaitForSeconds(attackDelay);
 
-        // 적 공격 범위 박스 비활성화, 적 공격 히트 박스 활성화 및 Damage
+
+        // 완벽한 회피 타이밍 비활성화, 적 공격 범위 박스 비활성화, 적 공격 히트 박스 활성화 및 Damage
         enemyWarningBox.SetActive(false);
+        enemyTimingBox.SetActive(false);
 
         if (attType == AttackType.MELEE)
             enemyAttackCollider.SetActive(true);
