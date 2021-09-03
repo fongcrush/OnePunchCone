@@ -37,6 +37,9 @@ public class EnemyController : MonoBehaviour
 
     private PlayerDirectionX playerDirectionX;
 
+    public string monsterName;
+    public int monsterRank;
+    public int attDamage;
     public float traceRange = 5.0f;
     public float attackRange = 2.0f;
     public float speed = 0.75f;
