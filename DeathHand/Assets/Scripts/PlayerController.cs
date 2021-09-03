@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _AttackRountine = null;
     private IEnumerator _Skill1Rountine = null;
 
+    bool isTiming;
+
     private void Awake()
     {
         runSpeed = WalkSpeed * 5;
@@ -86,18 +88,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
-                if (playerState.State == "Attack")
-                {
-                    StopCoroutine(_AttackRountine);
-                    AttackCollObject.gameObject.SetActive(false);
-                    AttackCollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
-                }
-                else if (playerState.State == "Skill1")
-                {
-                    StopCoroutine(_Skill1Rountine);
-                    Skill1CollObject.gameObject.SetActive(false);
-                    Skill1CollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
-                }
                 DoDesh(moveDirection.ToString());
                 playerState.State = "Idle";
             }
@@ -111,6 +101,32 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "PerfectTiming")
+        {
+            if (!isTiming)
+            {
+                Debug.Log("Timing!");
+                isTiming = true;
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "PerfectTiming")
+        {
+            isTiming = false;
+        }
+    }
+    /* LeftShift(DoDesh)
+    
+        if(isTiming)
+        {
+            isTiming = false;
+            // code
+        }
+    */
 
     public int DashCount
     {
@@ -202,7 +218,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    void AttackCancel()
+    {
+        if (playerState.State == "Attack")
+        {
+            StopCoroutine(_AttackRountine);
+            AttackCollObject.gameObject.SetActive(false);
+            AttackCollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+        }
+        else if (playerState.State == "Skill1")
+        {
+            StopCoroutine(_Skill1Rountine);
+            Skill1CollObject.gameObject.SetActive(false);
+            Skill1CollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+        }
+    }
     void ActionInput()
     {
         // АјАн
@@ -521,6 +551,7 @@ public class PlayerController : MonoBehaviour
 
     void DoDesh(string direction)
     {
+
         switch (direction)
         {
             case "Left":
