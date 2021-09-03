@@ -18,10 +18,10 @@ public class PlayerController : MonoBehaviour
     }
 
     enum CharacterDirection
-	{
+    {
         Right,
         Left
-	}
+    }
 
     Player player;
     PlayerFSM playerState;
@@ -47,6 +47,9 @@ public class PlayerController : MonoBehaviour
     private Transform Skill1CollObject;
     private Transform Skill2CollObject;
     private Transform ChargeCollObject;
+
+    private IEnumerator _AttackRountine = null;
+    private IEnumerator _Skill1Rountine = null;
 
     private void Awake()
     {
@@ -74,16 +77,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+        if (playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
         {
             MoveInput();
             ActionInput();
+        }
+        else if (playerState.State == "Attack" || playerState.State == "Skill1")
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
+            {
+                if (playerState.State == "Attack")
+                {
+                    StopCoroutine(_AttackRountine);
+                    AttackCollObject.gameObject.SetActive(false);
+                    AttackCollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+                }
+                else if (playerState.State == "Skill1")
+                {
+                    StopCoroutine(_Skill1Rountine);
+                    Skill1CollObject.gameObject.SetActive(false);
+                    Skill1CollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+                }
+                DoDesh(moveDirection.ToString());
+                playerState.State = "Idle";
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Arrow")
+        if (other.gameObject.tag == "Arrow")
         {
             Destroy(other.gameObject);
         }
@@ -106,12 +129,12 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public bool LeftOrRight()
-	{
-        if(characterDirection == CharacterDirection.Left)
+    {
+        if (characterDirection == CharacterDirection.Left)
             return true;
         else
             return false;
-	}
+    }
 
     void MoveInput()
     {
@@ -139,7 +162,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.RightArrow))
         {
-            canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down;} 
+            canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down; }
             if (moveDirection == MoveDirection.RightUp) moveDirection = MoveDirection.Up;
         }
         if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow) == false)
@@ -183,19 +206,21 @@ public class PlayerController : MonoBehaviour
     void ActionInput()
     {
         // 공격
-        if(Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            StartCoroutine(AttackRountine(0.5f, 0.8f));
+            _AttackRountine = AttackRountine(0.5f, 0.8f);
+            StartCoroutine(_AttackRountine);
         }
         // 스킬 1
-        if(Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            StartCoroutine(Skill1Routine(0.5f, 1f));
+            _Skill1Rountine = Skill1Rountine(0.5f, 1f);
+            StartCoroutine(_Skill1Rountine);
         }
         //스킬 2
-        if(Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            StartCoroutine(Skill2Routine(0.5f, 1f));
+            StartCoroutine(Skill2Rountine(0.5f, 1f));
         }
     }
 
@@ -214,7 +239,7 @@ public class PlayerController : MonoBehaviour
         playerState.State = "Idle";
     }
 
-    IEnumerator Skill1Routine(float delay, float time)
+    IEnumerator Skill1Rountine(float delay, float time)
     {
         playerState.State = "Skill1";
         player.stat.Power = player.Skill1Damage;
@@ -230,12 +255,12 @@ public class PlayerController : MonoBehaviour
         playerState.State = "Idle";
     }
 
-    IEnumerator Skill2Routine(float delay, float time)
+    IEnumerator Skill2Rountine(float delay, float time)
     {
         float curTime = 0f;
         Vector3 startPos = transform.position;
         Vector3 dir;
-        if(LeftOrRight())
+        if (LeftOrRight())
             dir = new Vector3(startPos.x - ChargeCollObject.localScale.x + 1.5f, startPos.y, startPos.z);
         else
             dir = new Vector3(startPos.x + ChargeCollObject.localScale.x - 1.5f, startPos.y, startPos.z);
@@ -251,7 +276,7 @@ public class PlayerController : MonoBehaviour
         yield return null;
 
         Vector3 fixedChargePos = ChargeCollObject.position;
-        while(curTime < time - delay)
+        while (curTime < time - delay)
         {
             curTime += Time.deltaTime;
             transform.position = Vector3.Lerp(transform.position, dir, Time.deltaTime * 20);
@@ -425,67 +450,67 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit[] raycastHit;
 
-        switch(direction)
+        switch (direction)
         {
-        case "Left":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 0), maxDistance);
-            break;
-        case "LeftUp":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 1), maxDistance);
-            break;
-        case "LeftDown":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, -1), maxDistance);
-            break;
-        case "Right":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), maxDistance);
-            break;
-        case "RightUp":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 1), maxDistance);
-            break;
-        case "RightDown":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, -1), maxDistance);
-            break;
-        case "Down":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, -1), maxDistance);
-            break;
-        case "Up":
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, 1), maxDistance);
-            break;
-        default:
-            Debug.LogWarning("RayCast No Direction");
-            raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), 0.0f);
-            break;
+            case "Left":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 0), maxDistance);
+                break;
+            case "LeftUp":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 1), maxDistance);
+                break;
+            case "LeftDown":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, -1), maxDistance);
+                break;
+            case "Right":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), maxDistance);
+                break;
+            case "RightUp":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 1), maxDistance);
+                break;
+            case "RightDown":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, -1), maxDistance);
+                break;
+            case "Down":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, -1), maxDistance);
+                break;
+            case "Up":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, 1), maxDistance);
+                break;
+            default:
+                Debug.LogWarning("RayCast No Direction");
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), 0.0f);
+                break;
         }
-        for(int i = 0; i < raycastHit.Length; i++)
+        for (int i = 0; i < raycastHit.Length; i++)
         {
-            if(raycastHit[i].transform.tag == "Wall")
+            if (raycastHit[i].transform.tag == "Wall")
             {
-                switch(direction)
+                switch (direction)
                 {
-                case "Left":
-                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, transform.position.z);
-                    break;
-                case "LeftUp":
-                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
-                    break;
-                case "LeftDown":
-                    transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
-                    break;
-                case "Right":
-                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, transform.position.z);
-                    break;
-                case "RightUp":
-                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
-                    break;
-                case "RightDown":
-                    transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
-                    break;
-                case "Down":
-                    transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z + 0.5f);
-                    break;
-                case "Up":
-                    transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z - 0.5f);
-                    break;
+                    case "Left":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, transform.position.z);
+                        break;
+                    case "LeftUp":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
+                    case "LeftDown":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Right":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, transform.position.z);
+                        break;
+                    case "RightUp":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
+                    case "RightDown":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Down":
+                        transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Up":
+                        transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
                 }
                 Debug.LogWarning("RayToWall You Can't Dash of Move");
                 return false;
@@ -571,12 +596,25 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case "None":
-                DrawRayPoint("Right");
-                if (RayCast("Right", 10.0f))
+                if (LeftOrRight())
                 {
-                    dashCount -= 1;
-                    useDash = true;
-                    transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z);
+                    DrawRayPoint("Left");
+                    if (RayCast("Left", 10.0f))
+                    {
+                        dashCount -= 1;
+                        useDash = true;
+                        transform.position = new Vector3(transform.position.x - DeshSpeed, transform.position.y, transform.position.z);
+                    }
+                }
+                else
+                {
+                    DrawRayPoint("Right");
+                    if (RayCast("Right", 10.0f))
+                    {
+                        dashCount -= 1;
+                        useDash = true;
+                        transform.position = new Vector3(transform.position.x + DeshSpeed, transform.position.y, transform.position.z);
+                    }
                 }
                 break;
         }
