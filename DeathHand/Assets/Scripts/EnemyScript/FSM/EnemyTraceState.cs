@@ -10,7 +10,7 @@ public class EnemyTraceState : EnemyBaseState
     }
     public override void Update(EnemyController ctrl)
     {
-        if (!ctrl.IsAlive())
+        if(!ctrl.IsAlive())
         {
             ctrl.ChangeState(ctrl.DeadState);
             return;

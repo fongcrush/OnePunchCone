@@ -5,34 +5,36 @@ using UnityEngine;
 public class AttackRange : MonoBehaviour
 {
 	public PlayerController player;
+	public bool IncludeSelf = true;
 
-	private float playerHalfScale;		// (플레이어 크기 / 2)
-	public float maxAttackRange = 2.0f; // 기본 공격 최대사거리
-
+	private float playerHalfScale; // (플레이어 크기 / 2)
+	private float attackHalfRange; // (공격 범위 크기 / 2)
 	private float collPosX;
 
 
 	private void Awake()
 	{
+		player = GameObject.Find("Player").GetComponent<PlayerController>();
 		playerHalfScale = player.transform.lossyScale.x / 2;
-		this.transform.localScale = new Vector3(maxAttackRange, 1f, 1f);
-	}
-
-	void Update()
-	{
-		if(player.LeftOrRight())
-			collPosX = -(playerHalfScale + maxAttackRange / 2);
-		else
-			collPosX = playerHalfScale + maxAttackRange / 2;
-		this.transform.localPosition = new Vector3(collPosX, 0, 0);
+		attackHalfRange = transform.localScale.x / 2;
 	}
 
 	void OnEnable()
 	{
-		if(player.LeftOrRight())
-			collPosX = -(playerHalfScale + maxAttackRange / 2);
+		if(IncludeSelf)
+		{
+			if(player.LeftOrRight())
+				collPosX = 1 - (playerHalfScale + attackHalfRange);
+			else
+				collPosX = playerHalfScale + attackHalfRange - 1;
+		}
 		else
-			collPosX = playerHalfScale + maxAttackRange / 2;
-		this.transform.localPosition = new Vector3(collPosX, 0, 0);
+		{
+			if(player.LeftOrRight())
+				collPosX = -(playerHalfScale + attackHalfRange);
+			else
+				collPosX = playerHalfScale + attackHalfRange;
+		}
+		this.transform.localPosition = new Vector3(collPosX, 0f, 0f);
 	}
 }

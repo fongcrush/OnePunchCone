@@ -8,7 +8,6 @@ TagManager:
   - EnemyAttackCollider
   - Wall
   - PlayerAttackCollider
-  - Arrow
   layers:
   - Default
   - TransparentFX
