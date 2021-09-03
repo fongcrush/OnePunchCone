@@ -10,14 +10,9 @@ public class Enemy : Actor
         stat = new StatusManager(700, 0, 10);
         Debug.Log("Enemy Hp: " + stat.curHP);
     }
-
-    public void OnDamage(float Damage)
-    {
-        Hp -= Damage;
-    }
     public float GetEnemyHp()
     {
-        return Hp;
+        return stat.curHP;
     }
 
     // Start is called before the first frame update

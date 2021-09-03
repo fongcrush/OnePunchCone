@@ -247,7 +247,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
-        ChargeCollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
         Debug.Log("스킬2 발동");
         yield return null;
 
@@ -262,7 +261,6 @@ public class PlayerController : MonoBehaviour
         Skill2CollObject.gameObject.SetActive(false);
         ChargeCollObject.gameObject.SetActive(false);
         Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
-        ChargeCollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
         playerState.State = "Idle";
     }
 
