@@ -44,6 +44,9 @@ public class PlayerController : MonoBehaviour
     private bool[] canRun;
 
     private Transform AttackCollObject;
+    private Transform Skill1CollObject;
+    private Transform Skill2CollObject;
+    private Transform ChargeCollObject;
 
     private void Awake()
     {
@@ -55,6 +58,9 @@ public class PlayerController : MonoBehaviour
         dashCount = 2;
         useDash = false;
         AttackCollObject = GameObject.Find("Player").transform.Find("AttackColl");
+        Skill1CollObject = GameObject.Find("Player").transform.Find("Skill1Coll");
+        Skill2CollObject = GameObject.Find("Player").transform.Find("Skill2Coll");
+        ChargeCollObject = GameObject.Find("Player").transform.Find("ChargeColl");
     }
 
     // Start is called before the first frame update
@@ -75,6 +81,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Arrow")
+        {
+            Destroy(other.gameObject);
+        }
+    }
+
     public int DashCount
     {
         get { return dashCount; }
@@ -87,8 +101,8 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 캐릭터가 왼쪽 방향을 보면 return false
-    /// 오른쪽 방향을 보면 return true
+    /// 캐릭터가 왼쪽 방향을 보면 return true
+    /// 오른쪽 방향을 보면 return false
     /// </summary>
     /// <returns></returns>
     public bool LeftOrRight()
@@ -171,31 +185,84 @@ public class PlayerController : MonoBehaviour
         // 공격
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            StartCoroutine(AttackRountine(0.5f, 1f));
+            StartCoroutine(AttackRountine(0.5f, 0.8f));
         }
         // 스킬 1
         if(Input.GetKeyDown(KeyCode.X))
         {
+            StartCoroutine(Skill1Routine(0.5f, 1f));
         }
         //스킬 2
         if(Input.GetKeyDown(KeyCode.C))
         {
+            StartCoroutine(Skill2Routine(0.5f, 1f));
         }
     }
 
-    IEnumerator AttackRountine(float delay, float attackSpeed)
+    IEnumerator AttackRountine(float delay, float time)
     {
         playerState.State = "Attack";
         player.stat.Power = player.AttackDamage;
         AttackCollObject.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
-        AttackCollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+        AttackCollObject.gameObject.GetComponent<MeshCollider>().enabled = true;
         Debug.Log("공격");
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("공격 완료");
         AttackCollObject.gameObject.SetActive(false);
-        AttackCollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
-        yield return new WaitForSeconds(attackSpeed - delay);
+        AttackCollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+        yield return new WaitForSeconds(time - delay);
+        playerState.State = "Idle";
+    }
+
+    IEnumerator Skill1Routine(float delay, float time)
+    {
+        playerState.State = "Skill1";
+        player.stat.Power = player.Skill1Damage;
+        Skill1CollObject.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+
+        Skill1CollObject.gameObject.GetComponent<MeshCollider>().enabled = true;
+        Debug.Log("스킬1 발동");
+        yield return new WaitForSeconds(0.1f);
+        Skill1CollObject.gameObject.SetActive(false);
+        Skill1CollObject.gameObject.GetComponent<MeshCollider>().enabled = false;
+        yield return new WaitForSeconds(time - delay);
+        playerState.State = "Idle";
+    }
+
+    IEnumerator Skill2Routine(float delay, float time)
+    {
+        float curTime = 0f;
+        Vector3 startPos = transform.position;
+        Vector3 dir;
+        if(LeftOrRight())
+            dir = new Vector3(startPos.x - ChargeCollObject.localScale.x + 1.5f, startPos.y, startPos.z);
+        else
+            dir = new Vector3(startPos.x + ChargeCollObject.localScale.x - 1.5f, startPos.y, startPos.z);
+
+        playerState.State = "Skill2";
+        player.stat.Power = player.Skill2Damage;
+        Skill2CollObject.gameObject.SetActive(true);
+        ChargeCollObject.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+
+        Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+        ChargeCollObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+        Debug.Log("스킬2 발동");
+        yield return null;
+
+        Vector3 fixedChargePos = ChargeCollObject.position;
+        while(curTime < time - delay)
+        {
+            curTime += Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, dir, Time.deltaTime * 20);
+            ChargeCollObject.position = fixedChargePos;
+            yield return null;
+        }
+        Skill2CollObject.gameObject.SetActive(false);
+        ChargeCollObject.gameObject.SetActive(false);
+        Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
+        ChargeCollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
         playerState.State = "Idle";
     }
 
@@ -244,6 +311,8 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
+
+
 
     void WalkOrRun(string keyCode, bool run)
     {

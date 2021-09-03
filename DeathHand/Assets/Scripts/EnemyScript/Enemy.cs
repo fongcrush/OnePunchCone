@@ -13,7 +13,11 @@ public class Enemy : Actor
 
     public void OnDamage(float Damage)
     {
-        //
+        Hp -= Damage;
+    }
+    public float GetEnemyHp()
+    {
+        return Hp;
     }
 
     // Start is called before the first frame update
@@ -25,6 +29,5 @@ public class Enemy : Actor
     // Update is called once per frame
     void Update()
     {
-        
     }
 }
