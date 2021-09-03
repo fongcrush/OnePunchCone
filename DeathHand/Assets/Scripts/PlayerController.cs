@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
+                AttackCancel();
                 DoDash(moveDirection.ToString());
                 playerState.State = "Idle";
             }
