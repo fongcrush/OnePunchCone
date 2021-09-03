@@ -815,6 +815,9 @@ MonoBehaviour:
   enemyTimingBox: {fileID: 1977530574}
   arrow: {fileID: 6673211518206688014, guid: f9fef2b1dc61e7645894413cbbf77559, type: 3}
   attTypeValue: 1
+  monsterName: box
+  monsterRank: 0
+  attDamage: 0
   traceRange: 5
   attackRange: 2
   speed: 0.75
