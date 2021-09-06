@@ -7,7 +7,7 @@ public class Enemy : Actor
     public StatusManager stat;
     private void Awake()
     {
-        stat = new StatusManager(700, 0, 10);
+        stat = new StatusManager(7000, 0, 10);
         Debug.Log("Enemy Hp: " + stat.curHP);
     }
     public float GetEnemyHp()

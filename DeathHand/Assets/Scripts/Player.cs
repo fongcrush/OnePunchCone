@@ -19,9 +19,12 @@ public class Player : Actor
     private int skill1Damage = 250;
     private int skill2Damage = 400;
 
+    //테스트용 나중에 삭제
+    public bool canskill1;
+    public bool canskill2;
+
     float dashTime;
     const float MaxDashTimer = 3.0f;
-
 
 
     public int AttackDamage { get { return attackDamage; } }

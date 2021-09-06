@@ -93,7 +93,16 @@ public class PlayerController : MonoBehaviour
                 playerState.State = "Idle";
             }
         }
-        Debug.Log(player.skills["Judgement"].coolTime + ", " + player.skills["Judgement"].curTime);
+        //Debug.Log(player.skills["Judgement"].coolTime + ", " + player.skills["Judgement"].curTime);
+
+        if(player.skills["Judgement"].curTime == 0) 
+        {
+            player.canskill1 = true;
+        }
+        if (player.skills["Charge"].curTime == 0)
+        {
+            player.canskill2 = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -129,6 +138,23 @@ public class PlayerController : MonoBehaviour
             // code
         }
     */
+
+    private void CheckPerfectTiming() 
+    {
+        if(isTiming == true) 
+        {
+            //player.skills["Judgement"].curTime = player.skills["Judgement"].coolTime;
+            //player.skills["Charge"].curTime = player.skills["Charge"].coolTime;
+            StopAllCoroutines();
+            player.skills["Judgement"].curTime = 0;
+            player.skills["Charge"].curTime = 0;
+            isTiming = false;
+        }
+        else 
+        {
+            Debug.Log("dpdpdppdp");
+        }
+    }
 
     public int DashCount
     {
@@ -249,11 +275,13 @@ public class PlayerController : MonoBehaviour
         {
             _Skill1Rountine = Skill1Rountine(0.5f, 1f);
             StartCoroutine(_Skill1Rountine);
+            player.canskill1 = false;
         }
         //½ºÅ³ 2
         if (Input.GetKeyDown(KeyCode.C) && player.skills["Charge"].curTime == 0f)
         {
-                StartCoroutine(Skill2Rountine(0.5f, 1f));
+            StartCoroutine(Skill2Rountine(0.5f, 1f));
+            player.canskill2 = false;
         }
     }
 
@@ -588,6 +616,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
                 }
                 break;
@@ -597,6 +626,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
@@ -606,6 +636,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
@@ -615,6 +646,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
                 }
                 break;
@@ -624,6 +656,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
@@ -633,6 +666,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
@@ -642,6 +676,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - DashSpeed);
                 }
                 break;
@@ -651,6 +686,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashCount -= 1;
                     useDash = true;
+                    CheckPerfectTiming();
                     transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + DashSpeed);
                 }
                 break;
@@ -662,6 +698,7 @@ public class PlayerController : MonoBehaviour
                     {
                         dashCount -= 1;
                         useDash = true;
+                        CheckPerfectTiming();
                         transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
                     }
                 }
@@ -672,6 +709,7 @@ public class PlayerController : MonoBehaviour
                     {
                         dashCount -= 1;
                         useDash = true;
+                        CheckPerfectTiming();
                         transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
                     }
                 }
