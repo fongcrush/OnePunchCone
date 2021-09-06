@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
                 playerState.State = "Idle";
             }
         }
+        Debug.Log(player.skills["Judgement"].coolTime + ", " + player.skills["Judgement"].curTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -236,6 +237,7 @@ public class PlayerController : MonoBehaviour
     }
     void ActionInput()
     {
+        SkillInfo skill;
         // 공격
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -243,15 +245,15 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(_AttackRountine);
         }
         // 스킬 1
-        if (Input.GetKeyDown(KeyCode.X))
+        if(Input.GetKeyDown(KeyCode.X) && player.skills["Judgement"].curTime == 0f)
         {
             _Skill1Rountine = Skill1Rountine(0.5f, 1f);
             StartCoroutine(_Skill1Rountine);
         }
         //스킬 2
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && player.skills["Charge"].curTime == 0f)
         {
-            StartCoroutine(Skill2Rountine(0.5f, 1f));
+                StartCoroutine(Skill2Rountine(0.5f, 1f));
         }
     }
 
@@ -272,6 +274,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill1Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Judgement"));
+
         playerState.State = "Skill1";
         player.stat.Power = player.Skill1Damage;
         Skill1CollObject.gameObject.SetActive(true);
@@ -288,13 +292,26 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill2Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Charge"));
+
         float curTime = 0f;
         Vector3 startPos = transform.position;
         Vector3 dir;
-        if (LeftOrRight())
-            dir = new Vector3(startPos.x - ChargeCollObject.localScale.x + 1.5f, startPos.y, startPos.z);
+        float dirX;
+        if(LeftOrRight())
+        {
+            dirX = startPos.x - ChargeCollObject.localScale.x + 1.5f;
+            if(dirX < -19)
+                dirX = -19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
         else
-            dir = new Vector3(startPos.x + ChargeCollObject.localScale.x - 1.5f, startPos.y, startPos.z);
+        {
+            dirX = startPos.x + ChargeCollObject.localScale.x - 1.5f;
+            if(dirX > 19)
+                dirX = 19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
 
         playerState.State = "Skill2";
         player.stat.Power = player.Skill2Damage;
@@ -319,6 +336,16 @@ public class PlayerController : MonoBehaviour
         Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
         playerState.State = "Idle";
     }
+
+    IEnumerator SkillTimer(string name)
+	{
+        while(player.skills[name].curTime < player.skills[name].coolTime)
+		{
+            player.skills[name].curTime += Time.deltaTime;
+            yield return null;
+		}
+        player.skills[name].curTime = 0f;
+	}
 
     bool CheckRun(string keyCode)
     {
