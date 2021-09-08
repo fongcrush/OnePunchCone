@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     private CurrentArrowKey currentArrowKey;
 
     private Vector3 moveDirection;
-    private Vector3 wallDirection;
     private Vector2 boxColliderSize;
 
     [SerializeField]
@@ -36,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     public float walkSpeed = 300f;
     public float runSpeed = 750f;
-    private const float DashSpeed = 10;
+    private const float DashSpeed = 1000;
 
     private const float MinWallDistance = 0.5f;
     //private float[] FirstTime;
@@ -180,8 +179,8 @@ public class PlayerController : MonoBehaviour
         if(canRun)
             curDoubleCheckTime += Time.deltaTime;
 
-        if(moveDirection == Vector3.zero && !canRun)
-		{
+        if ((moveDirection == Vector3.zero) && !canRun)
+        {
             isRun = false;
             playerState.State = "Idle";
 		}
@@ -224,11 +223,14 @@ public class PlayerController : MonoBehaviour
 		if(isRun == true)
 		{
 			movePos = transform.position + moveDirection * runSpeed * Time.deltaTime;
-		}
-		else
+            playerState.State = "Run";
+        }
+        else
 		{
 			movePos = transform.position + moveDirection * walkSpeed * Time.deltaTime;
-		}
+            if(moveDirection != Vector3.zero)
+                playerState.State = "Walk";
+        }
         movePos.x = Mathf.Clamp(movePos.x, mapSizeMin.x, mapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, mapSizeMin.y, mapSizeMax.y);
         transform.position = movePos;
@@ -251,10 +253,6 @@ public class PlayerController : MonoBehaviour
             player.skills["Judgement"].curTime = 0;
             player.skills["Charge"].curTime = 0;
             isTiming = false;
-        }
-        else 
-        {
-            Debug.Log("dpdpdppdp");
         }
     }
 
@@ -388,81 +386,20 @@ public class PlayerController : MonoBehaviour
         player.skills[name].curTime = 0f;
 	}
 
-    
-    void DrawRayPoint(float maxDistance)
-    {
-        if (moveDirection.x == 0 && moveDirection.y == 0)
-        {
-            if (LeftOrRight())
-                Debug.DrawRay(transform.position, Vector3.left * maxDistance, new Color(0, 1, 0), 1.0f);
-            else
-                Debug.DrawRay(transform.position, Vector3.right * maxDistance, new Color(0, 1, 0), 1.0f);
-        }
-        else
-        {
-            Debug.DrawRay(transform.position, moveDirection * maxDistance, new Color(0, 1, 0), 1.0f);
-        }
-    }
-
-    bool RayCast(float maxDistance)
-    {
-        RaycastHit2D[] raycastHit;
-
-        if (moveDirection.x == 0 && moveDirection.y == 0)
-        {
-            if (LeftOrRight())
-                raycastHit = Physics2D.RaycastAll(transform.position, Vector3.left, maxDistance);
-            else
-                raycastHit = Physics2D.RaycastAll(transform.position, Vector3.right, maxDistance);
-        }
-        else
-            raycastHit = Physics2D.RaycastAll(transform.position, moveDirection, maxDistance);
-        wallDirection = Vector3.zero;
-        for (int i = 0; i < raycastHit.Length; i++)
-        {
-            if (raycastHit[i].transform.tag == "Wall")
-            {
-                Vector2 playerPos = new Vector2(transform.position.x, transform.position.y);
-                wallDirection = (playerPos - raycastHit[i].point).normalized;
-
-                if (wallDirection.x > 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x + boxColliderSize.x / 2, raycastHit[i].point.y);
-                }
-                else if (wallDirection.x < 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x - boxColliderSize.x / 2, raycastHit[i].point.y);
-                }
-                if (wallDirection.y > 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x, raycastHit[i].point.y + boxColliderSize.y / 2);
-                }
-                else if (wallDirection.y < 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x, raycastHit[i].point.y - boxColliderSize.y / 2);
-                }
-                return false;
-            }
-        }
-        return true;
-    }
 
     void DoDash()
     {
-        DrawRayPoint(DashSpeed);
-        if (RayCast(DashSpeed))
+        dashCount -= 1;
+        useDash = true;
+        CheckPerfectTiming();
+        if (playerState.State != "Idle")
         {
-            dashCount -= 1;
-            useDash = true;
-            if (playerState.State != "Idle")
-            {
-                transform.position = transform.position + moveDirection * DashSpeed;
-                return;
-            }
-            if (LeftOrRight())
-                transform.position = transform.position + Vector3.left * DashSpeed;
-            else
-                transform.position = transform.position + Vector3.right * DashSpeed;
+            transform.position = transform.position + moveDirection * DashSpeed;
+            return;
         }
+        if (!LeftOrRight())
+            transform.position = transform.position + Vector3.left * DashSpeed;
+        else
+            transform.position = transform.position + Vector3.right * DashSpeed;
     }
 }
