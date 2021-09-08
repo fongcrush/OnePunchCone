@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    enum MoveDirection
+    {
+        None,
+        Left,
+        LeftUp,
+        LeftDown,
+        Right,
+        RightUp,
+        RightDown,
+        Down,
+        Up
+    }
+
     enum CharacterDirection
     {
         Right,
@@ -13,14 +26,13 @@ public class PlayerController : MonoBehaviour
     Player player;
     PlayerFSM playerState;
 
+    [SerializeField]
+    private MoveDirection moveDirection;
     private CharacterDirection characterDirection;
-
-    private Vector3 moveDirection;
-    private Vector3 wallDirection;
-    private Vector2 boxColliderSize;
 
     [SerializeField]
     private int dashCount;
+
     private bool useDash;
 
     private const float WalkSpeed = 1;
@@ -46,6 +58,7 @@ public class PlayerController : MonoBehaviour
         runSpeed = WalkSpeed * 5;
         FirstTime = new float[4];
         canRun = new bool[4];
+        moveDirection = MoveDirection.None;
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
         useDash = false;
@@ -61,7 +74,6 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
         playerState = GetComponent<PlayerFSM>();
         playerState.State = "Idle";
-        boxColliderSize = GetComponent<BoxCollider2D>().size;
     }
 
     // Update is called once per frame
@@ -77,20 +89,30 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
                 AttackCancel();
-                DoDash();
+                DoDash(moveDirection.ToString());
                 playerState.State = "Idle";
             }
         }
+        //Debug.Log(player.skills["Judgement"].coolTime + ", " + player.skills["Judgement"].curTime);
+
+        if(player.skills["Judgement"].curTime == 0) 
+        {
+            player.canskill1 = true;
+        }
+        if (player.skills["Charge"].curTime == 0)
+        {
+            player.canskill2 = true;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Arrow")
         {
             Destroy(other.gameObject);
         }
     }
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "PerfectTiming")
         {
@@ -101,7 +123,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "PerfectTiming")
         {
@@ -116,6 +138,23 @@ public class PlayerController : MonoBehaviour
             // code
         }
     */
+
+    private void CheckPerfectTiming() 
+    {
+        if(isTiming == true) 
+        {
+            //player.skills["Judgement"].curTime = player.skills["Judgement"].coolTime;
+            //player.skills["Charge"].curTime = player.skills["Charge"].coolTime;
+            StopAllCoroutines();
+            player.skills["Judgement"].curTime = 0;
+            player.skills["Charge"].curTime = 0;
+            isTiming = false;
+        }
+        else 
+        {
+            Debug.Log("dpdpdppdp");
+        }
+    }
 
     public int DashCount
     {
@@ -143,73 +182,67 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f).normalized;        
-
-        if((wallDirection.x > 0 && moveDirection.x < 0)||(wallDirection.x < 0 && moveDirection.x > 0)) 
+        // 방향키 누르다가 반대편 방향키 누르면 양 방향 키입력 무시
+        if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow) == false)
         {
-            moveDirection.x = 0;
+            characterDirection = CharacterDirection.Left;
+            // 연속키입력 확인용
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) { canRun[0] = CheckRun("LeftArrow"); }
+            // 움직이는 함수
+            WalkOrRun("LeftArrow", canRun[0]);
         }
-        if ((wallDirection.y > 0 && moveDirection.y < 0) || (wallDirection.y < 0 && moveDirection.y > 0)) 
+        // 달리기 변수 초기화, 대쉬용 방향 처리
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
         {
-            moveDirection.y = 0;
+            canRun[0] = false; if (moveDirection == MoveDirection.LeftDown) moveDirection = MoveDirection.Down;
+            if (moveDirection == MoveDirection.LeftUp) moveDirection = MoveDirection.Up;
         }
-
-        Debug.Log(moveDirection);
-
-        if (moveDirection.x > 0)
+        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) == false)
         {
-            DrawRayPoint(boxColliderSize.x / 2);
-            RayCast(boxColliderSize.x / 2);
             characterDirection = CharacterDirection.Right;
             if (Input.GetKeyDown(KeyCode.RightArrow)) { canRun[1] = CheckRun("RightArrow"); }
-            WalkOrRun(canRun[1]);
-        }
-        else if (moveDirection.x == 0)
-        {
-            canRun[0] = false;
-            canRun[1] = false;
-        }
-        else if (moveDirection.x < 0)
-        {
-            DrawRayPoint(boxColliderSize.x / 2);
-            RayCast(boxColliderSize.x / 2);
-            characterDirection = CharacterDirection.Left;
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) { canRun[0] = CheckRun("LeftArrow"); }
-            WalkOrRun(canRun[0]);
+            WalkOrRun("RightArrow", canRun[1]);
         }
 
-        if (moveDirection.y > 0)
+        if (Input.GetKeyUp(KeyCode.RightArrow))
         {
-            DrawRayPoint(boxColliderSize.y / 2);
-            RayCast(boxColliderSize.y / 2);
+            canRun[1] = false; if (moveDirection == MoveDirection.RightDown) { moveDirection = MoveDirection.Down; }
+            if (moveDirection == MoveDirection.RightUp) moveDirection = MoveDirection.Up;
+        }
+        if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow) == false)
+        {
+            if (Input.GetKeyDown(KeyCode.DownArrow)) canRun[2] = CheckRun("DownArrow");
+            WalkOrRun("DownArrow", canRun[2]);
+        }
+
+        if (Input.GetKeyUp(KeyCode.DownArrow)) { canRun[2] = false; }
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) == false)
+        {
             if (Input.GetKeyDown(KeyCode.UpArrow)) { canRun[3] = CheckRun("UpArrow"); }
-            WalkOrRun(canRun[3]);
+            WalkOrRun("UpArrow", canRun[3]);
         }
-        else if (moveDirection.y == 0)
+        if (Input.GetKeyUp(KeyCode.UpArrow)) { canRun[3] = false; }
+        // 특정경우 움직임을 멈추는 경우들
+        if ((Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow)) && (Input.GetKey(KeyCode.DownArrow) == false && Input.GetKey(KeyCode.UpArrow) == false) || (Input.GetKey(KeyCode.LeftArrow) == false && Input.GetKey(KeyCode.RightArrow) == false) && (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow)) || Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow))
         {
-            canRun[2] = false;
-            canRun[3] = false;
+            playerState.State = "Idle";
+            moveDirection = MoveDirection.None;
         }
-        else if (moveDirection.y < 0)
+        if (Input.GetKey(KeyCode.LeftArrow) == false && Input.GetKey(KeyCode.RightArrow) == false && Input.GetKey(KeyCode.DownArrow) == false && Input.GetKey(KeyCode.UpArrow) == false)
         {
-            DrawRayPoint(boxColliderSize.y / 2);
-            RayCast(boxColliderSize.y / 2);
-            if (Input.GetKeyDown(KeyCode.DownArrow)) { canRun[2] = CheckRun("DownArrow"); }
-            WalkOrRun(canRun[2]);
+            playerState.State = "Idle";
+            moveDirection = MoveDirection.None;
         }
-
-        if (moveDirection.x == 0 && moveDirection.y == 0) playerState.State = "Idle";
-        
         // 대쉬
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0 && useDash == false)
         {
             if (playerState.State == "Run" || playerState.State == "Walk")
             {
-                DoDash();
+                DoDash(moveDirection.ToString());
             }
             if (playerState.State == "Idle")
             {
-                DoDash();
+                DoDash(moveDirection.ToString());
             }
         }
     }
@@ -230,6 +263,7 @@ public class PlayerController : MonoBehaviour
     }
     void ActionInput()
     {
+        SkillInfo skill;
         // 공격
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -237,15 +271,17 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(_AttackRountine);
         }
         // 스킬 1
-        if (Input.GetKeyDown(KeyCode.X))
+        if(Input.GetKeyDown(KeyCode.X) && player.skills["Judgement"].curTime == 0f)
         {
             _Skill1Rountine = Skill1Rountine(0.5f, 1f);
             StartCoroutine(_Skill1Rountine);
+            player.canskill1 = false;
         }
         //스킬 2
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && player.skills["Charge"].curTime == 0f)
         {
             StartCoroutine(Skill2Rountine(0.5f, 1f));
+            player.canskill2 = false;
         }
     }
 
@@ -266,6 +302,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill1Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Judgement"));
+
         playerState.State = "Skill1";
         player.stat.Power = player.Skill1Damage;
         Skill1CollObject.gameObject.SetActive(true);
@@ -282,13 +320,26 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill2Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Charge"));
+
         float curTime = 0f;
         Vector3 startPos = transform.position;
         Vector3 dir;
-        if (LeftOrRight())
-            dir = new Vector3(startPos.x - ChargeCollObject.localScale.x + 1.5f, startPos.y, startPos.z);
+        float dirX;
+        if(LeftOrRight())
+        {
+            dirX = startPos.x - ChargeCollObject.localScale.x + 1.5f;
+            if(dirX < -19)
+                dirX = -19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
         else
-            dir = new Vector3(startPos.x + ChargeCollObject.localScale.x - 1.5f, startPos.y, startPos.z);
+        {
+            dirX = startPos.x + ChargeCollObject.localScale.x - 1.5f;
+            if(dirX > 19)
+                dirX = 19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
 
         playerState.State = "Skill2";
         player.stat.Power = player.Skill2Damage;
@@ -313,6 +364,16 @@ public class PlayerController : MonoBehaviour
         Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
         playerState.State = "Idle";
     }
+
+    IEnumerator SkillTimer(string name)
+	{
+        while(player.skills[name].curTime < player.skills[name].coolTime)
+		{
+            player.skills[name].curTime += Time.deltaTime;
+            yield return null;
+		}
+        player.skills[name].curTime = 0f;
+	}
 
     bool CheckRun(string keyCode)
     {
@@ -360,92 +421,299 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    void WalkOrRun(bool run)
+
+
+    void WalkOrRun(string keyCode, bool run)
     {
-        if (run == true)
-            transform.position = transform.position + moveDirection * runSpeed * Time.deltaTime;
-        else
-            transform.position = transform.position + moveDirection * WalkSpeed * Time.deltaTime;
+        if (keyCode == "LeftArrow")
+        {
+            if (RayCast("Left", MinWallDistance))
+            {
+                if (run == true)
+                    transform.position = new Vector3(transform.position.x - runSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+                else
+                    transform.position = new Vector3(transform.position.x - WalkSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+
+                if (moveDirection == MoveDirection.Up)
+                    moveDirection = MoveDirection.LeftUp;
+                else if (moveDirection == MoveDirection.Down)
+                    moveDirection = MoveDirection.LeftDown;
+                else
+                    moveDirection = MoveDirection.Left;
+            }
+        }
+
+        if (keyCode == "RightArrow")
+        {
+            if (RayCast("Right", MinWallDistance))
+            {
+                if (run == true)
+                    transform.position = new Vector3(transform.position.x + runSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+                else
+                    transform.position = new Vector3(transform.position.x + WalkSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+
+                if (moveDirection == MoveDirection.Up)
+                    moveDirection = MoveDirection.RightUp;
+                else if (moveDirection == MoveDirection.Down)
+                    moveDirection = MoveDirection.RightDown;
+                else
+                    moveDirection = MoveDirection.Right;
+            }
+        }
+
+        if (keyCode == "DownArrow")
+        {
+            if (RayCast("Down", MinWallDistance))
+            {
+                if (run == true)
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - runSpeed * Time.deltaTime);
+                else
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - WalkSpeed * Time.deltaTime);
+
+                if (moveDirection == MoveDirection.Right)
+                    moveDirection = MoveDirection.RightDown;
+                else if (moveDirection == MoveDirection.Left)
+                    moveDirection = MoveDirection.LeftDown;
+                else if (moveDirection != MoveDirection.RightDown && moveDirection != MoveDirection.LeftDown)
+                    moveDirection = MoveDirection.Down;
+            }
+        }
+
+        if (keyCode == "UpArrow")
+        {
+            if (RayCast("Up", MinWallDistance))
+            {
+                if (run == true)
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + runSpeed * Time.deltaTime);
+                else
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + WalkSpeed * Time.deltaTime);
+
+                if (moveDirection == MoveDirection.Right)
+                    moveDirection = MoveDirection.RightUp;
+                else if (moveDirection == MoveDirection.Left)
+                    moveDirection = MoveDirection.LeftUp;
+                else if (moveDirection != MoveDirection.RightUp && moveDirection != MoveDirection.LeftUp)
+                    moveDirection = MoveDirection.Up;
+            }
+        }
 
         if (run == true) playerState.State = "Run";
         else playerState.State = "Walk";
     }
 
-    void DrawRayPoint(float maxDistance)
+    void DrawRayPoint(string direction)
     {
-        if (moveDirection.x == 0 && moveDirection.y == 0)
+        switch (direction)
         {
-            if (LeftOrRight())
-                Debug.DrawRay(transform.position, Vector3.left * maxDistance, new Color(0, 1, 0), 1.0f);
-            else
-                Debug.DrawRay(transform.position, Vector3.right * maxDistance, new Color(0, 1, 0), 1.0f);
-        }
-        else
-        {
-            Debug.DrawRay(transform.position, moveDirection * maxDistance, new Color(0, 1, 0), 1.0f);
+            case "Left":
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
+                break;
+            case "LeftUp":
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
+            case "LeftDown":
+                Debug.DrawRay(transform.position, new Vector3(-DashSpeed, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
+            case "Right":
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, 0), new Color(0, 1, 0), 1.0f);
+                break;
+            case "RightUp":
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
+            case "RightDown":
+                Debug.DrawRay(transform.position, new Vector3(DashSpeed, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
+            case "Down":
+                Debug.DrawRay(transform.position, new Vector3(0, 0, -DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
+            case "Up":
+                Debug.DrawRay(transform.position, new Vector3(0, 0, DashSpeed), new Color(0, 1, 0), 1.0f);
+                break;
         }
     }
 
-    bool RayCast(float maxDistance)
+    bool RayCast(string direction, float maxDistance)
     {
-        RaycastHit2D[] raycastHit;
+        RaycastHit[] raycastHit;
 
-        if (moveDirection.x == 0 && moveDirection.y == 0) 
+        switch (direction)
         {
-            if (LeftOrRight())
-                raycastHit = Physics2D.RaycastAll(transform.position, Vector3.left, maxDistance);
-            else
-                raycastHit = Physics2D.RaycastAll(transform.position, Vector3.right, maxDistance);
+            case "Left":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 0), maxDistance);
+                break;
+            case "LeftUp":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, 1), maxDistance);
+                break;
+            case "LeftDown":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(-1, 0, -1), maxDistance);
+                break;
+            case "Right":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), maxDistance);
+                break;
+            case "RightUp":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 1), maxDistance);
+                break;
+            case "RightDown":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, -1), maxDistance);
+                break;
+            case "Down":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, -1), maxDistance);
+                break;
+            case "Up":
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(0, 0, 1), maxDistance);
+                break;
+            default:
+                Debug.LogWarning("RayCast No Direction");
+                raycastHit = Physics.RaycastAll(transform.position, new Vector3(1, 0, 0), 0.0f);
+                break;
         }
-        else 
-            raycastHit = Physics2D.RaycastAll(transform.position, moveDirection, maxDistance);
-        wallDirection = Vector3.zero;
         for (int i = 0; i < raycastHit.Length; i++)
         {
             if (raycastHit[i].transform.tag == "Wall")
             {
-                Vector2 playerPos = new Vector2(transform.position.x, transform.position.y);
-                wallDirection = (playerPos - raycastHit[i].point).normalized;
-
-                if (wallDirection.x > 0)
+                switch (direction)
                 {
-                    transform.position = new Vector2(raycastHit[i].point.x + boxColliderSize.x / 2, raycastHit[i].point.y);
+                    case "Left":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, transform.position.z);
+                        break;
+                    case "LeftUp":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
+                    case "LeftDown":
+                        transform.position = new Vector3(raycastHit[i].point.x + 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Right":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, transform.position.z);
+                        break;
+                    case "RightUp":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
+                    case "RightDown":
+                        transform.position = new Vector3(raycastHit[i].point.x - 0.5f, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Down":
+                        transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z + 0.5f);
+                        break;
+                    case "Up":
+                        transform.position = new Vector3(transform.position.x, transform.position.y, raycastHit[i].point.z - 0.5f);
+                        break;
                 }
-                else if (wallDirection.x < 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x - boxColliderSize.x / 2, raycastHit[i].point.y);
-                }
-                if (wallDirection.y > 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x, raycastHit[i].point.y + boxColliderSize.y / 2);
-                }
-                else if (wallDirection.y < 0)
-                {
-                    transform.position = new Vector2(raycastHit[i].point.x, raycastHit[i].point.y - boxColliderSize.y / 2);
-                }
+                Debug.LogWarning("RayToWall You Can't Dash of Move");
                 return false;
             }
         }
         return true;
     }
 
-
-    void DoDash()
+    void DoDash(string direction)
     {
-        DrawRayPoint(DashSpeed);
-        if (RayCast(DashSpeed))
+
+        switch (direction)
         {
-            dashCount -= 1;
-            useDash = true;
-            if (playerState.State != "Idle")
-            {
-                transform.position = transform.position + moveDirection * DashSpeed;
-                return;
-            }
-            if (LeftOrRight())
-                transform.position = transform.position + Vector3.left * DashSpeed;
-            else
-                transform.position = transform.position + Vector3.right * DashSpeed;
+            case "Left":
+                DrawRayPoint("Left");
+                if (RayCast("Left", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
+                }
+                break;
+            case "LeftUp":
+                DrawRayPoint("LeftUp");
+                if (RayCast("LeftUp", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z + DashSpeed);
+                }
+                break;
+            case "LeftDown":
+                DrawRayPoint("LeftDown");
+                if (RayCast("LeftDown", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z - DashSpeed);
+                }
+                break;
+            case "Right":
+                DrawRayPoint("Right");
+                if (RayCast("Right", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
+                }
+                break;
+            case "RightUp":
+                DrawRayPoint("RightUp");
+                if (RayCast("RightUp", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z + DashSpeed);
+                }
+                break;
+            case "RightDown":
+                DrawRayPoint("RightDown");
+                if (RayCast("RightDown", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z - DashSpeed);
+                }
+                break;
+            case "Down":
+                DrawRayPoint("Down");
+                if (RayCast("Down", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - DashSpeed);
+                }
+                break;
+            case "Up":
+                DrawRayPoint("Up");
+                if (RayCast("Up", 10.0f))
+                {
+                    dashCount -= 1;
+                    useDash = true;
+                    CheckPerfectTiming();
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + DashSpeed);
+                }
+                break;
+            case "None":
+                if (LeftOrRight())
+                {
+                    DrawRayPoint("Left");
+                    if (RayCast("Left", 10.0f))
+                    {
+                        dashCount -= 1;
+                        useDash = true;
+                        CheckPerfectTiming();
+                        transform.position = new Vector3(transform.position.x - DashSpeed, transform.position.y, transform.position.z);
+                    }
+                }
+                else
+                {
+                    DrawRayPoint("Right");
+                    if (RayCast("Right", 10.0f))
+                    {
+                        dashCount -= 1;
+                        useDash = true;
+                        CheckPerfectTiming();
+                        transform.position = new Vector3(transform.position.x + DashSpeed, transform.position.y, transform.position.z);
+                    }
+                }
+                break;
         }
     }
 }
