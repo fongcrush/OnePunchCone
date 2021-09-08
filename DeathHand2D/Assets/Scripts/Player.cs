@@ -12,15 +12,16 @@ public class Player : Actor
     float dashGodModeTime;
     const float MaxDashGodModeTimer = 0.3f;
     public StatusManager stat;
+
+    public Dictionary<string, SkillInfo> skills;
+
     private int attackDamage = 50;
     private int skill1Damage = 250;
     private int skill2Damage = 400;
 
-    const float Skill1MaxCollDown = 20.0f;
-    const float Skill2MaxCollDown = 30.0f;
-
-    float skill1CollDown;
-    float skill2CollDown;
+    //테스트용 나중에 삭제
+    public bool canskill1;
+    public bool canskill2;
 
     float dashTime;
     const float MaxDashTimer = 3.0f;
@@ -38,13 +39,15 @@ public class Player : Actor
         dashGodMode = false;
         dashGodModeTime = 0.0f;
         dashTime = 0.0f;
-        skill1CollDown = 0.0f;
-        skill2CollDown = 0.0f;
+
+        skills = new Dictionary<string, SkillInfo>();
+        skills.Add("Judgement", new SkillInfo(250, 20f, 0f));
+        skills.Add("Charge", new SkillInfo(400, 5f, 0f));
     }
 
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         playerController = GetComponent<PlayerController>();        
     }
 

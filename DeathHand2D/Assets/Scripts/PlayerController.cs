@@ -77,20 +77,30 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
                 AttackCancel();
-                DoDash();
+                DoDash(moveDirection.ToString());
                 playerState.State = "Idle";
             }
         }
+        //Debug.Log(player.skills["Judgement"].coolTime + ", " + player.skills["Judgement"].curTime);
+
+        if(player.skills["Judgement"].curTime == 0) 
+        {
+            player.canskill1 = true;
+        }
+        if (player.skills["Charge"].curTime == 0)
+        {
+            player.canskill2 = true;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Arrow")
         {
             Destroy(other.gameObject);
         }
     }
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "PerfectTiming")
         {
@@ -101,7 +111,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "PerfectTiming")
         {
@@ -116,6 +126,23 @@ public class PlayerController : MonoBehaviour
             // code
         }
     */
+
+    private void CheckPerfectTiming() 
+    {
+        if(isTiming == true) 
+        {
+            //player.skills["Judgement"].curTime = player.skills["Judgement"].coolTime;
+            //player.skills["Charge"].curTime = player.skills["Charge"].coolTime;
+            StopAllCoroutines();
+            player.skills["Judgement"].curTime = 0;
+            player.skills["Charge"].curTime = 0;
+            isTiming = false;
+        }
+        else 
+        {
+            Debug.Log("dpdpdppdp");
+        }
+    }
 
     public int DashCount
     {
@@ -143,13 +170,13 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f).normalized;        
+        moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f).normalized;
 
-        if((wallDirection.x > 0 && moveDirection.x < 0)||(wallDirection.x < 0 && moveDirection.x > 0)) 
+        if ((wallDirection.x > 0 && moveDirection.x < 0) || (wallDirection.x < 0 && moveDirection.x > 0))
         {
             moveDirection.x = 0;
         }
-        if ((wallDirection.y > 0 && moveDirection.y < 0) || (wallDirection.y < 0 && moveDirection.y > 0)) 
+        if ((wallDirection.y > 0 && moveDirection.y < 0) || (wallDirection.y < 0 && moveDirection.y > 0))
         {
             moveDirection.y = 0;
         }
@@ -199,17 +226,16 @@ public class PlayerController : MonoBehaviour
         }
 
         if (moveDirection.x == 0 && moveDirection.y == 0) playerState.State = "Idle";
-        
         // 대쉬
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0 && useDash == false)
         {
             if (playerState.State == "Run" || playerState.State == "Walk")
             {
-                DoDash();
+                DoDash(moveDirection.ToString());
             }
             if (playerState.State == "Idle")
             {
-                DoDash();
+                DoDash(moveDirection.ToString());
             }
         }
     }
@@ -230,6 +256,7 @@ public class PlayerController : MonoBehaviour
     }
     void ActionInput()
     {
+        SkillInfo skill;
         // 공격
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -237,15 +264,17 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(_AttackRountine);
         }
         // 스킬 1
-        if (Input.GetKeyDown(KeyCode.X))
+        if(Input.GetKeyDown(KeyCode.X) && player.skills["Judgement"].curTime == 0f)
         {
             _Skill1Rountine = Skill1Rountine(0.5f, 1f);
             StartCoroutine(_Skill1Rountine);
+            player.canskill1 = false;
         }
         //스킬 2
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && player.skills["Charge"].curTime == 0f)
         {
             StartCoroutine(Skill2Rountine(0.5f, 1f));
+            player.canskill2 = false;
         }
     }
 
@@ -266,6 +295,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill1Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Judgement"));
+
         playerState.State = "Skill1";
         player.stat.Power = player.Skill1Damage;
         Skill1CollObject.gameObject.SetActive(true);
@@ -282,13 +313,26 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill2Rountine(float delay, float time)
     {
+        StartCoroutine(SkillTimer("Charge"));
+
         float curTime = 0f;
         Vector3 startPos = transform.position;
         Vector3 dir;
-        if (LeftOrRight())
-            dir = new Vector3(startPos.x - ChargeCollObject.localScale.x + 1.5f, startPos.y, startPos.z);
+        float dirX;
+        if(LeftOrRight())
+        {
+            dirX = startPos.x - ChargeCollObject.localScale.x + 1.5f;
+            if(dirX < -19)
+                dirX = -19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
         else
-            dir = new Vector3(startPos.x + ChargeCollObject.localScale.x - 1.5f, startPos.y, startPos.z);
+        {
+            dirX = startPos.x + ChargeCollObject.localScale.x - 1.5f;
+            if(dirX > 19)
+                dirX = 19;
+            dir = new Vector3(dirX, startPos.y, startPos.z);
+        }
 
         playerState.State = "Skill2";
         player.stat.Power = player.Skill2Damage;
@@ -313,6 +357,16 @@ public class PlayerController : MonoBehaviour
         Skill2CollObject.gameObject.GetComponent<BoxCollider>().enabled = false;
         playerState.State = "Idle";
     }
+
+    IEnumerator SkillTimer(string name)
+	{
+        while(player.skills[name].curTime < player.skills[name].coolTime)
+		{
+            player.skills[name].curTime += Time.deltaTime;
+            yield return null;
+		}
+        player.skills[name].curTime = 0f;
+	}
 
     bool CheckRun(string keyCode)
     {
@@ -390,14 +444,14 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit2D[] raycastHit;
 
-        if (moveDirection.x == 0 && moveDirection.y == 0) 
+        if (moveDirection.x == 0 && moveDirection.y == 0)
         {
             if (LeftOrRight())
                 raycastHit = Physics2D.RaycastAll(transform.position, Vector3.left, maxDistance);
             else
                 raycastHit = Physics2D.RaycastAll(transform.position, Vector3.right, maxDistance);
         }
-        else 
+        else
             raycastHit = Physics2D.RaycastAll(transform.position, moveDirection, maxDistance);
         wallDirection = Vector3.zero;
         for (int i = 0; i < raycastHit.Length; i++)
@@ -428,7 +482,6 @@ public class PlayerController : MonoBehaviour
         }
         return true;
     }
-
 
     void DoDash()
     {
