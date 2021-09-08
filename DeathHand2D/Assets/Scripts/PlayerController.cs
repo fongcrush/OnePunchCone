@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
                 AttackCancel();
-                DoDash(moveDirection.ToString());
+                DoDash();
                 playerState.State = "Idle";
             }
         }
@@ -231,11 +231,11 @@ public class PlayerController : MonoBehaviour
         {
             if (playerState.State == "Run" || playerState.State == "Walk")
             {
-                DoDash(moveDirection.ToString());
+                DoDash();
             }
             if (playerState.State == "Idle")
             {
-                DoDash(moveDirection.ToString());
+                DoDash();
             }
         }
     }
