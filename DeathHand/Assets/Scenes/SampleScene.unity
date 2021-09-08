@@ -266,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ConfineMode: 0
   m_BoundingVolume: {fileID: 0}
-  m_BoundingShape2D: {fileID: 0}
+  m_BoundingShape2D: {fileID: 1475438256}
   m_ConfineScreenEdges: 1
   m_Damping: 0
 --- !u!114 &119558199
@@ -298,7 +298,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.0847824, y: 1}
+    m_SensorSize: {x: 2.2045991, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1242,7 +1242,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: -10}
+  m_LocalPosition: {x: 0.0009212494, y: 4.7414713, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1698,7 +1698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226556742}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.54, y: 0, z: 0}
   m_LocalScale: {x: 42, y: 1, z: 30}
   m_Children: []
   m_Father: {fileID: 713966098}
@@ -2373,8 +2373,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!61 &1475438256
-BoxCollider2D:
+--- !u!60 &1475438256
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2396,9 +2396,12 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 38, y: 9}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: -19.964676, y: 5.3417864}
+      - {x: -19.860914, y: -5.2562304}
+      - {x: 19.762142, y: -5.2686377}
+      - {x: 19.755136, y: 5.2622595}
 --- !u!4 &1475438257
 Transform:
   m_ObjectHideFlags: 0
