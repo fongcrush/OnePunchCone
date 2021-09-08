@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
-    protected float Hp;
+    public GameObject background;
+    [HideInInspector]
+    public Vector2 backgroundSize;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Vector2 spriteSize = background.GetComponent<SpriteRenderer>().sprite.rect.size;
+        Vector2 localSpriteSize = spriteSize / background.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+        backgroundSize = localSpriteSize * background.transform.lossyScale;
+        Debug.Log(backgroundSize);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    public Vector2 GetSpriteSize(GameObject _target)
+    {
+        Vector2 worldSize = Vector2.zero;
+        if(_target.GetComponent<SpriteRenderer>())
+        {
+            Vector2 spriteSize = _target.GetComponent<SpriteRenderer>().sprite.rect.size;
+            Vector2 localSpriteSize = spriteSize / _target.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+            worldSize = localSpriteSize * _target.transform.lossyScale;
+        }
+
+        return worldSize;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackRange : MonoBehaviour
 {
-	public PlayerController player;
+	PlayerController player;
 	public bool IncludeSelf = true;
 
 	private float playerHalfScale; // (플레이어 크기 / 2)

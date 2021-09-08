@@ -5,6 +5,8 @@ using System.Timers;
 
 public class Player : Actor
 {
+    public Actor gameManager;
+
     PlayerController playerController;
 
     [SerializeField]
@@ -15,9 +17,9 @@ public class Player : Actor
 
     public Dictionary<string, SkillInfo> skills;
 
-    private int attackDamage = 50;
-    private int skill1Damage = 250;
-    private int skill2Damage = 400;
+    public int attackDamage = 50;
+    public int skill1Damage = 250;
+    public int skill2Damage = 400;
 
     //테스트용 나중에 삭제
     public bool canskill1;
@@ -35,6 +37,11 @@ public class Player : Actor
 
     private void Awake()
     {
+        playerController = GetComponent<PlayerController>();
+
+        gameManager = GameObject.Find("@GM").GetComponent<Actor>();
+        backgroundSize = gameManager.backgroundSize;
+
         stat = new StatusManager(100, 100, 50);
         dashGodMode = false;
         dashGodModeTime = 0.0f;
@@ -47,8 +54,7 @@ public class Player : Actor
 
     // Start is called before the first frame update
     void Start()
-    {
-        playerController = GetComponent<PlayerController>();        
+    { 
     }
 
     // Update is called once per frame
@@ -82,7 +88,7 @@ public class Player : Actor
         {
             if (dashGodMode == false) 
             {
-                Hp -= 0.5f;
+                //Hp -= 0.5f;
             }
         }
     }
