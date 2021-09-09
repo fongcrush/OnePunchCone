@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
 
     void Turn()
 	{
-        if(characterDirection == CharacterDirection.Left)
+        if(LeftOrRight())
             transform.rotation = Quaternion.Euler(new Vector3(0, 180f, 0));
         else
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -335,10 +335,13 @@ public class PlayerController : MonoBehaviour
         float curTime = 0;
 
         // 돌진 목표 지점 계산
-        // 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 bottom center 이기 때문에)
+        // 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
         Vector3 dir;
-        dir = new Vector3(chargeRange.position.x + 300f * chargeRange.localScale.x - 150f, transform.position.y, 0);
-        dir.x = Mathf.Clamp(dir.x, mapSizeMin.x, mapSizeMax.x);
+		if(LeftOrRight())
+			dir = new Vector3(chargeRange.position.x - 300f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+		else
+			dir = new Vector3(chargeRange.position.x + 300f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+		dir.x = Mathf.Clamp(dir.x, mapSizeMin.x, mapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, mapSizeMin.y, mapSizeMax.y);
 
         player.stat.Power = player.Skill2Damage;
