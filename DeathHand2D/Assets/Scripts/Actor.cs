@@ -14,7 +14,6 @@ public class Actor : MonoBehaviour
         Vector2 spriteSize = background.GetComponent<SpriteRenderer>().sprite.rect.size;
         Vector2 localSpriteSize = spriteSize / background.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         backgroundSize = localSpriteSize * background.transform.lossyScale;
-        Debug.Log(backgroundSize);
     }
 
     // Update is called once per frame
