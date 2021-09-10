@@ -169,9 +169,9 @@ public class EnemyController : MonoBehaviour
         {
             // X축 거리는 유지하고 Z축만 이동
             if (playerDirectionX == PlayerDirectionX.LEFT)
-                transform.position = Vector2.MoveTowards(transform.position, (Vector2)targetTransform.position + new Vector2(+(transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetTransform.position.x + (transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
             else
-                transform.position = Vector2.MoveTowards(transform.position, (Vector2)targetTransform.position + new Vector2(-(transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetTransform.position.x - (transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
         }
         else
         {
@@ -184,8 +184,7 @@ public class EnemyController : MonoBehaviour
         ChangeRotation();
 
         CheckDistanceX();
-
-        transform.position = new Vector2(transform.position.x, transform.position.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, -2f);
     }
     public void Attack()
     {
