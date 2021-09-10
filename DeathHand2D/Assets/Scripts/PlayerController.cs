@@ -33,9 +33,9 @@ public class PlayerController : MonoBehaviour
     private int dashCount;
     private bool useDash;
 
-    public float walkSpeed = 300f;
-    public float runSpeed = 750f;
-    private const float DashSpeed = 1000;
+    public float walkSpeed = 3f;
+    public float runSpeed = 7.5f;
+    private const float DashSpeed = 10;
 
     //private float[] FirstTime;
     private bool canRun;
@@ -57,27 +57,27 @@ public class PlayerController : MonoBehaviour
     bool isRun;
     bool isTiming;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(other.gameObject.tag == "Arrow")
+        if (collision.gameObject.tag == "Arrow")
         {
-            Destroy(other.gameObject);
+            Destroy(collision.gameObject);
         }
     }
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if(other.gameObject.tag == "PerfectTiming")
+        if (collision.gameObject.tag == "PerfectTiming")
         {
-            if(!isTiming)
+            if (!isTiming)
             {
                 Debug.Log("Timing!");
                 isTiming = true;
             }
         }
     }
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if(other.gameObject.tag == "PerfectTiming")
+        if (collision.gameObject.tag == "PerfectTiming")
         {
             isTiming = false;
         }
@@ -160,7 +160,6 @@ public class PlayerController : MonoBehaviour
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
         moveDirection = new Vector3(hAxis, vAxis, 0).normalized;
-        Debug.Log(moveDirection);
 
         if(hAxis != 0)
         {
@@ -250,6 +249,7 @@ public class PlayerController : MonoBehaviour
             player.skills["Judgement"].curTime = 0;
             player.skills["Charge"].curTime = 0;
             isTiming = false;
+            Debug.Log(1);
         }
     }
 
@@ -338,9 +338,9 @@ public class PlayerController : MonoBehaviour
         // 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
         Vector3 dir;
 		if(LeftOrRight())
-			dir = new Vector3(chargeRange.position.x - 300f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+			dir = new Vector3(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
 		else
-			dir = new Vector3(chargeRange.position.x + 300f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+			dir = new Vector3(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
 		dir.x = Mathf.Clamp(dir.x, mapSizeMin.x, mapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, mapSizeMin.y, mapSizeMax.y);
 

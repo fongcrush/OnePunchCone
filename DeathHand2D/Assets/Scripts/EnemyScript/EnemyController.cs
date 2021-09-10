@@ -27,10 +27,10 @@ public class EnemyController : MonoBehaviour
     public GameObject arrow;
 
     private GameObject arrowObject;
-    private Rigidbody arrowRigid;
-    private Rigidbody enemyRigid;
+    private Rigidbody2D arrowRigid;
+    private Rigidbody2D enemyRigid;
 
-    private MeshRenderer enemyWarningBoxMesh;
+    private SpriteRenderer enemyWarningBoxMesh;
 
     public int attTypeValue;
     private AttackType attType;
@@ -51,7 +51,6 @@ public class EnemyController : MonoBehaviour
     public Transform targetTransform;
 
     private bool isAttackColliderActivation = false;
-    private bool isOnDamage = false;
 
     public EnemyBaseState CurrentState
     {
@@ -67,10 +66,10 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         currentState = IdleState;
-        enemyRigid = GetComponent<Rigidbody>();
+        enemyRigid = GetComponent<Rigidbody2D>();
         playerDirectionX = PlayerDirectionX.LEFT;
 
-        enemyWarningBoxMesh = enemyWarningBox.GetComponent<MeshRenderer>();
+        enemyWarningBoxMesh = enemyWarningBox.GetComponent<SpriteRenderer>();
         attType = (AttackType)attTypeValue;
         player = GameObject.Find("Player").GetComponent<Player>();
         enemy = GetComponent<Enemy>();
@@ -79,12 +78,12 @@ public class EnemyController : MonoBehaviour
     {
         if (attType == AttackType.RANGED)
         {
-            enemyAttackCollider.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
-            enemyAttackCollider.transform.localScale = new Vector3(4f, 1f, 1f);
-            enemyWarningBox.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
-            enemyWarningBox.transform.localScale = new Vector3(4f, 1f, 1f);
-            enemyTimingBox.transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z);
-            enemyTimingBox.transform.localScale = new Vector3(4f, 1f, 1f);
+            enemyAttackCollider.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
+            enemyAttackCollider.transform.localScale = new Vector3(4f, 3f, 1f);
+            enemyWarningBox.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
+            enemyWarningBox.transform.localScale = new Vector3(4f, 3f, 1f);
+            enemyTimingBox.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
+            enemyTimingBox.transform.localScale = new Vector3(4f, 3f, 1f);
             range = 1.99f;
         }
 
@@ -94,10 +93,9 @@ public class EnemyController : MonoBehaviour
     {
         currentState.Update(this);
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.gameObject.tag == "PlayerAttackCollider")
+        if (collision.gameObject.tag == "PlayerAttackCollider")
         {
             // 데미지 조정 필요
             //gameObject.GetComponent<Enemy>().OnDamage(50.0f);
@@ -126,7 +124,7 @@ public class EnemyController : MonoBehaviour
     }
     public bool CheckInAttackRange()
     {
-        return (CalcTargetDistance() < attackRange && Mathf.Abs(transform.position.z - targetTransform.position.z) < 0.3f) ? true : false;
+        return (CalcTargetDistance() < attackRange && Mathf.Abs(transform.position.y - targetTransform.position.y) < 0.3f) ? true : false;
     }
     public bool IsAlive()
     {
@@ -156,10 +154,12 @@ public class EnemyController : MonoBehaviour
         if (playerDirectionX == PlayerDirectionX.LEFT)
         {
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            enemyWarningBox.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (playerDirectionX == PlayerDirectionX.RIGHT)
         {
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            enemyWarningBox.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
     }
     public void CheckDistanceX()
@@ -169,13 +169,13 @@ public class EnemyController : MonoBehaviour
         {
             // X축 거리는 유지하고 Z축만 이동
             if (playerDirectionX == PlayerDirectionX.LEFT)
-                transform.position = Vector3.MoveTowards(transform.position, targetTransform.position + new Vector3(+(transform.position.x - targetTransform.position.x), 0f, 0f), speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, (Vector2)targetTransform.position + new Vector2(+(transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
             else
-                transform.position = Vector3.MoveTowards(transform.position, targetTransform.position + new Vector3(-(transform.position.x - targetTransform.position.x), 0f, 0f), speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, (Vector2)targetTransform.position + new Vector2(-(transform.position.x - targetTransform.position.x), 0f), speed * Time.deltaTime);
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetTransform.position, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, targetTransform.position, speed * Time.deltaTime);
         }
     }
     public void TraceTarget()
@@ -185,7 +185,7 @@ public class EnemyController : MonoBehaviour
 
         CheckDistanceX();
 
-        transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
+        transform.position = new Vector2(transform.position.x, transform.position.y);
     }
     public void Attack()
     {
@@ -206,13 +206,13 @@ public class EnemyController : MonoBehaviour
 
         // 적 공격 박스의 투명도 설정
         var c = enemyWarningBoxMesh.material.color;
-        c.a = 0.2f;
+        c.a = 0.6f;
         enemyWarningBoxMesh.material.color = c;
         yield return new WaitForSeconds(attackDelay - 0.5f);
 
         // 완벽한 회피 타이밍 활성화
         enemyTimingBox.SetActive(true);
-        c.a = 0.4f;
+        c.a = 0.8f;
         enemyWarningBoxMesh.material.color = c;
 
         yield return new WaitForSeconds(attackDelay);
@@ -227,16 +227,16 @@ public class EnemyController : MonoBehaviour
         else if (attType == AttackType.RANGED)
         {
             if (playerDirectionX == PlayerDirectionX.LEFT)
-                arrowObject = Instantiate(arrow, new Vector3(transform.position.x - 0.5f, 1.5f, transform.position.z), Quaternion.identity);
+                arrowObject = Instantiate(arrow, new Vector2(transform.position.x - 0.5f, transform.position.y), Quaternion.identity);
             else
-                arrowObject = Instantiate(arrow, new Vector3(transform.position.x + 0.5f, 1.5f, transform.position.z), Quaternion.identity);
+                arrowObject = Instantiate(arrow, new Vector2(transform.position.x + 0.5f, transform.position.y), Quaternion.identity);
 
-            arrowRigid = arrowObject.GetComponent<Rigidbody>();
+            arrowRigid = arrowObject.GetComponent<Rigidbody2D>();
 
             if (playerDirectionX == PlayerDirectionX.LEFT)
-                arrowRigid.AddForce(Vector3.left * 20f, ForceMode.Impulse);
+                arrowRigid.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
             else
-                arrowRigid.AddForce(Vector3.right * 20f, ForceMode.Impulse);
+                arrowRigid.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
         }
 
         // n초 후 공격 종료
