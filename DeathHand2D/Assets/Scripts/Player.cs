@@ -52,8 +52,8 @@ public class Player : Actor
         dashTime = 0.0f;
 
         skills = new Dictionary<string, SkillInfo>();
-        skills.Add("Judgement", new SkillInfo(250, skill1CoolTime, 0f));
-        skills.Add("Charge", new SkillInfo(400, Skill2CoolTime, 0f));
+        skills.Add("Judgement", new SkillInfo(300, skill1CoolTime, 0f));
+        skills.Add("Charge", new SkillInfo(150, Skill2CoolTime, 0f));
     }
 
     // Start is called before the first frame update
