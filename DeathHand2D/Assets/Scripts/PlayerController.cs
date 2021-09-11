@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
         {
             if (!isTiming)
             {
-                Debug.Log("Timing!");
                 isTiming = true;
             }
         }
@@ -249,7 +248,6 @@ public class PlayerController : MonoBehaviour
             player.skills["Judgement"].curTime = 0;
             player.skills["Charge"].curTime = 0;
             isTiming = false;
-            Debug.Log(1);
         }
     }
 
@@ -301,7 +299,6 @@ public class PlayerController : MonoBehaviour
         attackCollObject.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
         attackCollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        Debug.Log("공격");
         yield return new WaitForSeconds(0.1f);
         attackCollObject.gameObject.SetActive(false);
         attackCollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -319,7 +316,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         skill1CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        Debug.Log("스킬1 발동");
         yield return new WaitForSeconds(0.1f);
         skill1CollObject.gameObject.SetActive(false);
         skill1CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -336,11 +332,11 @@ public class PlayerController : MonoBehaviour
 
         // 돌진 목표 지점 계산
         // 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
-        Vector3 dir;
+        Vector2 dir;
 		if(LeftOrRight())
-			dir = new Vector3(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+			dir = new Vector2(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), transform.position.y);
 		else
-			dir = new Vector3(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), transform.position.y, 0);
+			dir = new Vector2(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), transform.position.y);
 		dir.x = Mathf.Clamp(dir.x, mapSizeMin.x, mapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, mapSizeMin.y, mapSizeMax.y);
 
@@ -350,21 +346,20 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         skill2CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        Debug.Log("스킬2 발동");
         yield return null;
 
-        Vector3 fixedChargePos = chargeRange.position;
+        Vector2 fixedChargePos = chargeRange.position;
         while (curTime < time - delay)
         {
             curTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, dir, Time.deltaTime * 20);
+            transform.localPosition = Vector2.Lerp(transform.position, dir, Time.deltaTime * 20);
             chargeRange.position = fixedChargePos;
             yield return null;
         }
         skill2CollObject.gameObject.SetActive(false);
         skill2CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         chargeRange.gameObject.SetActive(false);
-        chargeRange.localPosition = Vector3.zero;
+        chargeRange.localPosition = Vector2.zero;
         playerState.State = "Idle";
     }
 
@@ -384,12 +379,12 @@ public class PlayerController : MonoBehaviour
         dashCount -= 1;
         useDash = true;
         CheckPerfectTiming();
-        if (playerState.State != "Idle")
+        if (playerState.State != "Idle" && playerState.State != "Attack" && playerState.State != "Skill1")
         {
             transform.position = transform.position + moveDirection * DashSpeed;
             return;
         }
-        if (!LeftOrRight())
+        if (LeftOrRight())
             transform.position = transform.position + Vector3.left * DashSpeed;
         else
             transform.position = transform.position + Vector3.right * DashSpeed;
