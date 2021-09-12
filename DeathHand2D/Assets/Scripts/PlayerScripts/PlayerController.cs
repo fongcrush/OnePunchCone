@@ -142,19 +142,19 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
             if(canRun && currentArrowKey == CurrentArrowKey.Left) { isRun = true; playerState.State = "Run"; }
-            else { canRun = true; currentArrowKey = CurrentArrowKey.Left; playerState.State = "Walk"; }
+            else { canRun = true; currentArrowKey = CurrentArrowKey.Left; if(playerState.State != "Run") playerState.State = "Walk"; }
 
         if(Input.GetKeyDown(KeyCode.RightArrow))
             if(canRun && currentArrowKey == CurrentArrowKey.Right) { isRun = true; playerState.State = "Run"; }
-            else { canRun = true; currentArrowKey = CurrentArrowKey.Right; playerState.State = "Walk"; }
+            else { canRun = true; currentArrowKey = CurrentArrowKey.Right; if (playerState.State != "Run") playerState.State = "Walk"; }
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
             if(canRun && currentArrowKey == CurrentArrowKey.Up) { isRun = true; playerState.State = "Run"; }
-            else { canRun = true; currentArrowKey = CurrentArrowKey.Up; playerState.State = "Walk"; }
+            else { canRun = true; currentArrowKey = CurrentArrowKey.Up; if (playerState.State != "Run") playerState.State = "Walk"; }
 
         if(Input.GetKeyDown(KeyCode.DownArrow))
             if(canRun && currentArrowKey == CurrentArrowKey.Down) { isRun = true; playerState.State = "Run"; }
-            else { canRun = true; currentArrowKey = CurrentArrowKey.Down; playerState.State = "Walk"; }
+            else { canRun = true; currentArrowKey = CurrentArrowKey.Down; if (playerState.State != "Run") playerState.State = "Walk"; }
 
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");

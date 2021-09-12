@@ -24,8 +24,6 @@ public class Player : Actor
     public int skill2Damage = 400;
     public float Skill2CoolTime;
 
-
-    //테스트용 나중에 삭제
     public bool canskill1;
     public bool canskill2;
 
@@ -37,7 +35,8 @@ public class Player : Actor
     public int Skill1Damage { get { return skill1Damage; } }
     public int Skill2Damage { get { return skill2Damage; } }
 
-    
+    public PlayerController GetPlayerController { get { return playerController; } }
+
 
     private void Awake()
     {
@@ -50,6 +49,8 @@ public class Player : Actor
         dashGodMode = false;
         dashGodModeTime = 0.0f;
         dashTime = 0.0f;
+        canskill1 = true;
+        canskill2 = true;
 
         skills = new Dictionary<string, SkillInfo>();
         skills.Add("Judgement", new SkillInfo(300, skill1CoolTime, 0f));
@@ -58,7 +59,7 @@ public class Player : Actor
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
     }
 
     // Update is called once per frame
