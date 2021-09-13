@@ -37,19 +37,20 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 7.5f;
     private const float DashSpeed = 10;
 
-    //private float[] FirstTime;
     private bool canRun;
     private float curDoubleCheckTime = 0;
 
     private Transform attackCollObject;
     private Transform skill1CollObject;
     private Transform skill2CollObject;
+    private Transform skill3CollObject;
     private Transform chargeRange;
 
     private SpriteRenderer playerSprite;
 
     private IEnumerator _AttackRountine = null;
     private IEnumerator _Skill1Rountine = null;
+    private IEnumerator _Skill3Rountine = null;
 
     float hAxis = 0;
     float vAxis = 0;
@@ -84,7 +85,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        //FirstTime = new float[4];
         canRun = false;
         isRun = false;
         characterDirection = CharacterDirection.Right;
@@ -93,11 +93,11 @@ public class PlayerController : MonoBehaviour
         attackCollObject = GameObject.Find("Player Coll").transform.Find("AttackColl");
         skill1CollObject = GameObject.Find("Player Coll").transform.Find("Skill1Coll");
         skill2CollObject = GameObject.Find("Include Self").transform.Find("Skill2Coll");
+        skill3CollObject = GameObject.Find("Player Coll").transform.Find("Skill3Coll");
         chargeRange = GameObject.Find("Include Self").transform.Find("ChargeRange");
         playerSprite = GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GetComponent<Player>();
@@ -106,10 +106,9 @@ public class PlayerController : MonoBehaviour
         boxColliderSize = GetComponent<BoxCollider2D>().size;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2")
+        if (playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill2" && playerState.State != "Skill3")
         {
             PlayerMoveInput();
             PlayerActionInput();
@@ -117,7 +116,7 @@ public class PlayerController : MonoBehaviour
             Move();
             Turn();
         }
-        else if (playerState.State == "Attack" || playerState.State == "Skill1")
+        else if (playerState.State == "Attack" || playerState.State == "Skill1" || playerState.State == "Skill3")
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0)
             {
@@ -127,11 +126,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(player.skills["Judgement"].curTime == 0) 
+        if(player.skills["CrossSword"].curTime == 0) 
         {
             player.canskill1 = true;
         }
-        if (player.skills["Charge"].curTime == 0)
+        if (player.skills["Rush"].curTime == 0)
         {
             player.canskill2 = true;
         }
@@ -186,28 +185,38 @@ public class PlayerController : MonoBehaviour
     void PlayerActionInput()
     {
         // 공격
-        if(Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             _AttackRountine = AttackRoutine(0.5f, 0.8f);
             StartCoroutine(_AttackRountine);
         }
         // 스킬 1
-        if(Input.GetKeyDown(KeyCode.X) && player.skills["Judgement"].curTime == 0f)
+        if (Input.GetKeyDown(KeyCode.X) && player.skills["CrossSword"].curTime == 0f)
         {
             _Skill1Rountine = Skill1Routine(0.5f, 1f);
             StartCoroutine(_Skill1Rountine);
             player.canskill1 = false;
         }
+
         //스킬 2
-        if(Input.GetKeyDown(KeyCode.C) && player.skills["Charge"].curTime == 0f)
+        if (Input.GetKeyDown(KeyCode.C) && player.skills["Rush"].curTime == 0f)
         {
             StartCoroutine(Skill2Routine(0.5f, 1f));
             player.canskill2 = false;
         }
-        // 대쉬
-        if(Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0 && useDash == false)
+
+        //스킬 2-1
+        else if (Input.GetKeyDown(KeyCode.C) && player.canskill3 == true)
         {
-            if(playerState.State == "Run" || playerState.State == "Walk" || playerState.State == "Idle")
+            _Skill3Rountine = Skill3Routine(0.5f, 1f);
+            StartCoroutine(_Skill3Rountine);
+            player.canskill3 = false;
+        }
+
+        // 대쉬
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0 && useDash == false)
+        {
+            if (playerState.State == "Run" || playerState.State == "Walk" || playerState.State == "Idle")
             {
                 DoDash();
             }
@@ -245,8 +254,9 @@ public class PlayerController : MonoBehaviour
         if(isTiming == true) 
         {
             StopAllCoroutines();
-            player.skills["Judgement"].curTime = 0;
-            player.skills["Charge"].curTime = 0;
+            player.skills["CrossSword"].curTime = 0;
+            player.skills["Rush"].curTime = 0;
+            player.skills["QuadSlash"].curTime = 0;
             isTiming = false;
         }
     }
@@ -289,13 +299,19 @@ public class PlayerController : MonoBehaviour
             skill1CollObject.gameObject.SetActive(false);
             skill1CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
+        else if (playerState.State == "Skill3")
+        {
+            StopCoroutine(_Skill3Rountine);
+            skill3CollObject.gameObject.SetActive(false);
+            skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
     IEnumerator AttackRoutine(float delay, float time)
     {
         playerState.State = "Attack";
 
-        player.stat.Power = player.AttackDamage;
+        player.stat.Power = player.GetAttackDamage;
         attackCollObject.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
         attackCollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
@@ -308,10 +324,10 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill1Routine(float delay, float time)
     {
-        StartCoroutine(SkillTimer("Judgement"));
+        StartCoroutine(SkillTimer("CrossSword"));
         playerState.State = "Skill1";
 
-        player.stat.Power = player.Skill1Damage;
+        player.stat.Power = player.GetSkill1Damage;
         skill1CollObject.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
 
@@ -325,7 +341,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Skill2Routine(float delay, float time)
     {
-        StartCoroutine(SkillTimer("Charge"));
+        StartCoroutine(SkillTimer("Rush"));
+        StartCoroutine(Skill3ComboTimer());
         playerState.State = "Skill2";
 
         float curTime = 0;
@@ -340,7 +357,7 @@ public class PlayerController : MonoBehaviour
 		dir.x = Mathf.Clamp(dir.x, mapSizeMin.x, mapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, mapSizeMin.y, mapSizeMax.y);
 
-        player.stat.Power = player.Skill2Damage;
+        player.stat.Power = player.GetSkill2Damage;
         skill2CollObject.gameObject.SetActive(true);
         chargeRange.gameObject.SetActive(true); 
         yield return new WaitForSeconds(delay);
@@ -363,6 +380,22 @@ public class PlayerController : MonoBehaviour
         playerState.State = "Idle";
     }
 
+    IEnumerator Skill3Routine(float delay, float time)
+    {
+        playerState.State = "Skill3";
+
+        player.stat.Power = player.GetSkill3Damage;
+        skill3CollObject.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+
+        skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        skill3CollObject.gameObject.SetActive(false);
+        skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        yield return new WaitForSeconds(time - delay);
+        playerState.State = "Idle";
+    }
+
     IEnumerator SkillTimer(string name)
 	{
         while(player.skills[name].curTime < player.skills[name].coolTime)
@@ -372,14 +405,20 @@ public class PlayerController : MonoBehaviour
 		}
         player.skills[name].curTime = 0f;
 	}
-
+    IEnumerator Skill3ComboTimer()
+    {
+        player.canskill3 = true;
+        yield return new WaitForSeconds(5.0f);
+        player.canskill3 = false;
+        yield return null;
+    }
 
     void DoDash()
     {
         dashCount -= 1;
         useDash = true;
         CheckPerfectTiming();
-        if (playerState.State != "Idle" && playerState.State != "Attack" && playerState.State != "Skill1")
+        if (playerState.State != "Idle" && playerState.State != "Attack" && playerState.State != "Skill1" && playerState.State != "Skill3")
         {
             transform.position = transform.position + moveDirection * DashSpeed;
             return;

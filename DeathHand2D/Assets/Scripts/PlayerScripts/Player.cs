@@ -17,23 +17,25 @@ public class Player : Actor
 
     public Dictionary<string, SkillInfo> skills;
 
-    public int attackDamage = 50;
+    private const int AttackDamage = 50;
 
-    public int skill1Damage = 250;
-    public float skill1CoolTime;
-    public int skill2Damage = 400;
-    public float Skill2CoolTime;
+    private const int Skill1Damage = 300;
+    private const float Skill1CoolTime = 10;
+    private const int Skill2Damage = 150;
+    private const float Skill2CoolTime = 15;
+    private const int Skill3Damage = 70;
 
     public bool canskill1;
     public bool canskill2;
+    public bool canskill3;
 
     float dashTime;
-    const float MaxDashTimer = 3.0f;
+    const float MaxDashTimer = 10.0f;
 
-
-    public int AttackDamage { get { return attackDamage; } }
-    public int Skill1Damage { get { return skill1Damage; } }
-    public int Skill2Damage { get { return skill2Damage; } }
+    public int GetAttackDamage { get { return AttackDamage; } }
+    public int GetSkill1Damage { get { return Skill1Damage; } }
+    public int GetSkill2Damage { get { return Skill2Damage; } }
+    public int GetSkill3Damage { get { return Skill3Damage; } }
 
     public PlayerController GetPlayerController { get { return playerController; } }
 
@@ -51,10 +53,12 @@ public class Player : Actor
         dashTime = 0.0f;
         canskill1 = true;
         canskill2 = true;
+        canskill3 = false;
 
         skills = new Dictionary<string, SkillInfo>();
-        skills.Add("Judgement", new SkillInfo(300, skill1CoolTime, 0f));
-        skills.Add("Charge", new SkillInfo(150, Skill2CoolTime, 0f));
+        skills.Add("CrossSword", new SkillInfo(GetSkill1Damage, Skill1CoolTime, 0f));
+        skills.Add("Rush", new SkillInfo(GetSkill2Damage, Skill2CoolTime, 0f));
+        skills.Add("QuadSlash", new SkillInfo(GetSkill3Damage, Skill1CoolTime, 0f));
     }
 
     // Start is called before the first frame update

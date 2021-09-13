@@ -13,6 +13,7 @@ public class PlayerFSM : MonoBehaviour
         Attack,
         Skill1,
         Skill2,
+        Skill3,
         Dead
     }
 
@@ -46,6 +47,10 @@ public class PlayerFSM : MonoBehaviour
     private void Skill2()
     {
         playerState = States.Skill2;
+    }
+    private void Skill3()
+    {
+        playerState = States.Skill3;
     }
     private void Dead()
     {
@@ -82,6 +87,9 @@ public class PlayerFSM : MonoBehaviour
                     break;
                 case "Skill2":
                     Skill2();
+                    break;
+                case "Skill3":
+                    Skill3();
                     break;
                 case "Dead":
                     Dead();
