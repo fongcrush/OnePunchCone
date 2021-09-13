@@ -43,8 +43,8 @@ public class EnemyController : MonoBehaviour
     public float traceRange = 5.0f;
     public float attackRange = 2.0f;
     public float speed = 0.75f;
-    public float attackDelay = 1f;
-    public float attackSpeed = 1f;
+    public float attackDelay = 1f; // 공격 후 다음 공격까지 걸리는 시간
+    public float attackSpeed = 1f; // 공격에 걸리는 시간
 
     private float range = 0.5f;
 
@@ -78,13 +78,18 @@ public class EnemyController : MonoBehaviour
     {
         if (attType == AttackType.RANGED)
         {
-            enemyAttackCollider.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
-            enemyAttackCollider.transform.localScale = new Vector3(4f, 3f, 1f);
-            enemyWarningBox.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
-            enemyWarningBox.transform.localScale = new Vector3(4f, 3f, 1f);
-            enemyTimingBox.transform.position = new Vector2(transform.position.x - 2.5f, transform.position.y + 2.2f);
-            enemyTimingBox.transform.localScale = new Vector3(4f, 3f, 1f);
-            range = 1.99f;
+            enemyAttackCollider.transform.localScale = new Vector3(1f, 1f, 1f);
+            enemyWarningBox.transform.localScale = new Vector3(1f, 1f, 1f);
+            enemyTimingBox.transform.localScale = new Vector3(1f, 1f, 1f);
+            range = 2.99f;
+
+            attackSpeed = 0.2f;
+            attackDelay = 0f;
+            speed = 1.5f;
+            attackRange = 3f;
+            traceRange = 8f;
+            enemy.stat.MaxHP = 500;
+            enemy.stat.Power = 30;
         }
 
         ChangeState(IdleState);
@@ -102,9 +107,9 @@ public class EnemyController : MonoBehaviour
 
             enemy.stat.ChangeHP(-player.stat.Power);
             Debug.Log("Hit!");
-            Debug.Log(GetComponent<Enemy>().GetEnemyHp());
+            Debug.Log(gameObject.name + GetComponent<Enemy>().GetEnemyHp());
+            currentState.OnCollisionEnter(this);
         }
-        currentState.OnCollisionEnter(this);
     }
 
     public void ChangeState(EnemyBaseState state)
@@ -191,6 +196,13 @@ public class EnemyController : MonoBehaviour
         CheckPlayerDirectionX();
         ChangeRotation();
 
+        if(attType == AttackType.RANGED)
+        {
+            enemyAttackCollider.transform.position = targetTransform.position;
+            enemyWarningBox.transform.position = targetTransform.position;
+            enemyTimingBox.transform.position = targetTransform.position;
+        }
+
         StartCoroutine(AttackActivation());
     }
     public bool GetIsAttackColliderActivation()
@@ -199,6 +211,7 @@ public class EnemyController : MonoBehaviour
     }
     IEnumerator AttackActivation()
     {
+
         // 적 공격 범위 박스 활성화
         enemyWarningBox.SetActive(true);
         isAttackColliderActivation = true;
@@ -207,14 +220,14 @@ public class EnemyController : MonoBehaviour
         var c = enemyWarningBoxMesh.material.color;
         c.a = 0.6f;
         enemyWarningBoxMesh.material.color = c;
-        yield return new WaitForSeconds(attackDelay - 0.5f);
+        yield return new WaitForSeconds(attackSpeed - 0.1f);
 
         // 완벽한 회피 타이밍 활성화
         enemyTimingBox.SetActive(true);
         c.a = 0.8f;
         enemyWarningBoxMesh.material.color = c;
 
-        yield return new WaitForSeconds(attackDelay);
+        yield return new WaitForSeconds(attackSpeed);
 
 
         // 완벽한 회피 타이밍 비활성화, 적 공격 범위 박스 비활성화, 적 공격 히트 박스 활성화 및 Damage
@@ -225,17 +238,17 @@ public class EnemyController : MonoBehaviour
             enemyAttackCollider.SetActive(true);
         else if (attType == AttackType.RANGED)
         {
-            if (playerDirectionX == PlayerDirectionX.LEFT)
-                arrowObject = Instantiate(arrow, new Vector2(transform.position.x - 0.5f, transform.position.y + 2.2f), Quaternion.identity);
-            else
-                arrowObject = Instantiate(arrow, new Vector2(transform.position.x + 0.5f, transform.position.y + 2.2f), Quaternion.identity);
+            //if (playerDirectionX == PlayerDirectionX.LEFT)
+            //    arrowObject = Instantiate(arrow, new Vector2(transform.position.x - 0.5f, transform.position.y + 2.2f), Quaternion.identity);
+            //else
+            //    arrowObject = Instantiate(arrow, new Vector2(transform.position.x + 0.5f, transform.position.y + 2.2f), Quaternion.identity);
 
-            arrowRigid = arrowObject.GetComponent<Rigidbody2D>();
+            //arrowRigid = arrowObject.GetComponent<Rigidbody2D>();
 
-            if (playerDirectionX == PlayerDirectionX.LEFT)
-                arrowRigid.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
-            else
-                arrowRigid.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
+            //if (playerDirectionX == PlayerDirectionX.LEFT)
+            //    arrowRigid.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
+            //else
+            //    arrowRigid.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
         }
 
         // n초 후 공격 종료
@@ -246,7 +259,7 @@ public class EnemyController : MonoBehaviour
 
         enemyAttackCollider.SetActive(false);
 
-        yield return new WaitForSeconds(attackSpeed);
+        yield return new WaitForSeconds(attackDelay);
 
         isAttackColliderActivation = false;
     }
