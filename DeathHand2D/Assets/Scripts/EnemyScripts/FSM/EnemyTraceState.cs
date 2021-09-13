@@ -35,7 +35,7 @@ public class EnemyTraceState : EnemyBaseState
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {
-        
+        ctrl.ChangeState(ctrl.HitState);
     }
     public override void End(EnemyController ctrl)
     {
