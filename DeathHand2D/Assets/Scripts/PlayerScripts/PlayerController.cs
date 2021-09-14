@@ -383,15 +383,17 @@ public class PlayerController : MonoBehaviour
     IEnumerator Skill3Routine(float delay, float time)
     {
         playerState.State = "Skill3";
-
         player.stat.Power = player.GetSkill3Damage;
-        skill3CollObject.gameObject.SetActive(true);
-        yield return new WaitForSeconds(delay);
 
-        skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        skill3CollObject.gameObject.SetActive(false);
-        skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        for (int i = 0; i < 4; i++) 
+        {
+            skill3CollObject.gameObject.SetActive(true);
+            yield return new WaitForSeconds(delay);
+            skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            yield return new WaitForSeconds(0.3f);
+            skill3CollObject.gameObject.SetActive(false);
+            skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }        
         yield return new WaitForSeconds(time - delay);
         playerState.State = "Idle";
     }
