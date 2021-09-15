@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     public Vector2 mapSizeMin, mapSizeMax;
 
     Player player;
-    PlayerFSM playerState;
+    public PlayerFSM playerState;
+    SkillManager skillManager;
 
     private CharacterDirection characterDirection;
     private CurrentArrowKey currentArrowKey;
@@ -104,6 +105,8 @@ public class PlayerController : MonoBehaviour
         playerState = GetComponent<PlayerFSM>();
         playerState.State = "Idle";
         boxColliderSize = GetComponent<BoxCollider2D>().size;
+
+        skillManager = GameObject.Find("SkillManager").GetComponent<SkillManager>();
     }
 
     void Update()

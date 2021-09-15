@@ -6,8 +6,8 @@ using System.Timers;
 public class Player : Actor
 {
     public Actor gameManager;
-
-    PlayerController playerController;
+    [HideInInspector]
+    public PlayerController playerController;
 
     [SerializeField]
     bool dashGodMode;
