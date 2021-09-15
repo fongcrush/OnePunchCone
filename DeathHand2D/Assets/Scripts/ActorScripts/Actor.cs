@@ -7,6 +7,7 @@ public class Actor : MonoBehaviour
     public GameObject background;
     [HideInInspector]
     public Vector2 backgroundSize;
+    public Vector2 mapSizeMin, mapSizeMax;
 
     // Start is called before the first frame update
     void Start()

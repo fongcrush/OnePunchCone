@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using static CSVUtil;
 
-public class SkillManager : MonoBehaviour
+public class AttackManager : MonoBehaviour
 {
 	public static List<Dictionary<string, object>> CSVData;
 	public static Dictionary<short, SkillInfo> skillTable = new Dictionary<short, SkillInfo>();
