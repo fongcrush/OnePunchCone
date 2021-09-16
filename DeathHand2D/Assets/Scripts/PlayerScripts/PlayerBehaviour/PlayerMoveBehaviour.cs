@@ -15,11 +15,12 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
     Vector3 moveDirection;
 
     private float curDoubleCheckTime = 0;
-    void Awake()
+
+    public PlayerMoveBehaviour(Player playerComponent)
 	{
-        player = GameObject.Find("Player").GetComponent<Player>();
+        player = playerComponent;
+        moveDirection = Vector3.zero;
         canRun = false;
-        Debug.Log(player);
     }
 
     public void Begin()
@@ -95,9 +96,10 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
         {
             movePos = player.transform .position + moveDirection * walkSpeed * Time.deltaTime;
         }
+        
         // 맵을 넘어가지 않도록 제한
-        movePos.x = Mathf.Clamp(movePos.x, player.mapSizeMin.x, player.mapSizeMax.x);
-        movePos.y = Mathf.Clamp(movePos.y, player.mapSizeMin.y, player.mapSizeMax.y);
+        movePos.x = Mathf.Clamp(movePos.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
+        movePos.y = Mathf.Clamp(movePos.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
         player.transform.position = movePos;
     }
     void Turn()

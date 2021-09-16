@@ -23,8 +23,8 @@ public class UIController : MonoBehaviour
 
     void Update()
     {
-        CheckPlayerDashCount();
-        CheckPlayerUseSkill();
+        //CheckPlayerDashCount();
+        //CheckPlayerUseSkill();
     }
 
     void CheckPlayerDashCount() 
@@ -44,31 +44,31 @@ public class UIController : MonoBehaviour
         }
     }
 
-    void CheckPlayerUseSkill() 
-    {
-        if (PlayerAttackManager.skillTable[101].curTime != 0)
-        {
-            Skill1.GetComponent<Image>().color = Color.black;
-        }
-        else 
-        {
-            Skill1.GetComponent<Image>().color = Color.white;
-        }
-        if(PlayerAttackManager.skillTable[111].curTime != 0) 
-        {
-            //Skill2.GetComponent<Image>().color = Color.black;
-            //if (playerComponent.canskill3 == true)
-            //{
-            //    Skill3.SetActive(true);
-            //}
-            //else
-            //{
-            //    Skill3.SetActive(false);
-            //}
-        }
-        else
-        {
-            Skill2.GetComponent<Image>().color = Color.white;
-        }       
-    }
+    //void CheckPlayerUseSkill() 
+    //{
+    //    if (PlayerAttackManager.skillTable[101].curTime != 0)
+    //    {
+    //        Skill1.GetComponent<Image>().color = Color.black;
+    //    }
+    //    else 
+    //    {
+    //        Skill1.GetComponent<Image>().color = Color.white;
+    //    }
+    //    if(PlayerAttackManager.skillTable[111].curTime != 0) 
+    //    {
+    //        Skill2.GetComponent<Image>().color = Color.black;
+    //        if (playerComponent.canskill3 == true)
+    //        {
+    //            Skill3.SetActive(true);
+    //        }
+    //        else
+    //        {
+    //            Skill3.SetActive(false);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Skill2.GetComponent<Image>().color = Color.white;
+    //    }       
+    //}
 }

@@ -5,6 +5,7 @@ using static StatesManager;
 
 public class InputManager : MonoBehaviour
 {
+    [HideInInspector]
     public static float hAxis, vAxis;
 
     static void UpdateInput()

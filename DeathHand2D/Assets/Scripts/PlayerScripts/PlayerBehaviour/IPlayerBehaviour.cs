@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPlayerBehaviour
 {	
-	public void Update();
-	public void Begin();
-	public void End();
+	void Update();
+	void Begin();
+	void End();
 }

@@ -7,7 +7,8 @@ public class Actor : MonoBehaviour
     public GameObject background;
     [HideInInspector]
     public Vector2 backgroundSize;
-    public Vector2 mapSizeMin, mapSizeMax;
+    public static Vector2 mapSizeMin = new Vector2(2.0f, 1.0f);
+    public static Vector2 mapSizeMax = new Vector2(3840.4f, 1620.2f);
 
     // Start is called before the first frame update
     void Start()
@@ -15,8 +16,6 @@ public class Actor : MonoBehaviour
         Vector2 spriteSize = background.GetComponent<SpriteRenderer>().sprite.rect.size;
         Vector2 localSpriteSize = spriteSize / background.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         backgroundSize = localSpriteSize * background.transform.lossyScale;
-        mapSizeMin = new Vector2(2.0f, 1.0f); ;
-        mapSizeMax = new Vector2(36.4f, 14.2f);
     }
 
     // Update is called once per frame

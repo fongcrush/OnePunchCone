@@ -6,10 +6,16 @@ using static InputManager;
 
 public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 {
+	Player play;
+
 	IPlayerAction curPlayerAction;
 	PlayerAttackController attackController = new PlayerAttackController();
 	DashController dashController = new DashController();
 
+	public PlayerActionBehaviour(Player playComponent)
+	{
+		play = playComponent;
+	}
 	void Awake()
 	{
 	}

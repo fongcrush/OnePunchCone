@@ -7,7 +7,7 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
     private PlayerAttackController attackController;
-    private SkillInfo skillInfo;
+    private AttackInfo skillInfo;
     private Transform coll;
     private Transform chargeRange;
     private bool isDone;
@@ -17,7 +17,7 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
     {
         player = GameObject.Find("Player").GetComponent<Player>();
         attackController = GameObject.Find("AttackManager").GetComponent<PlayerAttackController>();
-        skillInfo = PlayerAttackManager.skillTable[101];
+        skillInfo = PlayerAttackManager.attackTable[101];
         coll = GameObject.Find("AttackManager").transform.Find("Skill2Coll");
         chargeRange = GameObject.Find("Include Self").transform.Find("ChargeRange");
     }
@@ -48,8 +48,8 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
         else
             dir = new Vector2(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), transform.position.y);
 
-        dir.x = Mathf.Clamp(dir.x, player.mapSizeMin.x, player.mapSizeMax.x);
-        dir.y = Mathf.Clamp(dir.y, player.mapSizeMin.y, player.mapSizeMax.y);
+        dir.x = Mathf.Clamp(dir.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
+        dir.y = Mathf.Clamp(dir.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
 
         coll.gameObject.SetActive(true);
         chargeRange.gameObject.SetActive(true);

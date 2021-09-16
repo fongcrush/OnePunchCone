@@ -6,14 +6,14 @@ using static StatesManager;
 public class Skill3 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
-    private SkillInfo skillInfo;
+    private AttackInfo skillInfo;
     private Transform coll;
     private bool isDone;
 
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        skillInfo = PlayerAttackManager.skillTable[112];
+        skillInfo = PlayerAttackManager.attackTable[112];
         coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
         isDone = false;
     }

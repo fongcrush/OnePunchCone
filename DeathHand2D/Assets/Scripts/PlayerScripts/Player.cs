@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Timers;
 using static StatesManager;
 
-public class Player : Actor
+public class Player : MonoBehaviour
 {
     [HideInInspector]
     public StatusManager stat;
@@ -12,12 +12,11 @@ public class Player : Actor
     public Actor gameManager;
 
     private IPlayerBehaviour curPlayerBehaviour;
-    private PlayerMoveBehaviour move = new PlayerMoveBehaviour();
-    private PlayerActionBehaviour action = new PlayerActionBehaviour(); 
+    private PlayerMoveBehaviour move;
+    private PlayerActionBehaviour action;
 
     [SerializeField]
     private int dashCount;
-
 
     [SerializeField]
     private bool dashGodMode;
@@ -26,8 +25,11 @@ public class Player : Actor
 
     private void Awake()
     {
+        move = new PlayerMoveBehaviour(this);
+        action = new PlayerActionBehaviour(this);
+
         gameManager = GameObject.Find("@GM").GetComponent<Actor>();
-        backgroundSize = gameManager.backgroundSize;
+        //backgroundSize = gameManager.backgroundSize;
 
         stat = new StatusManager(100, 100, 50);
         dashGodMode = false;
@@ -56,6 +58,8 @@ public class Player : Actor
             curPlayerBehaviour = move;
 
         curPlayerBehaviour.Update();
+
+        UpdateDisplayStates();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -65,37 +69,42 @@ public class Player : Actor
             Destroy(collision.gameObject);
         }
     }
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if(collision.gameObject.tag == "PerfectTiming")
-    //    {
-    //        if(!isTiming)
-    //        {
-    //            isTiming = true;
-    //        }
-    //    }
-    //}
 
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    if(collision.gameObject.tag == "PerfectTiming")
-    //    {
-    //        isTiming = false;
-    //    }
-    //}
+	private void UpdateDisplayStates()
+	{
+	
+	}
+	//private void OnTriggerStay2D(Collider2D collision)
+	//{
+	//    if(collision.gameObject.tag == "PerfectTiming")
+	//    {
+	//        if(!isTiming)
+	//        {
+	//            isTiming = true;
+	//        }
+	//    }
+	//}
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if(collision.transform.tag == "Enemy") 
-    //    {
-    //        if (dashGodMode == false) 
-    //        {
-    //            //Hp -= 0.5f;
-    //        }
-    //    }
-    //}
+	//private void OnTriggerExit2D(Collider2D collision)
+	//{
+	//    if(collision.gameObject.tag == "PerfectTiming")
+	//    {
+	//        isTiming = false;
+	//    }
+	//}
 
-    public int DashCount
+	//private void OnCollisionEnter(Collision collision)
+	//{
+	//    if(collision.transform.tag == "Enemy") 
+	//    {
+	//        if (dashGodMode == false) 
+	//        {
+	//            //Hp -= 0.5f;
+	//        }
+	//    }
+	//}
+
+	public int DashCount
     {
         get { return dashCount; }
         set { dashCount = value; }
