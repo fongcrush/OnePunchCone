@@ -6,21 +6,26 @@ using static StatesManager;
 public class Skill3 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
-    private AttackInfo skillInfo;
+    private PlayerAttackController attackController;
+    private AttackInfo attackInfo;
     private Transform coll;
     private bool isDone;
 
-    public void Awake()
+    public Skill3(PlayerAttackController AttackController)
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        skillInfo = PlayerAttackManager.attackTable[112];
+        attackController = AttackController;
+        attackInfo = PlayerAttackManager.attackTable[101];
         coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
         isDone = false;
+    }
+    public void Awake()
+    {
     }
     public void Run()
     {
         actionState = ActionState.Attack;
-        player.stat.Power = Random.Range(skillInfo.min, skillInfo.max);
+        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
         isDone = false;
         StartCoroutine(AttackRoutine());
     }
@@ -28,15 +33,17 @@ public class Skill3 : MonoBehaviour, IPlayerAttack
     public void Quit()
     {
         isDone = true;
-        actionState = ActionState.None;
+        attackController.End();
     }
 
     IEnumerator AttackRoutine()
     {
-        StartCoroutine(PlayerAttackManager.SkillTimer(skillInfo.code));
+        attackState = AttackState.Skill3;
+
+        StartCoroutine(PlayerAttackManager.SkillTimer(attackInfo.code));
         StartCoroutine(CheckDash());
 
-        yield return new WaitForSeconds(skillInfo.delay);
+        yield return new WaitForSeconds(attackInfo.delay);
         for(int i = 0; i < 4; i++)
         {
             coll.gameObject.SetActive(true);
@@ -49,7 +56,6 @@ public class Skill3 : MonoBehaviour, IPlayerAttack
         Quit();
     }
 
-
     IEnumerator CheckDash()
     {
         while(!isDone)
@@ -57,6 +63,7 @@ public class Skill3 : MonoBehaviour, IPlayerAttack
             if(actionState == ActionState.Dash)
             {
                 StopCoroutine(AttackRoutine());
+                isDone = false;
             }
             yield return null;
         }

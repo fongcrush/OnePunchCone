@@ -11,16 +11,18 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 
     private Player player;
     private bool canRun;
+    private Vector3 moveDirection;
 
-    Vector3 moveDirection;
+    private float curRunCheckTime;
 
-    private float curDoubleCheckTime = 0;
+    private ArrowKey curDoubleCheckKey;
 
     public PlayerMoveBehaviour(Player playerComponent)
 	{
         player = playerComponent;
-        moveDirection = Vector3.zero;
         canRun = false;
+        moveDirection = Vector3.zero;
+        curRunCheckTime = 0;
     }
 
     public void Begin()
@@ -31,11 +33,9 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
     {
         moveDirection = new Vector3(hAxis, vAxis, 0f).normalized;
 
-        if(curArrowKey != ArrowKey.None)
-        {
-            WalkOrRun();
+        MoveCheck();
+        if(moveDirection != Vector3.zero)
             Move();
-        }
         Turn();
     }
 
@@ -44,48 +44,40 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 
 	}
 
-    void WalkOrRun()
+    private void MoveCheck()
     {
-		if(canRun)
-        {
-            if(curArrowKey == ArrowKey.Left)
-                if(Input.GetKeyDown(KeyCode.LeftArrow)) moveMode = MoveMode.Run;
-
-            if(curArrowKey == ArrowKey.Right)
-                if(Input.GetKeyDown(KeyCode.RightArrow)) moveMode = MoveMode.Run;
-
-            if(curArrowKey == ArrowKey.Up)
-                if(Input.GetKeyDown(KeyCode.UpArrow)) moveMode = MoveMode.Run;
-
-            if(curArrowKey == ArrowKey.Down)
-                if(Input.GetKeyDown(KeyCode.DownArrow)) moveMode = MoveMode.Run;
-        }
+        if(moveDirection == Vector3.zero)
+            moveMode = MoveMode.Idle;
         else
-		{
-            canRun = true;
-		}
+            moveMode = MoveMode.Walk;
+
+        if(curRunCheckTime > 0.5f)
+        {
+            canRun = false;
+            curRunCheckTime = 0;
+            curDoubleCheckKey = ArrowKey.None;
+        }
 
         if(canRun)
-            curDoubleCheckTime += Time.deltaTime;
-        else
-            curDoubleCheckTime = 0;
-
-        if(curDoubleCheckTime > 0.5f && moveMode == MoveMode.Walk)
         {
-            canRun = false;
-            curDoubleCheckTime = 0;
-        }        
-
-        if(moveDirection == Vector3.zero)
-        {
-            moveMode = MoveMode.Idle;
-            curArrowKey = ArrowKey.None;
-            canRun = false;
+            curRunCheckTime += Time.deltaTime;
         }
+
+        if(Input.GetKeyDown(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; curRunCheckTime = 0; }
+
+        if(Input.GetKeyDown(KeyCode.RightArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Right; curRunCheckTime = 0; }
+
+        if(Input.GetKeyDown(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; curRunCheckTime = 0; }
+
+        if(Input.GetKeyDown(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; curRunCheckTime = 0; }
+
+        if(curDoubleCheckKey == curArrowKey && canRun)
+            moveMode = MoveMode.Run;
+
     }
 
 
-    void Move()
+    private void Move()
     {
         Vector3 movePos = Vector3.zero;
         if(moveMode == MoveMode.Run)
@@ -102,7 +94,7 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
         movePos.y = Mathf.Clamp(movePos.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
         player.transform.position = movePos;
     }
-    void Turn()
+    private void Turn()
     {
         if(hAxis != 0)
         {

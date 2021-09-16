@@ -6,15 +6,17 @@ using static InputManager;
 
 public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 {
-	Player play;
 
-	IPlayerAction curPlayerAction;
-	PlayerAttackController attackController = new PlayerAttackController();
-	DashController dashController = new DashController();
+	private IPlayerAction curPlayerAction;
+	private Player player;
+	private PlayerAttackController attackController;
+	private PlayerDashController dashController;
 
 	public PlayerActionBehaviour(Player playComponent)
 	{
-		play = playComponent;
+		player           = playComponent;
+		attackController = new PlayerAttackController(this);
+		dashController   = new PlayerDashController(this);
 	}
 	void Awake()
 	{
@@ -26,16 +28,19 @@ public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 	}
 	public void Update()
 	{
-		if(curActionKey != ActionKey.None)
+		if(actionState == ActionState.Ready)
 		{
-			if(curActionKey == ActionKey.LeftShift)
-				curPlayerAction = dashController;
-			else
+			if(actionState == ActionState.Attack)
 				curPlayerAction = attackController;
+			else if(actionState == ActionState.Dash)
+				curPlayerAction = dashController;
+
+			curPlayerAction.Begin();
 		}
-	} 
+	}
 	public void End()
 	{
-
+		playerState = PlayerState.Idle;
+		actionState = ActionState.None;
 	}
 }

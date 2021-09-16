@@ -5,37 +5,39 @@ using static StatesManager;
 
 public class PlayerAttackController : MonoBehaviour, IPlayerAction
 {
-	[HideInInspector]
-	public IPlayerAttack curPlayerAttack;
+	private IPlayerAttack curPlayerAttack;
+	private PlayerActionBehaviour actionBehaviour;
+	private AAttack attack;
+	private Skill1 skill1;
+	private Skill2 skill2;
+	private Skill3 skill3;
 
-	private Attack attack = new Attack();
-	private Skill1 skill1 = new Skill1();
-	private Skill2 skill2 = new Skill2();
-	private Skill3 skill3 = new Skill3();
-
-    public void Begin()
+	public PlayerAttackController(PlayerActionBehaviour ActionBehaviour)
 	{
+		actionBehaviour = ActionBehaviour;
+		attack = new AAttack(this);
+		skill1 = new Skill1(this);
+		skill2 = new Skill2(this);
+		skill3 = new Skill3(this);
 	}
-	public void Update()
-	{
-		if(curActionKey != ActionKey.None)
-		{
-			if(curActionKey == ActionKey.Z)
-				curPlayerAttack = attack;
-			else if(curActionKey == ActionKey.X)
-				curPlayerAttack = skill1;
-			else if(curActionKey == ActionKey.C)
-				curPlayerAttack = skill2;
 
-			curPlayerAttack.Run();
-		}
+	public void Begin()
+	{
+		actionState = ActionState.Attack;
+
+		if(curActionKey == ActionKey.Z)
+			curPlayerAttack = attack;
+		else if(curActionKey == ActionKey.X)
+			curPlayerAttack = skill1;
+		else if(curActionKey == ActionKey.C)
+			curPlayerAttack = skill2;
+
+		curPlayerAttack.Run();
 	}
 	public void End()
 	{
-
+		actionState = ActionState.None;
 	}
-
-
 
 	public void ChangeAttack(string name)
 	{

@@ -6,21 +6,24 @@ using static StatesManager;
 public class Skill1 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
-    private AttackInfo skillInfo;
+    private PlayerAttackController attackController;
+    private AttackInfo attackInfo;
     private Transform coll;
     private bool isDone;
 
-    public void Awake()
+    public Skill1(PlayerAttackController AttackController)
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        skillInfo = PlayerAttackManager.attackTable[101];
-        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
-        isDone = false;
+        attackController = AttackController;
+        attackInfo = PlayerAttackManager.attackTable[101];
+        coll      = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
+        isDone    = false;
     }
+
     public void Run()
     {
         actionState = ActionState.Attack;
-        player.stat.Power = Random.Range(skillInfo.min, skillInfo.max);
+        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
         isDone = false;
         StartCoroutine(AttackRoutine());
     }
@@ -28,21 +31,23 @@ public class Skill1 : MonoBehaviour, IPlayerAttack
     public void Quit()
     {
         isDone = true;
-        actionState = ActionState.None;
+        attackController.End();
     }
 
     IEnumerator AttackRoutine()
     {
-        StartCoroutine(PlayerAttackManager.SkillTimer(skillInfo.code));
+        attackState = AttackState.Skill1;
+
+        StartCoroutine(PlayerAttackManager.SkillTimer(attackInfo.code));
         StartCoroutine(CheckDash());
 
         coll.gameObject.SetActive(true);
-        yield return new WaitForSeconds(skillInfo.delay);
+        yield return new WaitForSeconds(attackInfo.delay);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
         yield return new WaitForSeconds(0.1f);
         coll.gameObject.SetActive(false);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        yield return new WaitForSeconds(skillInfo.cTime - skillInfo.delay - 0.1f);
+        yield return new WaitForSeconds(attackInfo.cTime - attackInfo.delay - 0.1f);
         Quit();
     }
 
@@ -51,6 +56,7 @@ public class Skill1 : MonoBehaviour, IPlayerAttack
         while(isDone)
         {
             yield return null;
+            isDone = false;
         }
     }
 }

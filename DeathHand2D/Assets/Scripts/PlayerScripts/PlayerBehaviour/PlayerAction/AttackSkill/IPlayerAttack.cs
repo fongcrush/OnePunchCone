@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPlayerAttack
 {
-	public void Run();
+	void Run();
 
-	public void Quit();
+	void Quit();
 }

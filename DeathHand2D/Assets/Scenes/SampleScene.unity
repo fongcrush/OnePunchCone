@@ -830,7 +830,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484638122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.7266655, y: 253.34999, z: -10}
+  m_LocalPosition: {x: 10.924444, y: 251.408, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 810921667}
@@ -3446,11 +3446,10 @@ GameObject:
   - component: {fileID: 1746514098}
   - component: {fileID: 1746514097}
   - component: {fileID: 1746514095}
-  - component: {fileID: 1746514094}
-  - component: {fileID: 1746514093}
   - component: {fileID: 1746514100}
   - component: {fileID: 1746514096}
   - component: {fileID: 1746514099}
+  - component: {fileID: 1746514093}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3467,27 +3466,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1746514092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9d29df63aeaa1e448b3db6c6b3c9350, type: 3}
+  m_Script: {fileID: 11500000, guid: 65c197444d7129b4aacf4c2e3a372ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerState: 0
---- !u!114 &1746514094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1746514092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db598d6230297248856a82a6103f4fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapSizeMin: {x: 1, y: 0}
-  mapSizeMax: {x: 37, y: 8}
-  dashCount: 0
-  walkSpeed: 3
-  runSpeed: 7.5
 --- !u!114 &1746514095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3500,13 +3481,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc566dfa80bb2eb43bec2ec2cf385ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 2008564415}
-  backgroundSize: {x: 0, y: 0}
   gameManager: {fileID: 476770074}
+  dashCount: 0
   dashGodMode: 0
-  canskill1: 0
-  canskill2: 0
-  canskill3: 0
+  displayPlayerState: 0
+  displayCharacterDir: 0
+  displayCurArrowKey: 0
+  disPlayPrevArrowKey: 0
+  displayCurActionKey: 0
+  displayCurMoveMode: 0
+  displayActionState: 0
 --- !u!61 &1746514096
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3593,7 +3577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746514092}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.86, y: 4.95, z: 0}
+  m_LocalPosition: {x: 8.08, y: 0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 208917095}

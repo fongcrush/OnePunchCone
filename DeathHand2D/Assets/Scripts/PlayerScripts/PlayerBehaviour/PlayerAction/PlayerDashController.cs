@@ -4,13 +4,19 @@ using UnityEngine;
 using static StatesManager;
 using static InputManager;
 
-public class DashController : MonoBehaviour, IPlayerAction
+public class PlayerDashController : MonoBehaviour, IPlayerAction
 {
+    private PlayerActionBehaviour actionBehaviour;
     private Player player;
+    private const float MaxDashGodModeTimer = 0.3f;
+    private const float MaxDashTimer = 10.0f;
+    private const float DashSpeed = 10.0f;
 
-    const float MaxDashGodModeTimer = 0.3f;
-    const float MaxDashTimer = 10.0f;
-    const float DashSpeed = 10.0f;
+    public PlayerDashController(PlayerActionBehaviour ActionBehaviour)
+	{
+        actionBehaviour = ActionBehaviour;
+        player = GameObject.Find("Player").GetComponent<Player>();
+    }
 
     private void Start()
     {
@@ -18,25 +24,19 @@ public class DashController : MonoBehaviour, IPlayerAction
     }
     public void Begin()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        DoDash();
-    }
-    public void Update()
-    {
+        actionState = ActionState.Dash;
+        Dash();
     }
     public void End()
     {
-        actionState = ActionState.None;
+        actionBehaviour.End();
     }
 
-    void DoDash()
+    void Dash()
     {
         player.DashCount -= 1;
-        if(moveMode != MoveMode.Idle)
-        {
-            transform.position = transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
-            return;
-        }
+        transform.position = transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+
         if(LeftOrRight())
             transform.position = transform.position + Vector3.left * DashSpeed;
         else

@@ -7,24 +7,25 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
     private PlayerAttackController attackController;
-    private AttackInfo skillInfo;
+    private AttackInfo attackInfo;
     private Transform coll;
     private Transform chargeRange;
     private bool isDone;
     private bool ComboOn;
 
-    public void Awake()
+    public Skill2(PlayerAttackController AttackController)
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        attackController = GameObject.Find("AttackManager").GetComponent<PlayerAttackController>();
-        skillInfo = PlayerAttackManager.attackTable[101];
-        coll = GameObject.Find("AttackManager").transform.Find("Skill2Coll");
-        chargeRange = GameObject.Find("Include Self").transform.Find("ChargeRange");
+        attackController = AttackController;
+        attackInfo = PlayerAttackManager.attackTable[101];
+        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
+        isDone = false;
     }
+
     public void Run()
     {
         actionState = ActionState.Attack;
-        player.stat.Power = Random.Range(skillInfo.min, skillInfo.max);
+        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
         isDone = false;
         StartCoroutine(AttackRoutine());
     }
@@ -32,12 +33,12 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
     public void Quit()
     {
         isDone = true;
-        actionState = ActionState.None;
+        attackController.End();
     }
 
     IEnumerator AttackRoutine()
     {
-        StartCoroutine(PlayerAttackManager.SkillTimer(skillInfo.code));
+        StartCoroutine(PlayerAttackManager.SkillTimer(attackInfo.code));
 
         float curTime = 0;
 
@@ -54,13 +55,13 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
         coll.gameObject.SetActive(true);
         chargeRange.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(skillInfo.delay);
+        yield return new WaitForSeconds(attackInfo.delay);
 
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
         yield return null;
 
         Vector2 fixedChargePos = chargeRange.position;
-        while(curTime < skillInfo.cTime - skillInfo.delay)
+        while(curTime < attackInfo.cTime - attackInfo.delay)
         {
             curTime += Time.deltaTime;
             transform.localPosition = Vector2.Lerp(transform.position, dir, Time.deltaTime * 20);

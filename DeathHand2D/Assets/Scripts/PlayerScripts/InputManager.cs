@@ -8,40 +8,52 @@ public class InputManager : MonoBehaviour
     [HideInInspector]
     public static float hAxis, vAxis;
 
-    static void UpdateInput()
+    private void Awake()
+	{
+        hAxis = vAxis = 0;
+    }
+
+	private void Update()
+    {
+        if(playerState != PlayerState.Dead)
+        {
+            if(actionState == ActionState.None)
+                UpdateMoveInput();
+            UpdateActionInput();
+        }
+    }
+
+    void UpdateMoveInput()
 	{
         // 이동
         if(Input.GetKey(KeyCode.LeftArrow))
             curArrowKey = ArrowKey.Left;
 
-        if(Input.GetKey(KeyCode.RightArrow))
+        else if(Input.GetKey(KeyCode.RightArrow))
             curArrowKey = ArrowKey.Right;
 
-        if(Input.GetKey(KeyCode.UpArrow))
+        else if(Input.GetKey(KeyCode.UpArrow))
             curArrowKey = ArrowKey.Up;
 
-        if(Input.GetKey(KeyCode.DownArrow))
+        else if(Input.GetKey(KeyCode.DownArrow))
             curArrowKey = ArrowKey.Down;
+
+        else
+            curArrowKey = ArrowKey.None;
 
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
-
-        // 액션
-        if(Input.GetKeyDown(KeyCode.Z))
-            curActionKey = ActionKey.Z;
-
-        if(Input.GetKeyDown(KeyCode.X))
-            curActionKey = ActionKey.X;
-
-        if(Input.GetKeyDown(KeyCode.C))
-            curActionKey = ActionKey.C;
-
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-            curActionKey = ActionKey.LeftShift;
     }
 
-	private void Update()
-	{
-        UpdateInput();
-	}
+    void UpdateActionInput()
+    {
+        // 액션
+        if(Input.GetKeyDown(KeyCode.Z)) { curActionKey = ActionKey.Z; actionState = ActionState.Ready; }
+
+        if(Input.GetKeyDown(KeyCode.X)) { curActionKey = ActionKey.X; actionState = ActionState.Ready; }
+
+        if(Input.GetKeyDown(KeyCode.C)) { curActionKey = ActionKey.C; actionState = ActionState.Ready; }
+
+        if(Input.GetKeyDown(KeyCode.LeftShift)) { curActionKey = ActionKey.LeftShift; actionState = ActionState.Ready; }
+    }
 }

@@ -20,22 +20,28 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private bool dashGodMode;
-
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
+
+
+    public PlayerState displayPlayerState;
+    public CharacterDirection displayCharacterDir;
+    public ArrowKey displayCurArrowKey;
+    public ActionKey displayCurActionKey;
+    public MoveMode displayCurMoveMode;
+    public ActionState displayActionState;
 
     private void Awake()
     {
-        move = new PlayerMoveBehaviour(this);
-        action = new PlayerActionBehaviour(this);
+        move               = new PlayerMoveBehaviour(this);
+        action             = new PlayerActionBehaviour(this);
 
-        gameManager = GameObject.Find("@GM").GetComponent<Actor>();
-        //backgroundSize = gameManager.backgroundSize;
+        gameManager        = GameObject.Find("@GM").GetComponent<Actor>();
 
-        stat = new StatusManager(100, 100, 50);
-        dashGodMode = false;
+        stat               = new StatusManager(100, 100, 50);
+        dashGodMode        = false;
 
         characterDirection = CharacterDirection.Right;
-        dashCount = 2;
+        dashCount          = 2;
     }
 
     public PlayerState CurrentState()
@@ -46,16 +52,17 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerState = PlayerState.Normal;
+        curPlayerBehaviour = move;
+        playerState = PlayerState.Idle;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(playerState == PlayerState.Action)
-            curPlayerBehaviour = action;
-        else
+        if(playerState == PlayerState.Move)
             curPlayerBehaviour = move;
+        else if(playerState == PlayerState.Action)
+            curPlayerBehaviour = action;
 
         curPlayerBehaviour.Update();
 
@@ -72,8 +79,14 @@ public class Player : MonoBehaviour
 
 	private void UpdateDisplayStates()
 	{
-	
-	}
+        displayPlayerState = playerState;
+        displayActionState = actionState;
+        displayCharacterDir = characterDirection;
+        displayCurArrowKey = curArrowKey;
+        displayCurActionKey = curActionKey;
+        displayCurMoveMode = moveMode;
+
+    }
 	//private void OnTriggerStay2D(Collider2D collision)
 	//{
 	//    if(collision.gameObject.tag == "PerfectTiming")
