@@ -7,14 +7,14 @@ public class Skill1 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
     private SkillInfo skillInfo;
-    private Transform CollObject;
+    private Transform coll;
     private bool isDone;
 
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        skillInfo = AttackManager.skillTable[101];
-        CollObject = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
+        skillInfo = PlayerAttackManager.skillTable[101];
+        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
         isDone = false;
     }
     public void Run()
@@ -33,15 +33,15 @@ public class Skill1 : MonoBehaviour, IPlayerAttack
 
     IEnumerator AttackRoutine()
     {
-        StartCoroutine(AttackManager.SkillTimer(skillInfo.code));
+        StartCoroutine(PlayerAttackManager.SkillTimer(skillInfo.code));
         StartCoroutine(CheckDash());
 
-        CollObject.gameObject.SetActive(true);
+        coll.gameObject.SetActive(true);
         yield return new WaitForSeconds(skillInfo.delay);
-        CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
         yield return new WaitForSeconds(0.1f);
-        CollObject.gameObject.SetActive(false);
-        CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        coll.gameObject.SetActive(false);
+        coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         yield return new WaitForSeconds(skillInfo.cTime - skillInfo.delay - 0.1f);
         Quit();
     }

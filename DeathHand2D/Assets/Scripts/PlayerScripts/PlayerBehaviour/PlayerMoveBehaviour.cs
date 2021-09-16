@@ -4,22 +4,22 @@ using UnityEngine;
 using static StatesManager;
 using static InputManager;
 
-public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
+public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 {
     public float walkSpeed = 3f;
     public float runSpeed = 7.5f;
 
-    Player player;
-    bool canRun;
+    private Player player;
+    private bool canRun;
 
     Vector3 moveDirection;
 
     private float curDoubleCheckTime = 0;
-
-
     void Awake()
 	{
+        player = GameObject.Find("Player").GetComponent<Player>();
         canRun = false;
+        Debug.Log(player);
     }
 
     public void Begin()
@@ -93,12 +93,12 @@ public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
         }
         else
         {
-            movePos = transform.position + moveDirection * walkSpeed * Time.deltaTime;
+            movePos = player.transform .position + moveDirection * walkSpeed * Time.deltaTime;
         }
         // 맵을 넘어가지 않도록 제한
         movePos.x = Mathf.Clamp(movePos.x, player.mapSizeMin.x, player.mapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, player.mapSizeMin.y, player.mapSizeMax.y);
-        transform.position = movePos;
+        player.transform.position = movePos;
     }
     void Turn()
     {
@@ -111,8 +111,8 @@ public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
         }
 
         if(LeftOrRight())
-            transform.rotation = Quaternion.Euler(new Vector3(0, 180f, 0));
+            player.transform.rotation = Quaternion.Euler(new Vector3(0, 180f, 0));
         else
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            player.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
 }

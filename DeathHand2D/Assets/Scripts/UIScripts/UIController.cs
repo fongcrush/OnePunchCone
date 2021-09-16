@@ -15,12 +15,10 @@ public class UIController : MonoBehaviour
 
     public GameObject playerGameObject;
     Player playerComponent;
-    PlayerController playerControllerComponent;
 
     void Start()
     {
         playerComponent = playerGameObject.GetComponent<Player>();
-        playerControllerComponent = playerGameObject.GetComponent<PlayerController>();
     }
 
     void Update()
@@ -31,7 +29,7 @@ public class UIController : MonoBehaviour
 
     void CheckPlayerDashCount() 
     {
-        switch (playerControllerComponent.DashCount) 
+        switch (playerComponent.DashCount) 
         {
             case 0:
                 DashCount1.SetActive(false);
@@ -48,7 +46,7 @@ public class UIController : MonoBehaviour
 
     void CheckPlayerUseSkill() 
     {
-        if (playerComponent.skills["CrossSword"].curTime != 0) 
+        if (PlayerAttackManager.skillTable[101].curTime != 0)
         {
             Skill1.GetComponent<Image>().color = Color.black;
         }
@@ -56,17 +54,17 @@ public class UIController : MonoBehaviour
         {
             Skill1.GetComponent<Image>().color = Color.white;
         }
-        if(playerComponent.skills["Rush"].curTime != 0) 
+        if(PlayerAttackManager.skillTable[111].curTime != 0) 
         {
-            Skill2.GetComponent<Image>().color = Color.black;
-            if (playerComponent.canskill3 == true)
-            {
-                Skill3.SetActive(true);
-            }
-            else
-            {
-                Skill3.SetActive(false);
-            }
+            //Skill2.GetComponent<Image>().color = Color.black;
+            //if (playerComponent.canskill3 == true)
+            //{
+            //    Skill3.SetActive(true);
+            //}
+            //else
+            //{
+            //    Skill3.SetActive(false);
+            //}
         }
         else
         {

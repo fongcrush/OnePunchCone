@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static StatesManager;
 
 public class PlayerEffectController : MonoBehaviour
 {
     Player player;
-    PlayerFSM playerState;
 
     public GameObject DustEffect;
     bool canCreateDust;
@@ -19,13 +19,12 @@ public class PlayerEffectController : MonoBehaviour
     void Start()
     {
         player = GetComponent<Player>();
-        playerState = GetComponent<PlayerFSM>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerState.State == "Run" && canCreateDust == true)
+        if (moveMode == MoveMode.Run && canCreateDust == true)
         {
             StartCoroutine("CreateDustEffect");
         }

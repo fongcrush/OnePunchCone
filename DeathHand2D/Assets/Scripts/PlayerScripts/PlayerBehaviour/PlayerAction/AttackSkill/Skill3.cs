@@ -7,14 +7,14 @@ public class Skill3 : MonoBehaviour, IPlayerAttack
 {
     private Player player;
     private SkillInfo skillInfo;
-    private Transform CollObject;
+    private Transform coll;
     private bool isDone;
 
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        skillInfo = AttackManager.skillTable[101];
-        CollObject = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
+        skillInfo = PlayerAttackManager.skillTable[112];
+        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
         isDone = false;
     }
     public void Run()
@@ -33,23 +33,31 @@ public class Skill3 : MonoBehaviour, IPlayerAttack
 
     IEnumerator AttackRoutine()
     {
-        StartCoroutine(AttackManager.SkillTimer(skillInfo.code));
+        StartCoroutine(PlayerAttackManager.SkillTimer(skillInfo.code));
         StartCoroutine(CheckDash());
 
-        CollObject.gameObject.SetActive(true);
         yield return new WaitForSeconds(skillInfo.delay);
-        CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        CollObject.gameObject.SetActive(false);
-        CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        yield return new WaitForSeconds(skillInfo.cTime - skillInfo.delay - 0.1f);
+        for(int i = 0; i < 4; i++)
+        {
+            coll.gameObject.SetActive(true);
+            coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            yield return new WaitForSeconds(0.3f);
+            coll.gameObject.SetActive(false);
+            coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }
+        yield return new WaitForSeconds(0.5f);
         Quit();
     }
 
+
     IEnumerator CheckDash()
     {
-        while(isDone)
+        while(!isDone)
         {
+            if(actionState == ActionState.Dash)
+            {
+                StopCoroutine(AttackRoutine());
+            }
             yield return null;
         }
     }

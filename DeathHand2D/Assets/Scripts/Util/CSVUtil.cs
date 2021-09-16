@@ -18,7 +18,7 @@ public class CSVUtil
 		if(lines.Length <= 1) return list;
 
 		string[] header = Regex.Split(lines[0], SPLIT_RE);
-		for(var i = 0; i < lines.Length; i++)
+		for(var i = 1; i < lines.Length - 1; i++)
 		{
 			var values = Regex.Split(lines[i], SPLIT_RE);
 
@@ -26,7 +26,8 @@ public class CSVUtil
 			for(var j = 0; j < header.Length && j < values.Length; j++)
 			{
 				string value = values[j];
-				value = value.Trim(TRIM_CHARS).Replace("\\", "");
+				value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", "");
+
 				object finalvalue = value;
 				int n;
 				float f;

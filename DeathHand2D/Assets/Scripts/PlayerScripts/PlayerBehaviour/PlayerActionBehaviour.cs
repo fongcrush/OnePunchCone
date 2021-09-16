@@ -4,10 +4,10 @@ using UnityEngine;
 using static StatesManager;
 using static InputManager;
 
-public class PlayerActionController: MonoBehaviour, IPlayerBehaviour
+public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 {
 	IPlayerAction curPlayerAction;
-	AttackController attackController = new AttackController();
+	PlayerAttackController attackController = new PlayerAttackController();
 	DashController dashController = new DashController();
 
 	void Awake()

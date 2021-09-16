@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using static CSVUtil;
 
-public class AttackManager : MonoBehaviour
+public class PlayerAttackManager : MonoBehaviour
 {
 	public static List<Dictionary<string, object>> CSVData;
 	public static Dictionary<short, SkillInfo> skillTable = new Dictionary<short, SkillInfo>();
@@ -26,7 +26,7 @@ public class AttackManager : MonoBehaviour
 			skill.type = byteParse(value["SKILL_TYPE"]);
 			skill.clear = byteParse(value["SKILL_Clear"]);
 			skill.delay = floatParse(value["SKILL_DELAY"]) / 100f;
-			skill.distance = new Vector2(intParse(value["SKILL_DISTANCE_X"]), intParse("SKILL_DISTANCE_Y"));
+			skill.distance = new Vector2(intParse(value["SKILL_DISTANCE_X"]), intParse(value["SKILL_DISTANCE_Y"]));
 			skill.hit = byteParse(value["SKILL_HIT"]);
 			skill.min = shortParse(value["SKILL_MIN_DAMAGE"]);
 			skill.max = shortParse(value["SKILL_MAX_DAMAGE"]);
@@ -65,7 +65,7 @@ public class AttackManager : MonoBehaviour
 			skill.type = byteParse(value["SKILL_TYPE"]);
 			skill.clear = byteParse(value["SKILL_Clear"]);
 			skill.delay = floatParse(value["SKILL_DELAY"]) / 100f;
-			skill.distance = new Vector2(intParse(value["SKILL_DISTANCE_X"]), intParse("SKILL_DISTANCE_Y"));
+			skill.distance = new Vector2(intParse(value["SKILL_DISTANCE_X"]), intParse(value["SKILL_DISTANCE_Y"]));
 			skill.hit = byteParse(value["SKILL_HIT"]);
 			skill.min = shortParse(value["SKILL_MIN_DAMAGE"]);
 			skill.max = shortParse(value["SKILL_MAX_DAMAGE"]);
