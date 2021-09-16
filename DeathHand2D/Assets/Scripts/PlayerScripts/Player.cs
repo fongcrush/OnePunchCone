@@ -6,24 +6,16 @@ using static StatesManager;
 
 public class Player : Actor
 {
-    SkillManager skillManager;
-
     private Vector2 boxColliderSize;
 
     public IPlayerBehaviour curPlayerBehaviour;
+    public StatusManager stat;
 
     [SerializeField]
     private int dashCount;
     private bool useDash;
 
     private const float DashSpeed = 10;
-
-
-    private Transform attackCollObject;
-    private Transform skill1CollObject;
-    private Transform skill2CollObject;
-    private Transform skill3CollObject;
-    private Transform chargeRange;
 
     private SpriteRenderer playerSprite;
 
@@ -39,17 +31,6 @@ public class Player : Actor
     bool dashGodMode;
     float dashGodModeTime;
     const float MaxDashGodModeTimer = 0.3f;
-    public StatusManager stat;
-
-    public Dictionary<string, SkillInfo> skills;
-
-    private const int AttackDamage = 50;
-
-    private const int Skill1Damage = 300;
-    private const float Skill1CoolTime = 10;
-    private const int Skill2Damage = 150;
-    private const float Skill2CoolTime = 15;
-    private const int Skill3Damage = 70;
 
     public bool canskill1;
     public bool canskill2;
@@ -57,12 +38,6 @@ public class Player : Actor
 
     float dashTime;
     const float MaxDashTimer = 10.0f;
-
-    public int GetAttackDamage { get { return AttackDamage; } }
-    public int GetSkill1Damage { get { return Skill1Damage; } }
-    public int GetSkill2Damage { get { return Skill2Damage; } }
-    public int GetSkill3Damage { get { return Skill3Damage; } }
-
 
     private void Awake()
     {
@@ -80,7 +55,6 @@ public class Player : Actor
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
         useDash = false;
-        attackCollObject = GameObject.Find("Player Coll").transform.Find("AttackColl");
         skill1CollObject = GameObject.Find("Player Coll").transform.Find("Skill1Coll");
         skill2CollObject = GameObject.Find("Include Self").transform.Find("Skill2Coll");
         skill3CollObject = GameObject.Find("Player Coll").transform.Find("Skill3Coll");
@@ -232,38 +206,6 @@ public class Player : Actor
             skill3CollObject.gameObject.SetActive(false);
             skill3CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
-    }
-
-    IEnumerator AttackRoutine(float delay, float time)
-    {
-        playerState.State = "Attack";
-
-        stat.Power = GetAttackDamage;
-        attackCollObject.gameObject.SetActive(true);
-        yield return new WaitForSeconds(delay);
-        attackCollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        attackCollObject.gameObject.SetActive(false);
-        attackCollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        yield return new WaitForSeconds(time - delay);
-        playerState.State = "Idle";
-    }
-
-    IEnumerator Skill1Routine(float delay, float time)
-    {
-        StartCoroutine(SkillTimer("CrossSword"));
-        playerState.State = "Skill1";
-
-        stat.Power = player.GetSkill1Damage;
-        skill1CollObject.gameObject.SetActive(true);
-        yield return new WaitForSeconds(delay);
-
-        skill1CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        skill1CollObject.gameObject.SetActive(false);
-        skill1CollObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        yield return new WaitForSeconds(time - delay);
-        playerState.State = "Idle";
     }
 
     IEnumerator Skill2Routine(float delay, float time)

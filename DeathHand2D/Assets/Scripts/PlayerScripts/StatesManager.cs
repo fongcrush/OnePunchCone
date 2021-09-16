@@ -6,9 +6,9 @@ public class StatesManager
     
     public static CharacterDirection characterDirection;
     
-    public static ArrowKey currentArrowKey;
+    public static ArrowKey curArrowKey;
 
-    public static ActionKey currentActionKey;
+    public static ActionKey curActionKey;
     
     public static MoveMode moveMode;
 
@@ -45,13 +45,16 @@ public class StatesManager
 
     public enum ActionKey
     {
+        None,
         Z,
         X,
-        C
+        C,
+        LeftShift
     }
 
 	public enum ActionState
 	{
+        None,
 		Attack,
 		Dash
 	}

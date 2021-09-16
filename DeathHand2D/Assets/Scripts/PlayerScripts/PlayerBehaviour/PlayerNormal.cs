@@ -30,7 +30,7 @@ public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
     {
         moveDirection = new Vector3(hAxis, vAxis, 0f).normalized;
 
-        if(currentArrowKey != ArrowKey.None)
+        if(curArrowKey != ArrowKey.None)
         {
             WalkOrRun();
             Move();
@@ -47,16 +47,16 @@ public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
     {
 		if(canRun)
         {
-            if(currentArrowKey == ArrowKey.Left)
+            if(curArrowKey == ArrowKey.Left)
                 if(Input.GetKeyDown(KeyCode.LeftArrow)) moveMode = MoveMode.Run;
 
-            if(currentArrowKey == ArrowKey.Right)
+            if(curArrowKey == ArrowKey.Right)
                 if(Input.GetKeyDown(KeyCode.RightArrow)) moveMode = MoveMode.Run;
 
-            if(currentArrowKey == ArrowKey.Up)
+            if(curArrowKey == ArrowKey.Up)
                 if(Input.GetKeyDown(KeyCode.UpArrow)) moveMode = MoveMode.Run;
 
-            if(currentArrowKey == ArrowKey.Down)
+            if(curArrowKey == ArrowKey.Down)
                 if(Input.GetKeyDown(KeyCode.DownArrow)) moveMode = MoveMode.Run;
         }
         else
@@ -78,7 +78,7 @@ public class PlayerNormal : MonoBehaviour, IPlayerBehaviour
         if(moveDirection == Vector3.zero)
         {
             moveMode = MoveMode.Idle;
-            currentArrowKey = ArrowKey.None;
+            curArrowKey = ArrowKey.None;
             canRun = false;
         }
     }

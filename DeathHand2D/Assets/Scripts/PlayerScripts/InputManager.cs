@@ -11,30 +11,32 @@ public class InputManager : MonoBehaviour
 	{
         // 이동
         if(Input.GetKey(KeyCode.LeftArrow))
-            currentArrowKey = CurrentArrowKey.Left;
+            curArrowKey = ArrowKey.Left;
 
         if(Input.GetKey(KeyCode.RightArrow))
-            currentArrowKey = CurrentArrowKey.Right;
+            curArrowKey = ArrowKey.Right;
 
         if(Input.GetKey(KeyCode.UpArrow))
-            currentArrowKey = CurrentArrowKey.Up;
+            curArrowKey = ArrowKey.Up;
 
         if(Input.GetKey(KeyCode.DownArrow))
-            currentArrowKey = CurrentArrowKey.Down;
+            curArrowKey = ArrowKey.Down;
 
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
 
         // 액션
         if(Input.GetKeyDown(KeyCode.Z))
-            currentActionKey = CurrentActionKey.Z;
+            curActionKey = ActionKey.Z;
 
         if(Input.GetKeyDown(KeyCode.X))
-            currentActionKey = CurrentActionKey.X;
+            curActionKey = ActionKey.X;
 
         if(Input.GetKeyDown(KeyCode.C))
-            currentActionKey = CurrentActionKey.C;
+            curActionKey = ActionKey.C;
 
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+            curActionKey = ActionKey.LeftShift;
     }
 
 	private void Update()

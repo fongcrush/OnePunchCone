@@ -4,14 +4,14 @@ using UnityEngine;
 using static StatesManager;
 using static InputManager;
 
-public class PlayerAction : MonoBehaviour, IPlayerBehaviour
+public class PlayerActionController: MonoBehaviour, IPlayerBehaviour
 {
 	IPlayerAction curPlayerAction;
 	AttackController attackController = new AttackController();
+	DashController dashController = new DashController();
 
 	void Awake()
 	{
-		curPlayerAction = attackController;
 	}
 
     public void Begin()
@@ -20,8 +20,14 @@ public class PlayerAction : MonoBehaviour, IPlayerBehaviour
 	}
 	public void Update()
 	{
-
-	}
+		if(curActionKey != ActionKey.None)
+		{
+			if(curActionKey == ActionKey.LeftShift)
+				curPlayerAction = dashController;
+			else
+				curPlayerAction = attackController;
+		}
+	} 
 	public void End()
 	{
 

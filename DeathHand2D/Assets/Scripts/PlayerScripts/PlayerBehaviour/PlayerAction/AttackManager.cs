@@ -9,7 +9,10 @@ public class AttackManager : MonoBehaviour
 	public static List<Dictionary<string, object>> CSVData;
 	public static Dictionary<short, SkillInfo> skillTable = new Dictionary<short, SkillInfo>();
 
-	IPlayerSkill curSkill;
+	private Transform skill1CollObject;
+	private Transform skill2CollObject;
+	private Transform skill3CollObject;
+	private Transform chargeRange;
 
 	private void Awake()
 	{
@@ -80,7 +83,7 @@ public class AttackManager : MonoBehaviour
 		}
 	}
 
-	IEnumerator SkillTimer(short code)
+	public static IEnumerator SkillTimer(short code)
 	{
 		while(skillTable[code].curTime < skillTable[code].curTime)
 		{
