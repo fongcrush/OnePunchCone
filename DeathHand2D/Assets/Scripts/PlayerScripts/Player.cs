@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public Actor gameManager;
 
-    private IPlayerBehaviour curPlayerBehaviour;
+    private IPlayerBehaviour curBehaviour;
+    private IPlayerBehaviour prevBehaviour;
     private PlayerMoveBehaviour move;
     private PlayerActionBehaviour action;
 
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        curPlayerBehaviour = move;
+        curBehaviour = move;
         playerState = PlayerState.Idle;
     }
 
@@ -60,11 +61,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         if(playerState == PlayerState.Move)
-            curPlayerBehaviour = move;
+            ChangeBehaviour(move);
         else if(playerState == PlayerState.Action)
-            curPlayerBehaviour = action;
+            ChangeBehaviour(action);
 
-        curPlayerBehaviour.Update();
+        curBehaviour.Update();
 
         UpdateDisplayStates();
     }
@@ -87,39 +88,48 @@ public class Player : MonoBehaviour
         displayCurMoveMode = moveMode;
 
     }
-	//private void OnTriggerStay2D(Collider2D collision)
-	//{
-	//    if(collision.gameObject.tag == "PerfectTiming")
-	//    {
-	//        if(!isTiming)
-	//        {
-	//            isTiming = true;
-	//        }
-	//    }
-	//}
 
-	//private void OnTriggerExit2D(Collider2D collision)
-	//{
-	//    if(collision.gameObject.tag == "PerfectTiming")
-	//    {
-	//        isTiming = false;
-	//    }
-	//}
+    void ChangeBehaviour(IPlayerBehaviour behaviour)
+	{
+        curBehaviour.End();
+        prevBehaviour = curBehaviour;
+        curBehaviour = behaviour;
+        curBehaviour.Begin();
+    }
 
-	//private void OnCollisionEnter(Collision collision)
-	//{
-	//    if(collision.transform.tag == "Enemy") 
-	//    {
-	//        if (dashGodMode == false) 
-	//        {
-	//            //Hp -= 0.5f;
-	//        }
-	//    }
-	//}
-
-	public int DashCount
+    public int DashCount
     {
         get { return dashCount; }
         set { dashCount = value; }
     }
+
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if(collision.gameObject.tag == "PerfectTiming")
+    //    {
+    //        if(!isTiming)
+    //        {
+    //            isTiming = true;
+    //        }
+    //    }
+    //}
+
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if(collision.gameObject.tag == "PerfectTiming")
+    //    {
+    //        isTiming = false;
+    //    }
+    //}
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if(collision.transform.tag == "Enemy") 
+    //    {
+    //        if (dashGodMode == false) 
+    //        {
+    //            //Hp -= 0.5f;
+    //        }
+    //    }
+    //}
 }

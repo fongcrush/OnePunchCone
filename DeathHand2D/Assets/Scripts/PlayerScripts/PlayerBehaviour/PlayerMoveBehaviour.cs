@@ -23,6 +23,7 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
         canRun = false;
         moveDirection = Vector3.zero;
         curRunCheckTime = 0;
+        curDoubleCheckKey = ArrowKey.None;
     }
 
     public void Begin()
@@ -41,39 +42,46 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 
 	public void End()
 	{
-
+        moveDirection = Vector3.zero;
 	}
 
     private void MoveCheck()
     {
-        if(moveDirection == Vector3.zero)
-            moveMode = MoveMode.Idle;
+        if(!canRun)
+        {
+            if(Input.GetKeyDown(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; curRunCheckTime = 0; }
+
+            if(Input.GetKeyDown(KeyCode.RightArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Right; curRunCheckTime = 0; }
+
+            if(Input.GetKeyDown(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; curRunCheckTime = 0; }
+
+            if(Input.GetKeyDown(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; curRunCheckTime = 0; }
+        }
         else
-            moveMode = MoveMode.Walk;
-
-        if(curRunCheckTime > 0.5f)
-        {
-            canRun = false;
-            curRunCheckTime = 0;
-            curDoubleCheckKey = ArrowKey.None;
-        }
-
-        if(canRun)
-        {
+		{
             curRunCheckTime += Time.deltaTime;
+            if(Input.GetKeyDown(KeyCode.LeftArrow) && curDoubleCheckKey == ArrowKey.Left) { moveMode = MoveMode.Run; }
+
+            if(Input.GetKeyDown(KeyCode.RightArrow) && curDoubleCheckKey == ArrowKey.Right) { moveMode = MoveMode.Run; }
+
+            if(Input.GetKeyDown(KeyCode.UpArrow) && curDoubleCheckKey == ArrowKey.Up) { moveMode = MoveMode.Run; }
+
+            if(Input.GetKeyDown(KeyCode.DownArrow) && curDoubleCheckKey == ArrowKey.Down) { moveMode = MoveMode.Run; }
+
+            if(curRunCheckTime > 0.5f)
+			{
+                curRunCheckTime = 0;
+                canRun = false;
+			}
         }
-
-        if(Input.GetKeyDown(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; curRunCheckTime = 0; }
-
-        if(Input.GetKeyDown(KeyCode.RightArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Right; curRunCheckTime = 0; }
-
-        if(Input.GetKeyDown(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; curRunCheckTime = 0; }
-
-        if(Input.GetKeyDown(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; curRunCheckTime = 0; }
-
-        if(curDoubleCheckKey == curArrowKey && canRun)
-            moveMode = MoveMode.Run;
-
+        if(moveDirection == Vector3.zero)
+		{
+            moveMode = MoveMode.Idle;
+		}
+		else if(moveMode!= MoveMode.Run)
+		{
+            moveMode = MoveMode.Walk;
+		}
     }
 
 
