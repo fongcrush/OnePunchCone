@@ -48,12 +48,12 @@ public class InputManager : MonoBehaviour
     void UpdateActionInput()
     {
         // ¾×¼Ç
-        if(Input.GetKeyDown(KeyCode.Z)) { curActionKey = ActionKey.Z; actionState = ActionState.Ready; }
+        if(Input.GetKeyDown(KeyCode.Z)) { curActionKey = ActionKey.Z; actionState = ActionState.Ready; playerState = PlayerState.Action; }
 
-        if(Input.GetKeyDown(KeyCode.X)) { curActionKey = ActionKey.X; actionState = ActionState.Ready; }
+        if(Input.GetKeyDown(KeyCode.X)) { curActionKey = ActionKey.X; actionState = ActionState.Ready; playerState = PlayerState.Action; }
 
-        if(Input.GetKeyDown(KeyCode.C)) { curActionKey = ActionKey.C; actionState = ActionState.Ready; }
+        if(Input.GetKeyDown(KeyCode.C)) { curActionKey = ActionKey.C; actionState = ActionState.Ready; playerState = PlayerState.Action; }
 
-        if(Input.GetKeyDown(KeyCode.LeftShift)) { curActionKey = ActionKey.LeftShift; actionState = ActionState.Ready; }
+        if(Input.GetKeyDown(KeyCode.LeftShift)) { curActionKey = ActionKey.LeftShift; actionState = ActionState.Ready; playerState = PlayerState.Action; }
     }
 }

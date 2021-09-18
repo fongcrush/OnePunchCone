@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Timers;
 using static StatesManager;
 
+[RequireComponent(typeof(PlayerMoveBehaviour), typeof(PlayerActionBehaviour))]
 public class Player : MonoBehaviour
 {
     [HideInInspector]
@@ -33,8 +34,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        move               = new PlayerMoveBehaviour(this);
-        action             = new PlayerActionBehaviour(this);
+        move               = GetComponent<PlayerMoveBehaviour>();
+        action             = GetComponent<PlayerActionBehaviour>();
 
         gameManager        = GameObject.Find("@GM").GetComponent<Actor>();
 
@@ -60,12 +61,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerState == PlayerState.Move)
+        if (playerState == PlayerState.Move)
             ChangeBehaviour(move);
-        else if(playerState == PlayerState.Action)
+        else if (playerState == PlayerState.Action)
             ChangeBehaviour(action);
 
-        curBehaviour.Update();
+        curBehaviour.Begin();
 
         UpdateDisplayStates();
     }

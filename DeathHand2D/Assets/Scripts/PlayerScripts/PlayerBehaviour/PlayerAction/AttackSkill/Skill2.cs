@@ -10,7 +10,7 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
     private AttackInfo attackInfo;
     private Transform coll;
     private Transform chargeRange;
-    private bool isDone;
+    //private bool isDone;
     private bool ComboOn;
 
     public Skill2(PlayerAttackController AttackController)
@@ -19,20 +19,20 @@ public class Skill2 : MonoBehaviour, IPlayerAttack
         attackController = AttackController;
         attackInfo = PlayerAttackManager.attackTable[101];
         coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
-        isDone = false;
+        //isDone = false;
     }
 
     public void Run()
     {
         actionState = ActionState.Attack;
         player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
-        isDone = false;
+        //isDone = false;
         StartCoroutine(AttackRoutine());
     }
 
     public void Quit()
     {
-        isDone = true;
+        //isDone = true;
         attackController.End();
     }
 

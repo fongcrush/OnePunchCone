@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static StatesManager;
 
+[RequireComponent(typeof(PlayerAttackController))]
 public class AAttack : MonoBehaviour, IPlayerAttack
 {
     private Player player;
@@ -11,13 +12,19 @@ public class AAttack : MonoBehaviour, IPlayerAttack
     private Transform coll;
     private bool isDone;
 
-    public AAttack(PlayerAttackController AttackController)
+    private void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        attackController = AttackController;
-        attackInfo = PlayerAttackManager.attackTable[101];
-        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
         isDone = false;
+    }
+
+    private void Start()
+    {
+        attackController = GetComponent<PlayerAttackController>();
+        if(attackController.gameObject.name == "@GM") { attackController = null; }
+
+        player = GameObject.Find("Player").GetComponent<Player>();
+        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
+        attackInfo = PlayerAttackManager.attackTable[100];
     }
 
     public void Run()
@@ -47,8 +54,8 @@ public class AAttack : MonoBehaviour, IPlayerAttack
         yield return new WaitForSeconds(0.1f);
         coll.gameObject.SetActive(false);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        yield return new WaitForSeconds(attackInfo.cTime - attackInfo.delay - 0.1f);
         Quit();
+        yield return new WaitForSeconds(attackInfo.cTime/1000.0f - attackInfo.delay - 0.1f);
     }
 
     IEnumerator CheckDash()

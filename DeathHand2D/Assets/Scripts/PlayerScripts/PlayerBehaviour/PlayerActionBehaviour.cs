@@ -4,6 +4,7 @@ using UnityEngine;
 using static StatesManager;
 using static InputManager;
 
+[RequireComponent(typeof(PlayerAttackController), typeof(PlayerDashController))]
 public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 {
 
@@ -12,35 +13,36 @@ public class PlayerActionBehaviour : MonoBehaviour, IPlayerBehaviour
 	private PlayerAttackController attackController;
 	private PlayerDashController dashController;
 
-	public PlayerActionBehaviour(Player playComponent)
-	{
-		player           = playComponent;
-		attackController = new PlayerAttackController(this);
-		dashController   = new PlayerDashController(this);
-	}
 	void Awake()
 	{
+		player = GetComponent<Player>();
+		attackController = GetComponent<PlayerAttackController>();
+		dashController = GetComponent<PlayerDashController>();
 	}
 
     public void Begin()
 	{
+		playerState = PlayerState.Action;
 
-	}
-	public void Update()
-	{
 		if(actionState == ActionState.Ready)
 		{
-			if(actionState == ActionState.Attack)
+			if (curActionKey != ActionKey.LeftShift)
+			{
 				curPlayerAction = attackController;
-			else if(actionState == ActionState.Dash)
+			}
+			else
 				curPlayerAction = dashController;
 
 			curPlayerAction.Begin();
 		}
 	}
+	public void Update()
+	{
+		
+	}
 	public void End()
 	{
 		playerState = PlayerState.Idle;
-		actionState = ActionState.None;
+		//actionState = ActionState.None;
 	}
 }

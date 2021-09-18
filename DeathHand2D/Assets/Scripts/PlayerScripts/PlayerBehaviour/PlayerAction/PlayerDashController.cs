@@ -20,6 +20,7 @@ public class PlayerDashController : MonoBehaviour, IPlayerAction
 
     private void Start()
     {
+        if(player)
         StartCoroutine(UpdateDashCount());
     }
     public void Begin()
@@ -35,14 +36,15 @@ public class PlayerDashController : MonoBehaviour, IPlayerAction
     void Dash()
     {
         player.DashCount -= 1;
-        transform.position = transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+        player.transform.position = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
 
         if(LeftOrRight())
-            transform.position = transform.position + Vector3.left * DashSpeed;
+            player.transform.position = player.transform.position + Vector3.left * DashSpeed;
         else
-            transform.position = transform.position + Vector3.right * DashSpeed;
+            player.transform.position = player.transform.position + Vector3.right * DashSpeed;
         CheckPerfectTiming();
-        StartCoroutine(UpdateGodMode());
+        if(player)
+            StartCoroutine(UpdateGodMode());
         End();
     }
 
@@ -55,6 +57,7 @@ public class PlayerDashController : MonoBehaviour, IPlayerAction
                 yield return new WaitForSeconds(MaxDashTimer - MaxDashGodModeTimer);
                 player.DashCount++;
             }
+            yield return new WaitForSeconds(0.01f);
         }
     }
 

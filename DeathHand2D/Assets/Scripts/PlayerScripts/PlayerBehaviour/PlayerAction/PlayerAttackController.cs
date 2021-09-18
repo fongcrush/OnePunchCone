@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static StatesManager;
 
+[RequireComponent(typeof(AAttack))]
+[RequireComponent(typeof(Skill1), typeof(Skill2), typeof(Skill3))]
 public class PlayerAttackController : MonoBehaviour, IPlayerAction
 {
 	private IPlayerAttack curPlayerAttack;
@@ -12,16 +14,16 @@ public class PlayerAttackController : MonoBehaviour, IPlayerAction
 	private Skill2 skill2;
 	private Skill3 skill3;
 
-	public PlayerAttackController(PlayerActionBehaviour ActionBehaviour)
-	{
-		actionBehaviour = ActionBehaviour;
-		attack = new AAttack(this);
-		skill1 = new Skill1(this);
-		skill2 = new Skill2(this);
-		skill3 = new Skill3(this);
+    private void Awake()
+    {
+		actionBehaviour = GetComponent<PlayerActionBehaviour>();
+		attack = GetComponent<AAttack>();
+		skill1 = GetComponent<Skill1>();
+		skill2 = GetComponent<Skill2>();
+		skill3 = GetComponent<Skill3>();
 	}
 
-	public void Begin()
+    public void Begin()
 	{
 		actionState = ActionState.Attack;
 
@@ -37,6 +39,8 @@ public class PlayerAttackController : MonoBehaviour, IPlayerAction
 	public void End()
 	{
 		actionState = ActionState.None;
+		curActionKey = ActionKey.None;
+		playerState = PlayerState.Idle;
 	}
 
 	public void ChangeAttack(string name)

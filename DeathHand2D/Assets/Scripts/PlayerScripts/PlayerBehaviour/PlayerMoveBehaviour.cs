@@ -17,9 +17,9 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 
     private ArrowKey curDoubleCheckKey;
 
-    public PlayerMoveBehaviour(Player playerComponent)
-	{
-        player = playerComponent;
+    private void Awake()
+    {
+        player = GetComponent<Player>();
         canRun = false;
         moveDirection = Vector3.zero;
         curRunCheckTime = 0;
@@ -47,32 +47,41 @@ public class PlayerMoveBehaviour : MonoBehaviour, IPlayerBehaviour
 
     private void MoveCheck()
     {
-        if(!canRun)
+        if (!canRun)
         {
-            if(Input.GetKeyDown(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; curRunCheckTime = 0; }
+            if (Input.GetKeyUp(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; }
+            if (Input.GetKeyDown(KeyCode.LeftArrow)){ curRunCheckTime = 0; }
 
-            if(Input.GetKeyDown(KeyCode.RightArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Right; curRunCheckTime = 0; }
+            if (Input.GetKeyUp(KeyCode.RightArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Right; }
+            if (Input.GetKeyDown(KeyCode.RightArrow)) { curRunCheckTime = 0; }
 
-            if(Input.GetKeyDown(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; curRunCheckTime = 0; }
+            if (Input.GetKeyUp(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; }
+            if (Input.GetKeyDown(KeyCode.UpArrow)) { curRunCheckTime = 0; }
 
-            if(Input.GetKeyDown(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; curRunCheckTime = 0; }
+            if (Input.GetKeyUp(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) { curRunCheckTime = 0; }
+
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow))
+            {
+                curRunCheckTime += Time.deltaTime;
+            }
         }
         else
-		{
+        {
             curRunCheckTime += Time.deltaTime;
-            if(Input.GetKeyDown(KeyCode.LeftArrow) && curDoubleCheckKey == ArrowKey.Left) { moveMode = MoveMode.Run; }
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && curDoubleCheckKey == ArrowKey.Left) { moveMode = MoveMode.Run; }
 
-            if(Input.GetKeyDown(KeyCode.RightArrow) && curDoubleCheckKey == ArrowKey.Right) { moveMode = MoveMode.Run; }
+            if (Input.GetKeyDown(KeyCode.RightArrow) && curDoubleCheckKey == ArrowKey.Right) { moveMode = MoveMode.Run; }
 
-            if(Input.GetKeyDown(KeyCode.UpArrow) && curDoubleCheckKey == ArrowKey.Up) { moveMode = MoveMode.Run; }
+            if (Input.GetKeyDown(KeyCode.UpArrow) && curDoubleCheckKey == ArrowKey.Up) { moveMode = MoveMode.Run; }
 
-            if(Input.GetKeyDown(KeyCode.DownArrow) && curDoubleCheckKey == ArrowKey.Down) { moveMode = MoveMode.Run; }
+            if (Input.GetKeyDown(KeyCode.DownArrow) && curDoubleCheckKey == ArrowKey.Down) { moveMode = MoveMode.Run; }
 
-            if(curRunCheckTime > 0.5f)
-			{
+            if (curRunCheckTime > 0.5f)
+            {
                 curRunCheckTime = 0;
                 canRun = false;
-			}
+            }
         }
         if(moveDirection == Vector3.zero)
 		{
