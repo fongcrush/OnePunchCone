@@ -10,16 +10,13 @@ public class PlayerDash : IPlayerAction
     private const float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
 
-    public PlayerDash(PlayerActionMgr ActionBehaviour)
-	{
-        actionMgr = ActionBehaviour;
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
-    }
-
     private void Start()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        actionMgr = player.ActionMgr;
+
         if(player)
-        StartCoroutine(UpdateDashCount());
+            StartCoroutine(UpdateDashCount());
     }
     public override void Begin()
     {
@@ -27,33 +24,41 @@ public class PlayerDash : IPlayerAction
         Dash();
     }
 
-	public override void UpdateAction()
-	{
-		
-	}
-
-	public override void End()
+    public override void UpdateAction()
     {
+
+    }
+
+    public override void End()
+    {
+        actionState = ActionState.None;
+
         actionMgr.End();
     }
 
-	public override void Quit()
-	{
-
-	}
-
-	void Dash()
+    public override void Quit()
     {
-        player.DashCount -= 1;
-        player.transform.position = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
 
-        if(player.LeftOrRight())
-            player.transform.position = player.transform.position + Vector3.left * DashSpeed;
-        else
-            player.transform.position = player.transform.position + Vector3.right * DashSpeed;
-        CheckPerfectTiming();
-        if(player)
-            StartCoroutine(UpdateGodMode());
+    }
+
+    void Dash()
+    {
+        if(player.DashCount > 0)
+        {
+            player.DashCount -= 1;
+            if(hAxis != 0 || vAxis != 0)
+                player.transform.position = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+            else
+            {
+                if(player.LeftOrRight())
+                    player.transform.position = player.transform.position + Vector3.left * DashSpeed;
+                else
+                    player.transform.position = player.transform.position + Vector3.right * DashSpeed;
+            }
+            CheckPerfectTiming();
+            if(player)
+                StartCoroutine(UpdateGodMode());
+        }
         End();
     }
 

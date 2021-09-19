@@ -25,8 +25,8 @@ public class PlayerAttackData
 			skill.code = shortParse(value["CODE"]);
 			skill.type = byteParse(value["TYPE"]);
 			skill.clear = byteParse(value["CLEAR"]);
-			skill.fDelay = floatParse(value["FIRST_DELAY"]) / 100f;
-			skill.sDelay = floatParse(value["FIRST_DELAY"]) / 100f;
+			skill.fDelay = floatParse(value["FIRST_DELAY"]) / 1000f;
+			skill.sDelay = floatParse(value["FIRST_DELAY"]) / 1000f;
 			skill.distance = new Vector2(intParse(value["DISTANCE_X"]), intParse(value["DISTANCE_Y"]));
 			skill.hit = byteParse(value["HIT"]);
 			skill.min = shortParse(value["MIN_DAMAGE"]);
