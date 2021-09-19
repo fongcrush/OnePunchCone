@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
+using static PlayerAttackData;
 
 public class PlayerDash : IPlayerAction
 {
@@ -10,16 +11,23 @@ public class PlayerDash : IPlayerAction
     private const float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
 
+    private bool isTiming;
+
+    private void Awake()
+    {
+        isTiming = false;
+    }
+
     private void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         actionMgr = player.ActionMgr;
-
-        if(player)
+        if (player)
             StartCoroutine(UpdateDashCount());
     }
     public override void Begin()
     {
+        Debug.Log("DashBegin");
         actionState = ActionState.Dash;
         Dash();
     }
@@ -84,6 +92,28 @@ public class PlayerDash : IPlayerAction
 
     private void CheckPerfectTiming()
     {
+        if(isTiming == true)
+        {
+            foreach (var attackInfo in AttackTable)
+            {
+                attackInfo.Value.curTime = 0;
+            }
+        }
+    }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "PerfectTiming")
+        {
+            isTiming = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "PerfectTiming")
+        {
+            isTiming = false;
+        }
     }
 }

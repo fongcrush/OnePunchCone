@@ -23,7 +23,6 @@ public class PlayerAttackSkill02 : IPlayerAction
 	{
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
-        actionMgr = player.ActionMgr;
 
         dir = Vector2.zero;
         curTime = 0;
@@ -32,6 +31,7 @@ public class PlayerAttackSkill02 : IPlayerAction
 
     private void Start()
     {
+        actionMgr = player.ActionMgr;
         attackInfo = PlayerAttackData.AttackTable[102];
     }
 

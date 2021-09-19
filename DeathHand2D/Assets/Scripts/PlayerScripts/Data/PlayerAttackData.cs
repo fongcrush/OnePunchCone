@@ -9,7 +9,7 @@ public class PlayerAttackData
 	private static List<Dictionary<string, object>> CSVData;
 
 	private static Dictionary<short, AttackInfo> attackTable;
-	public static Dictionary<short, AttackInfo> AttackTable { get { return attackTable; } }
+	public static Dictionary<short, AttackInfo> AttackTable { get { return attackTable; } set { attackTable = value; } }
 
 	public static void UpdateCSVData()
 	{
