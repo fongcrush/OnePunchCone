@@ -45,6 +45,14 @@ public class PlayerMove : MonoBehaviour
 
     private void MoveCheck()
     {
+        if(moveDirection == Vector3.zero)
+        {
+            moveMode = MoveMode.Idle;
+        }
+        else if(moveMode != MoveMode.Run)
+        {
+            moveMode = MoveMode.Walk;
+        }
         if (!canRun)
         {
             if(Input.GetKeyDown(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; curRunCheckTime = 0; }
@@ -54,6 +62,7 @@ public class PlayerMove : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.UpArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Up; curRunCheckTime = 0; }
 
             if(Input.GetKeyDown(KeyCode.DownArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Down; curRunCheckTime = 0; }
+
             //if (Input.GetKeyUp(KeyCode.LeftArrow)) { canRun = true; curDoubleCheckKey = ArrowKey.Left; }
             //if (Input.GetKeyDown(KeyCode.LeftArrow)){ curRunCheckTime = 0; }
 
@@ -88,14 +97,6 @@ public class PlayerMove : MonoBehaviour
                 canRun = false;
             }
         }
-        if(moveDirection == Vector3.zero)
-		{
-            moveMode = MoveMode.Idle;
-		}
-		else if(moveMode!= MoveMode.Run)
-		{
-            moveMode = MoveMode.Walk;
-		}
     }
 
     private void Move()

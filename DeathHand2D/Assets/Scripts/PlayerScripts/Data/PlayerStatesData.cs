@@ -62,6 +62,9 @@ public enum AttackState
 public enum ActionState
 {
     None,
-    Attack,
+    AAttack,
+    Skill1,
+    Skill2,
+    Skill3,
     Dash
 }

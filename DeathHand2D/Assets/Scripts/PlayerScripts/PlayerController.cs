@@ -12,10 +12,6 @@ public class PlayerController : MonoBehaviour
     private PlayerActionMgr actionMgr;
     public PlayerActionMgr ActionMgr { get { return actionMgr; } }
 
-    private PlayerAttackMgr attackMgr;
-    public PlayerAttackMgr AttackMgr { get { return attackMgr; } }
-
-
     private PlayerMove move;
 
     [SerializeField]
@@ -44,7 +40,6 @@ public class PlayerController : MonoBehaviour
     {
         gameManager = GameObject.Find("@GM").GetComponent<Actor>();
         actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
-        attackMgr = actionMgr.transform.Find("AttackManager").GetComponent<PlayerAttackMgr>();
         move = GetComponent<PlayerMove>();
 
         stat = new StatusManager(100, 100, 50);

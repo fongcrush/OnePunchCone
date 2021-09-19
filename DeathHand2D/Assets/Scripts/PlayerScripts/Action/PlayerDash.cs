@@ -4,17 +4,15 @@ using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
 
-public class PlayerDash : MonoBehaviour, IPlayerAction
+public class PlayerDash : IPlayerAction
 {
-    private PlayerActionMgr actionBehaviour;
-    private PlayerController player;
     private const float MaxDashGodModeTimer = 0.3f;
     private const float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
 
     public PlayerDash(PlayerActionMgr ActionBehaviour)
 	{
-        actionBehaviour = ActionBehaviour;
+        actionMgr = ActionBehaviour;
         player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
@@ -23,23 +21,28 @@ public class PlayerDash : MonoBehaviour, IPlayerAction
         if(player)
         StartCoroutine(UpdateDashCount());
     }
-    public void Begin()
+    public override void Begin()
     {
         actionState = ActionState.Dash;
         Dash();
     }
 
-	public void UpdateAction()
+	public override void UpdateAction()
 	{
 		
 	}
 
-	public void End()
+	public override void End()
     {
-        actionBehaviour.End();
+        actionMgr.End();
     }
 
-    void Dash()
+	public override void Quit()
+	{
+
+	}
+
+	void Dash()
     {
         player.DashCount -= 1;
         player.transform.position = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;

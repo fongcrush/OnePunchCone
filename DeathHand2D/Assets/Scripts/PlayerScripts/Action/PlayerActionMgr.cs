@@ -7,44 +7,72 @@ public class PlayerActionMgr : MonoBehaviour
 {
 	private PlayerController player;
 
-	private IPlayerAction curPlayerAction;
+	private IPlayerAction curAction;
 
-	[SerializeField]
-	private PlayerAttackMgr attackMgr;
-	public PlayerAttackMgr AttackMgr { get { return attackMgr; } }
+	private PlayerAttackAuto aAttack;
+	public IPlayerAction AAttack { get { return aAttack; } }
+
+	private PlayerAttackSkill01 skill_01;
+	public IPlayerAction Skill_01 { get { return skill_01; } }
+
+	private PlayerAttackSkill02 skill_02;
+	public IPlayerAction Skill_02 { get { return skill_02; } }
+
+	private PlayerAttackSkill03 skill_03;
+	public IPlayerAction Skill_03 { get { return skill_03; } }
 
 	private PlayerDash dash;
-	public PlayerDash Dash { get { return dash; } }
+	public IPlayerAction Dash { get { return dash; } }
 
 	void Awake()
 	{
 		player = GameObject.Find("Player").GetComponent<PlayerController>();
+
+		aAttack = GetComponent<PlayerAttackAuto>();
+		skill_01 = GetComponent<PlayerAttackSkill01>();
+		skill_02 = GetComponent<PlayerAttackSkill02>();
+		skill_03 = GetComponent<PlayerAttackSkill03>();
+		PlayerAttackData.UpdateCSVData();
+
 		dash = GetComponent<PlayerDash>();
+
+	}
+	public void Update()
+	{
+		PlayerAttackData.UpdateCSVData();
 	}
 
 	public void Begin()
 	{
 		playerState = PlayerState.Action;
 		player.GetComponent<PlayerMove>().enabled = false;
-		switch(curActionKey)
+		if(actionState == ActionState.None)
 		{
-		case ActionKey.LeftShift:
-			curPlayerAction = dash;
-			break;
+			switch(curActionKey)
+			{
+			case ActionKey.Z:
+				curAction = AAttack;
+				break;
+			case ActionKey.X:
+				curAction = Skill_01;
+				break;
+			case ActionKey.C:
+				curAction = Skill_02;
+				break;
+			case ActionKey.LeftShift:
+				curAction = dash;
+				break;
+			}
 
-		case ActionKey.Z:
-		case ActionKey.X:
-		case ActionKey.C:
-			curPlayerAction = attackMgr;
-			break;
+			if(curAction != null)
+				curAction.Begin();
 		}
-		attackMgr.Begin();
 	}
 
 	public void UpdateAction()
 	{
-		if(curPlayerAction !=null)
-			curPlayerAction.UpdateAction();
+		if(curAction != null)
+			curAction.UpdateAction();
 		if(actionState == ActionState.None)
 			End();
 	}
@@ -53,5 +81,13 @@ public class PlayerActionMgr : MonoBehaviour
 	{
 		playerState = PlayerState.Move;
 		player.GetComponent<PlayerMove>().enabled = true;
+	}
+
+	public void ChangeAction(IPlayerAction action)
+	{
+		if(curAction != null)
+		{
+			curAction.Quit();
+		}
 	}
 }

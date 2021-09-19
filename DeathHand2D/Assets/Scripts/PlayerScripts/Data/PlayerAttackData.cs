@@ -23,12 +23,12 @@ public class PlayerAttackData
 		{
 			AttackInfo skill = new AttackInfo();
 			skill.code = shortParse(value["CODE"]);
-			skill.name = stringParse(value["NAME"]);
 			skill.type = byteParse(value["TYPE"]);
 			skill.clear = byteParse(value["CLEAR"]);
-			skill.delay = floatParse(value["DELAY"]) / 100f;
+			skill.fDelay = floatParse(value["FIRST_DELAY"]) / 100f;
+			skill.sDelay = floatParse(value["FIRST_DELAY"]) / 100f;
 			skill.distance = new Vector2(intParse(value["DISTANCE_X"]), intParse(value["DISTANCE_Y"]));
-			skill.hit = byteParse(value["HIT_COUNT"]);
+			skill.hit = byteParse(value["HIT"]);
 			skill.min = shortParse(value["MIN_DAMAGE"]);
 			skill.max = shortParse(value["MAX_DAMAGE"]);
 			skill.cTime = floatParse(value["C_TIME"]);
@@ -59,10 +59,10 @@ public class PlayerAttackData
 public class AttackInfo
 {
 	public short code;
-	public string name;
 	public byte type;
 	public short clear;
-	public float delay;
+	public float fDelay;
+	public float sDelay;
 	public Vector2 distance;
 	public byte hit;
 	public short min;

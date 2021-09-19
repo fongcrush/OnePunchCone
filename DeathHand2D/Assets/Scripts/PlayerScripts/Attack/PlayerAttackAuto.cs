@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
 
-public class PlayerAttackAuto : IPlayerAttack
+public class PlayerAttackAuto : IPlayerAction
 {
-    private PlayerController player;
-
     [SerializeField]
     private Transform coll;
 
-    private PlayerAttackMgr attackMgr;
-
     private AttackInfo attackInfo;
-
-    private float curTime;
-
-    private bool isDone;
 
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        attackMgr = player.AttackMgr;
+        actionMgr = player.ActionMgr;
 
         curTime = 0;
         isDone = false;
@@ -34,10 +26,12 @@ public class PlayerAttackAuto : IPlayerAttack
 
     public override void Begin()
     {
-        attackState = AttackState.AAttack;
+        Debug.Log("Auto Attack!");
+        actionState = ActionState.AAttack;
 
         coll.gameObject.SetActive(true);
         player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        attackInfo = PlayerAttackData.AttackTable[100];
         curTime = 0;
         isDone = false;
 
@@ -45,15 +39,15 @@ public class PlayerAttackAuto : IPlayerAttack
         StartCoroutine(CheckDash());
 	}
 
-	public override void UpdateAttack()
+	public override void UpdateAction()
     {
-        if(curTime < attackInfo.delay) { } // ¼± µô·¹ÀÌ
-        else if(curTime < attackInfo.delay + 0.1f)
+        if(curTime < attackInfo.fDelay) { } // ¼± µô·¹ÀÌ
+        else if(curTime < attackInfo.fDelay + 0.1f)
         {
             if(coll.GetComponent<BoxCollider2D>().enabled == false)
                 coll.GetComponent<BoxCollider2D>().enabled = true;
         }
-        else if(curTime < attackInfo.cTime) { } // ÈÄ µô·¹ÀÌ
+        else if(curTime < attackInfo.sDelay) { } // ÈÄ µô·¹ÀÌ
         else
         {
             if(coll.gameObject.activeSelf)
@@ -66,8 +60,9 @@ public class PlayerAttackAuto : IPlayerAttack
     }
 
 	public override void End()
-	{
-        attackState = AttackState.None;
+    {
+        Debug.Log("Auto Attack end!");
+        actionState = ActionState.None;
 
         coll.gameObject.SetActive(false);
         isDone = false;
@@ -77,9 +72,9 @@ public class PlayerAttackAuto : IPlayerAttack
     {
         coll.gameObject.SetActive(false);
         coll.GetComponent<BoxCollider2D>().enabled = false;
-        isDone = true;
-        attackMgr.End();
         coll.gameObject.SetActive(true);
+        isDone = true;
+        actionMgr.End();
     }
 
 	IEnumerator CheckDash()

@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
 
-public class PlayerAttackSkill02 : IPlayerAttack
+public class PlayerAttackSkill02 : IPlayerAction
 {
-    private PlayerController player;
-
     [SerializeField]
     private Transform coll;
 
     [SerializeField]
     private Transform chargeRange;
-
-    private PlayerAttackMgr attackMgr;
 
     private AttackInfo attackInfo;
 
@@ -21,15 +17,13 @@ public class PlayerAttackSkill02 : IPlayerAttack
 
     private Vector2 dir;
 
-    private float curTime;
-
     private bool ComboOn;
 
 	public void Awake()
 	{
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
-        attackMgr = player.AttackMgr;
+        actionMgr = player.ActionMgr;
 
         dir = Vector2.zero;
         curTime = 0;
@@ -38,16 +32,19 @@ public class PlayerAttackSkill02 : IPlayerAttack
 
     private void Start()
     {
-        attackInfo = PlayerAttackData.AttackTable[100];
+        attackInfo = PlayerAttackData.AttackTable[102];
     }
+
 
     public override void Begin()
     {
-        attackState = AttackState.Skill2;
+        Debug.Log("Attack Skill 02!");
+        actionState = ActionState.Skill2;
 
         coll.gameObject.SetActive(true);
         chargeRange.gameObject.SetActive(true);
         player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        attackInfo = PlayerAttackData.AttackTable[102];
         curTime = 0;
 
         // 돌진 목표 지점 계산 : 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
@@ -63,10 +60,10 @@ public class PlayerAttackSkill02 : IPlayerAttack
         StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
     }
 
-	public override void UpdateAttack()
+	public override void UpdateAction()
     {
-        if(curTime < attackInfo.delay) { }
-        else if(curTime < attackInfo.cTime)
+        if(curTime < attackInfo.fDelay) { }
+        else if(curTime < attackInfo.fDelay )
         {
             player.transform.position = Vector2.Lerp(transform.position, dir, Time.deltaTime * 20);
             chargeRange.position = fixedChargePos;
@@ -84,7 +81,8 @@ public class PlayerAttackSkill02 : IPlayerAttack
 
     public override void End()
     {
-        attackState = AttackState.None;
+        Debug.Log("Attack Skill 02 end!");
+        actionState = ActionState.None;
 
         Debug.Log("Skill 2 End");
         coll.gameObject.SetActive(false);
@@ -110,7 +108,7 @@ public class PlayerAttackSkill02 : IPlayerAttack
 
             if(Input.GetKeyDown(KeyCode.C))
 			{
-                attackMgr.ChangeAttack(attackMgr.Skill_03);
+                actionMgr.ChangeAction(actionMgr.Skill_03);
             }
         }
     }

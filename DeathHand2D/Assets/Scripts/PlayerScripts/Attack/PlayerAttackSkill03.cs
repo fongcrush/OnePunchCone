@@ -2,27 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
-using static PlayerAttackData;
 
-public class PlayerAttackSkill03 : IPlayerAttack
+public class PlayerAttackSkill03 : IPlayerAction
 {
-    private PlayerController player;
-
     [SerializeField]
     private Transform coll;
 
-    private PlayerAttackMgr attackMgr;
-
     private AttackInfo attackInfo;
-
-    private float curTime;
-
-    private bool isDone;
 
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        attackMgr = player.AttackMgr;
+        actionMgr = player.ActionMgr;
 
         curTime = 0;
         isDone = false;
@@ -30,15 +21,18 @@ public class PlayerAttackSkill03 : IPlayerAttack
 
     private void Start()
     {
-        attackInfo = PlayerAttackData.AttackTable[100];
+        attackInfo = PlayerAttackData.AttackTable[103];
     }
+
 
     public override void Begin()
     {
-        attackState = AttackState.Skill3;
+        Debug.Log("Attack Skill 03!");
+        actionState = ActionState.Skill3;
 
         coll.gameObject.SetActive(true);
         player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        attackInfo = PlayerAttackData.AttackTable[103];
         curTime = 0;
         isDone = false;
 
@@ -46,15 +40,15 @@ public class PlayerAttackSkill03 : IPlayerAttack
         StartCoroutine(CheckDash());
     }
 
-    public override void UpdateAttack()
+    public override void UpdateAction()
 	{
-        if(curTime < attackInfo.delay) { } // ¼± µô·¹ÀÌ
-        else if(curTime < attackInfo.delay + 0.1f)
+        if(curTime < attackInfo.fDelay) { } // ¼± µô·¹ÀÌ
+        else if(curTime < attackInfo.fDelay + 0.1f)
         {
             if(coll.GetComponent<BoxCollider2D>().enabled == false)
                 coll.GetComponent<BoxCollider2D>().enabled = true;
         }
-        else if(curTime < attackInfo.cTime) { } // ÈÄ µô·¹ÀÌ
+        else if(curTime < attackInfo.sDelay) { } // ÈÄ µô·¹ÀÌ
         else
         {
             if(coll.gameObject.activeSelf)
@@ -69,7 +63,8 @@ public class PlayerAttackSkill03 : IPlayerAttack
 
 	public override void End()
     {
-        attackState = AttackState.None;
+        Debug.Log("Attack Skill 03 end!");
+        actionState = ActionState.None;
 
         coll.gameObject.SetActive(false);
         isDone = true;
@@ -80,7 +75,7 @@ public class PlayerAttackSkill03 : IPlayerAttack
         coll.gameObject.SetActive(false);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         isDone = true;
-        attackMgr.End();
+        actionMgr.End();
     }
 
     IEnumerator CheckDash()
