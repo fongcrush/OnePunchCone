@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
+
 public class PlayerActionMgr : MonoBehaviour
 {
 	private PlayerController player;
@@ -46,6 +47,7 @@ public class PlayerActionMgr : MonoBehaviour
 	{
 		playerState = PlayerState.Action;
 		player.GetComponent<PlayerMove>().enabled = false;
+
 		if(actionState == ActionState.None)
 		{
 			switch(curActionKey)
@@ -62,25 +64,34 @@ public class PlayerActionMgr : MonoBehaviour
 			case ActionKey.LeftShift:
 				curAction = dash;
 				break;
-			}
-
-			if(curAction != null)
-				curAction.Begin();
+			}			
 		}
+
+		if (curAction != null)
+			curAction.Begin();
 	}
 
 	public void UpdateAction()
 	{
-		if(curAction != null)
+		if (curActionKey == ActionKey.LeftShift)
+			curAction.Quit();
+
+		if (curAction != null)
 			curAction.UpdateAction();
-		if(actionState == ActionState.None)
+
+		if (actionState == ActionState.None)
 			End();
 	}
 
 	public void End()
 	{
+		if(actionState == ActionState.Dash) 
+		{
+			curAction = dash;
+			curAction.Begin();
+		}
 		playerState = PlayerState.Move;
-		player.GetComponent<PlayerMove>().enabled = true;
+		player.GetComponent<PlayerMove>().enabled = true;		
 	}
 
 	public void ChangeAction(IPlayerAction action)

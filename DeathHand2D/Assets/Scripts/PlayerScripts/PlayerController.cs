@@ -93,25 +93,6 @@ public class PlayerController : MonoBehaviour
             return false;
     }
 
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if(collision.gameObject.tag == "PerfectTiming")
-    //    {
-    //        if(!isTiming)
-    //        {
-    //            isTiming = true;
-    //        }
-    //    }
-    //}
-
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    if(collision.gameObject.tag == "PerfectTiming")
-    //    {
-    //        isTiming = false;
-    //    }
-    //}
-
     //private void OnCollisionEnter(Collision collision)
     //{
     //    if(collision.transform.tag == "Enemy") 

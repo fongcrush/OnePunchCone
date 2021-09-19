@@ -13,7 +13,6 @@ public class PlayerAttackSkill01 : IPlayerAction
 	public void Awake()
 	{
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        actionMgr = player.ActionMgr;
 
         curTime = 0;
         isDone = false;
@@ -21,6 +20,7 @@ public class PlayerAttackSkill01 : IPlayerAction
 
     private void Start()
     {
+        actionMgr = player.ActionMgr;
         attackInfo = PlayerAttackData.AttackTable[101];
     }
 
@@ -36,12 +36,11 @@ public class PlayerAttackSkill01 : IPlayerAction
         isDone = false;
 
         StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
-        StartCoroutine(CheckDash());
     }
 
 	public override void UpdateAction()
     {
-        if(curTime < attackInfo.fDelay) { } // ¼± µô·¹ÀÌ
+        if(curTime < attackInfo.fDelay) { }
         else if(curTime < attackInfo.sDelay + 0.1f)
         {
             if(coll.GetComponent<BoxCollider2D>().enabled == false)
@@ -74,16 +73,8 @@ public class PlayerAttackSkill01 : IPlayerAction
         isDone = true;
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         coll.gameObject.SetActive(false);
+        actionState = ActionState.Dash;        
         actionMgr.End();
     }
 
-    IEnumerator CheckDash()
-    {
-        while(!isDone)
-        {
-            if(actionState == ActionState.Dash)
-                Quit();
-            yield return null;
-        }
-    }
 }
