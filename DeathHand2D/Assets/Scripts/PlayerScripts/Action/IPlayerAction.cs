@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IPlayerAction
 {
-    void Begin();
-    void End();
+    public void Begin();
+    public void UpdateAction();
+    public void End();
 }

@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static StatesManager;
+using static PlayerStatesData;
 
 public class InputManager : MonoBehaviour
 {
-    [HideInInspector]
+    private static ArrowKey arrowKey = ArrowKey.None;
+    public static ArrowKey curArrowKey { get { return arrowKey; } }
+
+    private static ActionKey actionKey = ActionKey.None;
+    public static ActionKey curActionKey { get { return actionKey; } }
+
+    public static CharacterDirection characterDirection = CharacterDirection.Right;
+
     public static float hAxis, vAxis;
 
     private void Awake()
@@ -26,20 +33,15 @@ public class InputManager : MonoBehaviour
     void UpdateMoveInput()
 	{
         // 이동
-        if(Input.GetKey(KeyCode.LeftArrow))
-            curArrowKey = ArrowKey.Left;
+        if(Input.GetKey(KeyCode.LeftArrow)) { arrowKey = ArrowKey.Left; }
 
-        else if(Input.GetKey(KeyCode.RightArrow))
-            curArrowKey = ArrowKey.Right;
+        else if(Input.GetKey(KeyCode.RightArrow)) { arrowKey = ArrowKey.Right; }
 
-        else if(Input.GetKey(KeyCode.UpArrow))
-            curArrowKey = ArrowKey.Up;
+        else if(Input.GetKey(KeyCode.UpArrow)) { arrowKey = ArrowKey.Up; }
 
-        else if(Input.GetKey(KeyCode.DownArrow))
-            curArrowKey = ArrowKey.Down;
+        else if(Input.GetKey(KeyCode.DownArrow)) { arrowKey = ArrowKey.Down; }
 
-        else
-            curArrowKey = ArrowKey.None;
+        else { arrowKey = ArrowKey.None; }
 
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
@@ -48,12 +50,14 @@ public class InputManager : MonoBehaviour
     void UpdateActionInput()
     {
         // 액션
-        if(Input.GetKeyDown(KeyCode.Z)) { curActionKey = ActionKey.Z; actionState = ActionState.Ready; playerState = PlayerState.Action; }
+        if(Input.GetKeyDown(KeyCode.Z)) { actionKey = ActionKey.Z;}
 
-        if(Input.GetKeyDown(KeyCode.X)) { curActionKey = ActionKey.X; actionState = ActionState.Ready; playerState = PlayerState.Action; }
+        else if(Input.GetKeyDown(KeyCode.X)) { actionKey = ActionKey.X;}
 
-        if(Input.GetKeyDown(KeyCode.C)) { curActionKey = ActionKey.C; actionState = ActionState.Ready; playerState = PlayerState.Action; }
+        else if(Input.GetKeyDown(KeyCode.C)) { actionKey = ActionKey.C;}
 
-        if(Input.GetKeyDown(KeyCode.LeftShift)) { curActionKey = ActionKey.LeftShift; actionState = ActionState.Ready; playerState = PlayerState.Action; }
+        else if(Input.GetKeyDown(KeyCode.LeftShift)) { actionKey = ActionKey.LeftShift;}
+
+        else { actionKey = ActionKey.None; }
     }
 }

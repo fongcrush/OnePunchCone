@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static StatesManager;
+using static PlayerStatesData;
 
 public class PlayerEffectController : MonoBehaviour
 {
-    Player player;
+    PlayerController player;
 
     public GameObject DustEffect;
     bool canCreateDust;
@@ -18,7 +18,7 @@ public class PlayerEffectController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponent<Player>();
+        player = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

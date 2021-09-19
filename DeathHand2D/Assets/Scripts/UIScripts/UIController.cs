@@ -14,11 +14,11 @@ public class UIController : MonoBehaviour
     public GameObject DashCount2;
 
     public GameObject playerGameObject;
-    Player playerComponent;
+    PlayerController playerComponent;
 
     void Start()
     {
-        playerComponent = playerGameObject.GetComponent<Player>();
+        playerComponent = playerGameObject.GetComponent<PlayerController>();
     }
 
     void Update()

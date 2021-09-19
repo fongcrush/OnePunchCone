@@ -15,7 +15,7 @@ enum PlayerDirectionX
 
 public class EnemyController : MonoBehaviour
 {
-    private Player player;
+    private PlayerController player;
 
     private Enemy enemy;
     private EnemyBaseState currentState;
@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
 
         enemyWarningBoxMesh = enemyWarningBox.GetComponent<SpriteRenderer>();
         attType = (AttackType)attTypeValue;
-        player = GameObject.Find("Player").GetComponent<Player>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
         enemy = GetComponent<Enemy>();
     }
     private void Start()

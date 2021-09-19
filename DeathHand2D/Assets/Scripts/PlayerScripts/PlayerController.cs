@@ -2,28 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Timers;
-using static StatesManager;
+using static PlayerStatesData;
+using static InputManager;
 
-[RequireComponent(typeof(PlayerMoveBehaviour), typeof(PlayerActionBehaviour))]
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    [HideInInspector]
-    public StatusManager stat;
-    [HideInInspector]
-    public Actor gameManager;
+    private InputManager inputController;
 
-    private IPlayerBehaviour curBehaviour;
-    private IPlayerBehaviour prevBehaviour;
-    private PlayerMoveBehaviour move;
-    private PlayerActionBehaviour action;
+    private PlayerActionMgr actionMgr;
+    public PlayerActionMgr ActionMgr { get { return actionMgr; } }
+
+    private PlayerAttackMgr attackMgr;
+    public PlayerAttackMgr AttackMgr { get { return attackMgr; } }
+
+
+    private PlayerMove move;
 
     [SerializeField]
     private int dashCount;
+    public int DashCount { get { return dashCount; } set { dashCount = value; } }
 
     [SerializeField]
     private bool dashGodMode;
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
 
+
+    [HideInInspector]
+    public StatusManager stat;
+
+    [HideInInspector]
+    public Actor gameManager;
 
     public PlayerState displayPlayerState;
     public CharacterDirection displayCharacterDir;
@@ -34,41 +42,34 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        move               = GetComponent<PlayerMoveBehaviour>();
-        action             = GetComponent<PlayerActionBehaviour>();
+        gameManager = GameObject.Find("@GM").GetComponent<Actor>();
+        actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
+        attackMgr = actionMgr.transform.Find("AttackManager").GetComponent<PlayerAttackMgr>();
+        move = GetComponent<PlayerMove>();
 
-        gameManager        = GameObject.Find("@GM").GetComponent<Actor>();
-
-        stat               = new StatusManager(100, 100, 50);
-        dashGodMode        = false;
-
+        stat = new StatusManager(100, 100, 50);
         characterDirection = CharacterDirection.Right;
-        dashCount          = 2;
-    }
-
-    public PlayerState CurrentState()
-	{
-        return playerState;
-	}
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        curBehaviour = move;
-        playerState = PlayerState.Idle;
+        dashCount = 2;
+        dashGodMode = false;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        if (playerState == PlayerState.Move)
-            ChangeBehaviour(move);
-        else if (playerState == PlayerState.Action)
-            ChangeBehaviour(action);
+	{
+        switch(playerState)
+        {
+        case PlayerState.Move:
+            move.UpdateMove();
+            break;
+        case PlayerState.Action:
+            actionMgr.UpdateAction();
+            break;
 
-        curBehaviour.Begin();
+        case PlayerState.Dead:
 
-        UpdateDisplayStates();
+            break;
+        }
+		UpdateDisplayStates();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -79,29 +80,22 @@ public class Player : MonoBehaviour
         }
     }
 
-	private void UpdateDisplayStates()
-	{
+    private void UpdateDisplayStates()
+    {
         displayPlayerState = playerState;
         displayActionState = actionState;
         displayCharacterDir = characterDirection;
         displayCurArrowKey = curArrowKey;
         displayCurActionKey = curActionKey;
         displayCurMoveMode = moveMode;
-
     }
 
-    void ChangeBehaviour(IPlayerBehaviour behaviour)
-	{
-        curBehaviour.End();
-        prevBehaviour = curBehaviour;
-        curBehaviour = behaviour;
-        curBehaviour.Begin();
-    }
-
-    public int DashCount
+    public bool LeftOrRight()
     {
-        get { return dashCount; }
-        set { dashCount = value; }
+        if(characterDirection == CharacterDirection.Left)
+            return true;
+        else
+            return false;
     }
 
     //private void OnTriggerStay2D(Collider2D collision)
