@@ -69,9 +69,8 @@ public class PlayerAttackAuto : IPlayerAction
 
 	public override void Quit()
     {
-        coll.gameObject.SetActive(false);
         coll.GetComponent<BoxCollider2D>().enabled = false;
-        coll.gameObject.SetActive(true);
+        coll.gameObject.SetActive(false);
         isDone = true;
         actionState = ActionState.Dash;
         actionMgr.End();
