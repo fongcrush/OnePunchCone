@@ -40,7 +40,7 @@ public class PlayerActionMgr : MonoBehaviour
 	}
 	public void Update()
 	{
-		PlayerAttackData.UpdateCSVData();
+		//PlayerAttackData.UpdateCSVData();
 	}
 
 	public void Begin()
@@ -73,7 +73,7 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void UpdateAction()
 	{
-		if (curActionKey == ActionKey.LeftShift)
+		if (curActionKey == ActionKey.LeftShift && player.DashCount > 0)
 			curAction.Quit();
 
 		if (curAction != null)

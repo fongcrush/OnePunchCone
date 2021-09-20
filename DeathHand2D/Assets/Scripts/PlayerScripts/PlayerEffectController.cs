@@ -10,9 +10,15 @@ public class PlayerEffectController : MonoBehaviour
     public GameObject DustEffect;
     bool canCreateDust;
 
+    public GameObject DarkDebuffEffect;
+    bool darkDebuff;
+
+    public bool DarkDebuff { set { darkDebuff = value; } }
+
     private void Awake()
     {
         canCreateDust = true;
+        darkDebuff = false;
     }
 
     // Start is called before the first frame update
@@ -28,6 +34,8 @@ public class PlayerEffectController : MonoBehaviour
         {
             StartCoroutine("CreateDustEffect");
         }
+        DarkDebuffEffect.SetActive(darkDebuff);
+
     }
 
     IEnumerator CreateDustEffect()
