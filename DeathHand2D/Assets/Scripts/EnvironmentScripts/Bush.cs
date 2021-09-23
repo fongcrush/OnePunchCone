@@ -16,12 +16,12 @@ public class Bush : Environment
             if (environmentName == "Bush" && collision.gameObject.tag == "Enemy")
             {
                 collision.GetComponent<SpriteRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder - 1;
-                //if(collision.GetComponent<EnemyController>().CurrentState == new EnemyTraceState() || collision.GetComponent<EnemyController>().CurrentState == new EnemyAttackState()|| collision.GetComponent<EnemyController>().CurrentState == new EnemyHitState()) 
-                //{
-                //    collision.GetComponent<EnemyController>().ChangeState(new EnemyTraceState());
-                //    // 5초 지나면
-                //    collision.GetComponent<EnemyController>().ChangeState(new EnemyIdleState());
-                //}
+                // if(collision.GetComponent<EnemyController>().CurrentState == new EnemyTraceState() || collision.GetComponent<EnemyController>().CurrentState == new EnemyAttackState()|| collision.GetComponent<EnemyController>().CurrentState == new EnemyHitState()) 
+                // {
+                    // collision.GetComponent<EnemyController>().ChangeState(new EnemyTraceState());
+                    // 5초 지나면
+                    // collision.GetComponent<EnemyController>().ChangeState(new EnemyIdleState());
+                // }
             }
         }
         else

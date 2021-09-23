@@ -20,6 +20,11 @@ public class EnemyTraceState : EnemyBaseState
             ctrl.ChangeState(ctrl.IdleState);
             return;
         }
+        if(ctrl.CheckTargetInBush())
+        {
+            // ctrl.SearchTarget();
+            return;
+        }
         if(!ctrl.CheckInTraceRange())
         {
             ctrl.ChangeState(ctrl.IdleState);
