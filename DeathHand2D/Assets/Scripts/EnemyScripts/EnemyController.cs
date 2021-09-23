@@ -5,7 +5,9 @@ using UnityEngine;
 enum AttackType
 {
     MELEE,
-    RANGED
+    RANGED,
+    MELEE_ELITE,
+    RANGED_ELITE
 }
 enum PlayerDirectionX
 {
@@ -15,7 +17,7 @@ enum PlayerDirectionX
 
 public class EnemyController : MonoBehaviour
 {
-    private PlayerController player;
+    private GameObject player;
 
     private Enemy enemy;
     private EnemyBaseState currentState;
@@ -24,29 +26,24 @@ public class EnemyController : MonoBehaviour
     public GameObject enemyAttackCollider;
     public GameObject enemyWarningBox;
     public GameObject enemyTimingBox;
-    public GameObject arrow;
-
-    private GameObject arrowObject;
-    private Rigidbody2D arrowRigid;
-    private Rigidbody2D enemyRigid;
+    public GameObject summonCreature;
 
     private SpriteRenderer enemyWarningBoxMesh;
+    private SpriteRenderer enemySpriteRenderer;
+    private SpriteRenderer playerSpriteRenderer;
 
     public int attTypeValue;
     private AttackType attType;
 
     private PlayerDirectionX playerDirectionX;
 
-    public string monsterName;
-    public int monsterRank;
-    public int attDamage;
-    public float traceRange = 5.0f;
-    public float attackRange = 2.0f;
-    public float speed = 0.75f;
-    public float attackDelay = 1f; // 공격 후 다음 공격까지 걸리는 시간
-    public float attackSpeed = 1f; // 공격에 걸리는 시간
+    private float traceRange;
+    private float attackRange;
+    private float speed;
+    private float attackDelay; // 공격 자세부터 실제 공격까지 걸리는 시간
+    private float attackSpeed; // 공격에 걸리는 시간
 
-    private float range = 0.5f;
+    private float range;
 
     public Transform targetTransform;
 
@@ -66,30 +63,75 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         currentState = IdleState;
-        enemyRigid = GetComponent<Rigidbody2D>();
         playerDirectionX = PlayerDirectionX.LEFT;
 
         enemyWarningBoxMesh = enemyWarningBox.GetComponent<SpriteRenderer>();
+        enemySpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         attType = (AttackType)attTypeValue;
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GameObject.Find("Player");
         enemy = GetComponent<Enemy>();
     }
     private void Start()
     {
-        if (attType == AttackType.RANGED)
+        if(attType == AttackType.MELEE)
+        {
+            range = 0.5f;
+
+            attackSpeed = 1f;
+            attackDelay = 0.8f;
+            traceRange = 5f;
+            attackRange = 1f;
+            speed = 1f;
+            enemy.stat.MaxHP = 300;
+            enemy.stat.Power = 100;
+        }
+        else if (attType == AttackType.RANGED)
         {
             enemyAttackCollider.transform.localScale = new Vector3(1f, 1f, 1f);
             enemyWarningBox.transform.localScale = new Vector3(1f, 1f, 1f);
             enemyTimingBox.transform.localScale = new Vector3(1f, 1f, 1f);
             range = 2.99f;
 
-            attackSpeed = 0.2f;
-            attackDelay = 0f;
-            speed = 1.5f;
+            attackSpeed = 0.4f;
+            attackDelay = 0.7f;
+            speed = 1.2f;
             attackRange = 3f;
             traceRange = 8f;
             enemy.stat.MaxHP = 500;
-            enemy.stat.Power = 30;
+            enemy.stat.Power = 150;
+        }
+        else if (attType == AttackType.MELEE_ELITE)
+        {
+            enemyAttackCollider.transform.localScale = new Vector3(10f, 1f, 1f);
+            enemyWarningBox.transform.localScale = new Vector3(10f, 1f, 1f);
+            enemyTimingBox.transform.localScale = new Vector3(10f, 1f, 1f);
+            enemyAttackCollider.transform.position = transform.position + new Vector3(-5f, 0f, 0f);
+            enemyWarningBox.transform.position = transform.position + new Vector3(-5f, 0f, 0f);
+            enemyTimingBox.transform.position = transform.position + new Vector3(-5f, 0f, 0f);
+
+            range = 2.99f;
+
+            attackDelay = 2f;
+            attackSpeed = 1f;
+            speed = 1.5f;
+            attackRange = 3f;
+            traceRange = 8f;
+            enemy.stat.MaxHP = 700;
+            enemy.stat.Power = 200;
+        }
+        else if (attType == AttackType.RANGED_ELITE)
+        {
+            enemyAttackCollider.transform.localScale = new Vector3(3f, 2f, 1f);
+            enemyWarningBox.transform.localScale = new Vector3(3f, 2f, 1f);
+            enemyTimingBox.transform.localScale = new Vector3(3f, 2f, 1f);
+
+            attackDelay = 1f;
+            attackSpeed = 1f;
+            speed = 1.3f;
+            attackRange = 3f;
+            traceRange = 8f;
+            enemy.stat.MaxHP = 750;
+            enemy.stat.Power = 0;
         }
 
         ChangeState(IdleState);
@@ -105,7 +147,7 @@ public class EnemyController : MonoBehaviour
             // 데미지 조정 필요
             //gameObject.GetComponent<Enemy>().OnDamage(50.0f);
 
-            enemy.stat.ChangeHP(-player.stat.Power);
+            enemy.stat.ChangeHP(-player.GetComponent<PlayerController>().stat.Power);
             Debug.Log("Hit!");
             Debug.Log(gameObject.name + GetComponent<Enemy>().GetEnemyHp());
             currentState.OnCollisionEnter(this);
@@ -130,6 +172,11 @@ public class EnemyController : MonoBehaviour
     public bool CheckInAttackRange()
     {
         return (CalcTargetDistance() < attackRange && Mathf.Abs(transform.position.y - targetTransform.position.y) < 0.3f) ? true : false;
+    }
+    public bool CheckTargetInBush()
+    {
+        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
+        return (playerSpriteRenderer.color.a == 0.5f) ? true : false;
     }
     public bool IsAlive()
     {
@@ -196,7 +243,7 @@ public class EnemyController : MonoBehaviour
         CheckPlayerDirectionX();
         ChangeRotation();
 
-        if(attType == AttackType.RANGED)
+        if (attType == AttackType.RANGED || attType == AttackType.RANGED_ELITE)
         {
             enemyAttackCollider.transform.position = targetTransform.position;
             enemyWarningBox.transform.position = targetTransform.position;
@@ -211,55 +258,89 @@ public class EnemyController : MonoBehaviour
     }
     IEnumerator AttackActivation()
     {
-
-        // 적 공격 범위 박스 활성화
-        enemyWarningBox.SetActive(true);
         isAttackColliderActivation = true;
 
-        // 적 공격 박스의 투명도 설정
-        var c = enemyWarningBoxMesh.material.color;
-        c.a = 0.6f;
-        enemyWarningBoxMesh.material.color = c;
-        yield return new WaitForSeconds(attackSpeed - 0.1f);
+        Color c;
+        if (attType == AttackType.MELEE)
+        {
+            c = enemySpriteRenderer.material.color;
+            c = Color.blue;
+            c.a = 0.8f;
+
+            enemySpriteRenderer.material.color = c;
+        }
+        else if (attType == AttackType.RANGED || attType == AttackType.RANGED_ELITE)
+        {
+            enemyWarningBox.SetActive(true);
+        }
+        else if (attType == AttackType.MELEE_ELITE)
+        {
+            c = enemySpriteRenderer.material.color;
+            c = Color.blue;
+            c.a = 0.8f;
+
+            enemySpriteRenderer.material.color = c;
+
+            enemyWarningBox.SetActive(true);
+        }
 
         // 완벽한 회피 타이밍 활성화
         enemyTimingBox.SetActive(true);
-        c.a = 0.8f;
-        enemyWarningBoxMesh.material.color = c;
 
-        yield return new WaitForSeconds(attackSpeed);
+        yield return new WaitForSeconds(attackDelay);
 
+        c = Color.white;
+        c.a = 1f;
+        enemySpriteRenderer.material.color = c;
 
-        // 완벽한 회피 타이밍 비활성화, 적 공격 범위 박스 비활성화, 적 공격 히트 박스 활성화 및 Damage
+        // 완벽한 회피 타이밍 비활성화, 적 공격 범위 박스 비활성화
         enemyWarningBox.SetActive(false);
         enemyTimingBox.SetActive(false);
 
-        if (attType == AttackType.MELEE)
-            enemyAttackCollider.SetActive(true);
-        else if (attType == AttackType.RANGED)
+        enemyAttackCollider.SetActive(true);
+
+        // 돌진
+        if (attType == AttackType.MELEE_ELITE)
         {
-            //if (playerDirectionX == PlayerDirectionX.LEFT)
-            //    arrowObject = Instantiate(arrow, new Vector2(transform.position.x - 0.5f, transform.position.y + 2.2f), Quaternion.identity);
-            //else
-            //    arrowObject = Instantiate(arrow, new Vector2(transform.position.x + 0.5f, transform.position.y + 2.2f), Quaternion.identity);
+            Vector2 dir;
 
-            //arrowRigid = arrowObject.GetComponent<Rigidbody2D>();
+            if(playerDirectionX == PlayerDirectionX.LEFT)
+            {
+                dir = new Vector2(transform.position.x - 10, transform.position.y);
+            }
+            else
+            {
+                dir = new Vector2(transform.position.x + 10, transform.position.y);
+            }
 
-            //if (playerDirectionX == PlayerDirectionX.LEFT)
-            //    arrowRigid.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
-            //else
-            //    arrowRigid.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
+            dir.x = Mathf.Clamp(dir.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
+            dir.y = Mathf.Clamp(dir.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
+            
+            for(var f = 0f; f <= 1f; f += Time.deltaTime)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, dir, 10 * Time.deltaTime);
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+        }
+        else if (attType == AttackType.RANGED_ELITE)
+        {
+            float x, y;
+
+            for (int i = 0; i < 4; i++)
+            {
+                x = Random.Range(-2f, 2f);
+                y = Random.Range(-1f, 1f);
+                Instantiate(summonCreature, enemyWarningBox.transform.position + new Vector3(x, y, 0f), Quaternion.identity);
+            }
         }
 
-        // n초 후 공격 종료
-        // yield return new WaitForSeconds();
+        
+        // yield return new WaitForSeconds(attackSpeed);
 
-        // 적 공격 박스 비활성화
-        yield return new WaitForSeconds(0.01f);
+
+        yield return new WaitForSeconds(attackSpeed);
 
         enemyAttackCollider.SetActive(false);
-
-        yield return new WaitForSeconds(attackDelay);
 
         isAttackColliderActivation = false;
     }
