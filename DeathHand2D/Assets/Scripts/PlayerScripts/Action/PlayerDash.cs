@@ -49,9 +49,14 @@ public class PlayerDash : IPlayerAction
 
     }
 
+    public override bool Ready()
+    {
+        return player.DashCount > 0;
+    }
+
     void Dash()
     {
-        if(player.DashCount > 0)
+        if(Ready())
         {
             player.DashCount -= 1;
             if(hAxis != 0 || vAxis != 0)

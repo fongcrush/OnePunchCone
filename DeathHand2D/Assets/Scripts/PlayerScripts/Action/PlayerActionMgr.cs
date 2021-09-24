@@ -25,6 +25,9 @@ public class PlayerActionMgr : MonoBehaviour
 	private PlayerDash dash;
 	public IPlayerAction Dash { get { return dash; } }
 
+
+	public bool skill_03_On = false;
+
 	void Awake()
 	{
 		player = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -45,27 +48,34 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void Begin()
 	{
+		switch(curActionKey)
+		{
+		case ActionKey.Z:
+			curAction = AAttack;
+			break;
+		case ActionKey.X:
+			curAction = Skill_01;
+			break;
+		case ActionKey.C:
+			if(!skill_03_On)
+				curAction = Skill_02;
+			else
+				curAction = skill_03;
+			break;
+		case ActionKey.LeftShift:
+			curAction = dash;
+			break;
+		}
+
+		if(!curAction.Ready())
+		{
+			Debug.Log("Not ready");
+			curAction = null;
+			return;
+		}
+
 		playerState = PlayerState.Action;
 		player.GetComponent<PlayerMove>().enabled = false;
-
-		if(actionState == ActionState.None)
-		{
-			switch(curActionKey)
-			{
-			case ActionKey.Z:
-				curAction = AAttack;
-				break;
-			case ActionKey.X:
-				curAction = Skill_01;
-				break;
-			case ActionKey.C:
-				curAction = Skill_02;
-				break;
-			case ActionKey.LeftShift:
-				curAction = dash;
-				break;
-			}			
-		}
 
 		if (curAction != null)
 			curAction.Begin();
@@ -73,8 +83,11 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void UpdateAction()
 	{
-		if (curActionKey == ActionKey.LeftShift && player.DashCount > 0)
-			curAction.Quit();
+		if (curActionKey == ActionKey.LeftShift && dash.Ready())
+		{
+			if(curAction != skill_02)
+				ChangeAction(dash);
+		}
 
 		if (curAction != null)
 			curAction.UpdateAction();
@@ -91,14 +104,19 @@ public class PlayerActionMgr : MonoBehaviour
 			curAction.Begin();
 		}
 		playerState = PlayerState.Move;
-		player.GetComponent<PlayerMove>().enabled = true;		
+		player.GetComponent<PlayerMove>().enabled = true;	
 	}
 
 	public void ChangeAction(IPlayerAction action)
 	{
 		if(curAction != null)
-		{
 			curAction.Quit();
-		}
+
+		playerState = PlayerState.Action;
+		player.GetComponent<PlayerMove>().enabled = false;
+
+		curAction = action;
+		if(curAction != null)
+			curAction.Begin();
 	}
 }

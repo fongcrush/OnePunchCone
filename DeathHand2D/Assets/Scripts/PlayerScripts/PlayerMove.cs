@@ -35,7 +35,9 @@ public class PlayerMove : MonoBehaviour
         Turn();
 
         if(curActionKey != ActionKey.None)
+        {
             player.ActionMgr.Begin();
+        }
     }
 
 	public void End()

@@ -72,7 +72,11 @@ public class PlayerAttackAuto : IPlayerAction
         coll.GetComponent<BoxCollider2D>().enabled = false;
         coll.gameObject.SetActive(false);
         isDone = true;
-        actionState = ActionState.Dash;
         actionMgr.End();
     }
+
+	public override bool Ready()
+	{
+        return attackInfo.curTime == 0;
+	}
 }

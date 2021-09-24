@@ -16,9 +16,5 @@ public abstract class IPlayerAction : MonoBehaviour
     public abstract void UpdateAction();
     public abstract void End();
     public abstract void Quit();
-
-    public IEnumerator Timer(float dirTime) 
-    { 
-        yield return null; 
-    }
+    public abstract bool Ready();
 }

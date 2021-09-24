@@ -31,7 +31,7 @@ public class PlayerAttackData
 			skill.hit = byteParse(value["HIT"]);
 			skill.min = shortParse(value["MIN_DAMAGE"]);
 			skill.max = shortParse(value["MAX_DAMAGE"]);
-			skill.cTime = floatParse(value["C_TIME"]);
+			skill.cTime = floatParse(value["C_TIME"]) / 1000;
 			skill.icon = stringParse(value["ICON"]);
 			skill.effect = stringParse(value["EFFECT"]);
 			skill.anim1 = stringParse(value["ANI_01"]);
@@ -47,7 +47,7 @@ public class PlayerAttackData
 
 	public static IEnumerator SkillTimer(short code)
 	{
-		while(attackTable[code].curTime < attackTable[code].curTime)
+		while(attackTable[code].curTime < attackTable[code].cTime)
 		{
 			attackTable[code].curTime += Time.deltaTime;
 			yield return null;

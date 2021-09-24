@@ -10,9 +10,17 @@ public class PlayerAttackSkill03 : IPlayerAction
 
     private AttackInfo attackInfo;
 
+    [SerializeField]
+    private ActionStep attackStep;
+
+    private int count;
+
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+
+        attackStep = ActionStep.None;
+        count = 0;
 
         curTime = 0;
         isDone = false;
@@ -30,9 +38,9 @@ public class PlayerAttackSkill03 : IPlayerAction
         Debug.Log("Attack Skill 03!");
         actionState = ActionState.Skill3;
 
-        coll.gameObject.SetActive(true);
-        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[103];
+        attackStep = ActionStep.First_Delay;
+        count = 0;
         curTime = 0;
         isDone = false;
 
@@ -41,21 +49,57 @@ public class PlayerAttackSkill03 : IPlayerAction
 
     public override void UpdateAction()
 	{
-        if(curTime < attackInfo.fDelay) { } // ¼± µô·¹ÀÌ
-        else if(curTime < attackInfo.fDelay + 0.1f)
-        {
-            if(coll.GetComponent<BoxCollider2D>().enabled == false)
-                coll.GetComponent<BoxCollider2D>().enabled = true;
-        }
-        else if(curTime < attackInfo.sDelay) { } // ÈÄ µô·¹ÀÌ
-        else
-        {
-            if(coll.gameObject.activeSelf)
+        switch(attackStep)
+		{
+        case ActionStep.First_Delay:
+            if(curTime < attackInfo.fDelay) { }
+            else
             {
-                coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                coll.gameObject.SetActive(false);
+                curTime = 0;
+                attackStep = ActionStep.Action;
+            }
+            break;
+        case ActionStep.Action:
+            if(count < 4)
+            {
+                if(curTime < 0.05f)
+                {
+                    if(!coll.transform.gameObject.activeSelf)
+                    {
+                        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+                        coll.gameObject.SetActive(true);
+                        coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+                    }
+                }
+                else if(curTime < 0.1f) { }
+                else if(curTime < 0.3f)
+                {
+                    if(coll.gameObject.activeSelf)
+                    {
+                        coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                        coll.gameObject.SetActive(false);
+                    }
+                }
+                else
+                {
+                    ++count;
+                    curTime = 0;
+                }
+            }
+            else
+            {
+                count = 0;
+                attackStep = ActionStep.Second_Delay;
+            }
+            break;
+        case ActionStep.Second_Delay:
+            if(curTime < attackInfo.sDelay) { }
+            else
+            {
+                curTime = 0;
                 End();
             }
+            break;
         }
         curTime += Time.deltaTime;
     }
@@ -64,6 +108,7 @@ public class PlayerAttackSkill03 : IPlayerAction
     {
         Debug.Log("Attack Skill 03 end!");
         actionState = ActionState.None;
+        actionMgr.skill_03_On = false;
 
         coll.gameObject.SetActive(false);
         isDone = true;
@@ -73,8 +118,14 @@ public class PlayerAttackSkill03 : IPlayerAction
     {
         coll.gameObject.SetActive(false);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        actionMgr.skill_03_On = false;
+
         isDone = true;
-        actionState = ActionState.Dash;
         actionMgr.End();
+    }
+
+    public override bool Ready()
+    {
+        return attackInfo.curTime == 0;
     }
 }

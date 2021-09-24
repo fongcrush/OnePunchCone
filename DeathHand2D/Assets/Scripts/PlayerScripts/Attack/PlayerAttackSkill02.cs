@@ -13,20 +13,18 @@ public class PlayerAttackSkill02 : IPlayerAction
 
     private AttackInfo attackInfo;
 
-    Vector2 fixedChargePos;
+    private Vector2 fixedChargePos;
 
-    private Vector2 dir;
+    private Vector3 dir;
 
-    private bool ComboOn;
+    private ActionStep attackStep;
 
-	public void Awake()
+    public void Awake()
 	{
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        coll = GameObject.Find("AttackManager").transform.Find("Skill1Coll");
-
-        dir = Vector2.zero;
+        dir = Vector3.zero;
         curTime = 0;
-        ComboOn = false;
+        attackStep = ActionStep.None;
     }
 
     private void Start()
@@ -46,12 +44,13 @@ public class PlayerAttackSkill02 : IPlayerAction
         player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[102];
         curTime = 0;
+        attackStep = ActionStep.First_Delay;
 
         // 돌진 목표 지점 계산 : 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
         if(player.LeftOrRight())
-            dir = new Vector2(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y);
+            dir = new Vector3(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y, 0);
         else
-            dir = new Vector2(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y);
+            dir = new Vector3(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y, 0);
 
         dir.x = Mathf.Clamp(dir.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
@@ -60,21 +59,39 @@ public class PlayerAttackSkill02 : IPlayerAction
         StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
     }
 
-	public override void UpdateAction()
+    public override void UpdateAction()
     {
-        if(curTime < attackInfo.fDelay) { }
-        else if(curTime < attackInfo.fDelay )
+        switch(attackStep)
         {
-            player.transform.position = Vector2.Lerp(transform.position, dir, Time.deltaTime * 20);
+        case ActionStep.First_Delay:
+            if(curTime < attackInfo.fDelay) { }
+            else
+            {
+                curTime = 0;
+                attackStep = ActionStep.Action;
+            }
+            break;
+        case ActionStep.Action:
+            player.transform.position = Vector3.Lerp(transform.position, dir, Time.deltaTime * 20);
             chargeRange.position = fixedChargePos;
-        }
-        else
-        {
-            coll.gameObject.SetActive(false);
-            coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            chargeRange.localPosition = Vector2.zero;
-            chargeRange.gameObject.SetActive(false);
-            End();
+            if(player.transform.position == dir)
+            {
+                curTime = 0;
+                attackStep = ActionStep.Second_Delay;
+            }
+            break;
+        case ActionStep.Second_Delay:
+            if(curTime < attackInfo.sDelay) { }
+            else
+            {
+                coll.gameObject.SetActive(false);
+                coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                chargeRange.localPosition = Vector2.zero;
+                chargeRange.gameObject.SetActive(false);
+                End();
+                StartCoroutine(CheckCombo(5f));
+            }
+            break;
         }
         curTime += Time.deltaTime;
     }
@@ -96,6 +113,7 @@ public class PlayerAttackSkill02 : IPlayerAction
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         chargeRange.localPosition = Vector2.zero;
         chargeRange.gameObject.SetActive(false);
+        StartCoroutine(CheckCombo(5f));
     }
 
     IEnumerator CheckCombo(float checkTime)
@@ -108,8 +126,14 @@ public class PlayerAttackSkill02 : IPlayerAction
 
             if(Input.GetKeyDown(KeyCode.C))
 			{
-                actionMgr.ChangeAction(actionMgr.Skill_03);
+                actionMgr.skill_03_On = true;
+                actionMgr.Begin();
             }
         }
+    }
+
+    public override bool Ready()
+    {
+        return attackInfo.curTime == 0;
     }
 }

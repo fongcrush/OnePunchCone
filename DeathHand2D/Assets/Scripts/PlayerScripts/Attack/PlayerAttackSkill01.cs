@@ -73,8 +73,11 @@ public class PlayerAttackSkill01 : IPlayerAction
         isDone = true;
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         coll.gameObject.SetActive(false);
-        actionState = ActionState.Dash;        
         actionMgr.End();
     }
 
+    public override bool Ready()
+    {
+        return attackInfo.curTime == 0;
+    }
 }
