@@ -2,37 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static PlayerAttackData;
 
 public class UIController : MonoBehaviour
 {
-    public GameObject HPBar;
-    public GameObject MPBar;
-    public GameObject Skill1;
-    public GameObject Skill2;
-    public GameObject Skill3;
-    public GameObject DashCount1;
-    public GameObject DashCount2;
+    [SerializeField]
+    private GameObject HPBar;
 
-    public GameObject playerGameObject;
-    PlayerController playerComponent;
-    BuffManager buffManager;
+    [SerializeField]
+    private GameObject MPBar;
+
+    [SerializeField]
+    private GameObject DashCount1;
+
+    [SerializeField]
+    private GameObject DashCount2;
+
+    [SerializeField]
+    private PlayerController playerController;
+
+    [SerializeField]
+    private Image[] skillCoolTime;
+
+    [SerializeField]
+    private Image[] skill;
+
+    [SerializeField]
+    private PlayerActionMgr playerActionMgr;
+
+    private BuffManager buffManager;
 
     void Start()
     {
-        playerComponent = playerGameObject.GetComponent<PlayerController>();
         buffManager = GetComponent<BuffManager>();
     }
 
     void Update()
     {
         CheckPlayerDashCount();
-        //CheckPlayerUseSkill();
+        CheckPlayerUseSkill();
         CheckPlayerDebuff();
     }
 
     void CheckPlayerDashCount() 
     {
-        switch (playerComponent.DashCount) 
+        switch (playerController.DashCount) 
         {
             case 0:
                 DashCount1.SetActive(false);
@@ -47,37 +61,33 @@ public class UIController : MonoBehaviour
         }
     }
 
-    //void CheckPlayerUseSkill() 
-    //{
-    //    if (PlayerAttackManager.skillTable[101].curTime != 0)
-    //    {
-    //        Skill1.GetComponent<Image>().color = Color.black;
-    //    }
-    //    else 
-    //    {
-    //        Skill1.GetComponent<Image>().color = Color.white;
-    //    }
-    //    if(PlayerAttackManager.skillTable[111].curTime != 0) 
-    //    {
-    //        Skill2.GetComponent<Image>().color = Color.black;
-    //        if (playerComponent.canskill3 == true)
-    //        {
-    //            Skill3.SetActive(true);
-    //        }
-    //        else
-    //        {
-    //            Skill3.SetActive(false);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Skill2.GetComponent<Image>().color = Color.white;
-    //    }       
-    //}
+	void CheckPlayerUseSkill()
+	{
+        skillCoolTime[0].fillAmount = 1 - AttackTable[101].curTime / AttackTable[101].cTime;
 
-    void CheckPlayerDebuff() 
+        skillCoolTime[1].fillAmount = 1 - AttackTable[102].curTime / AttackTable[102].cTime;
+
+        if(PlayerAttackData.AttackTable[101].curTime == 0)
+            skillCoolTime[0].gameObject.SetActive(false);
+        else
+            skillCoolTime[0].gameObject.SetActive(true);
+
+
+        if(PlayerAttackData.AttackTable[102].curTime == 0)
+            skillCoolTime[1].gameObject.SetActive(false);
+        else        
+            skillCoolTime[1].gameObject.SetActive(true);
+
+
+        if(playerActionMgr.CanSkill3)
+            skill[2].gameObject.SetActive(true);
+		else
+            skill[2].gameObject.SetActive(false);
+	}
+
+	void CheckPlayerDebuff() 
     {
-        if (playerGameObject.GetComponent<PlayerEffectController>().DarkDebuff == true) 
+        if (playerController.GetComponent<PlayerEffectController>().DarkDebuff == true) 
         {
             buffManager.DarkDebuff.SetActive(true);
             buffManager.DarkDebuff.transform.Find("Count").GetComponent<Text>().text = buffManager.DarkDebuffCount.ToString();

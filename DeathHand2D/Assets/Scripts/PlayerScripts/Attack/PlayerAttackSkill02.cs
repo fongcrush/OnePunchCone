@@ -12,6 +12,7 @@ public class PlayerAttackSkill02 : IPlayerAction
     private Transform chargeRange;
 
     private AttackInfo attackInfo;
+    public AttackInfo Info { get { return attackInfo; } }
 
     private Vector2 fixedChargePos;
 
@@ -33,8 +34,7 @@ public class PlayerAttackSkill02 : IPlayerAction
         attackInfo = PlayerAttackData.AttackTable[102];
     }
 
-
-    public override void Begin()
+	public override void Begin()
     {
         Debug.Log("Attack Skill 02!");
         actionState = ActionState.Skill2;
@@ -118,6 +118,7 @@ public class PlayerAttackSkill02 : IPlayerAction
 
     IEnumerator CheckCombo(float checkTime)
 	{
+        actionMgr.CanSkill3 = true;
         float curTime = 0f;
         while(checkTime > curTime)
 		{
@@ -128,12 +129,14 @@ public class PlayerAttackSkill02 : IPlayerAction
 			{
                 actionMgr.skill_03_On = true;
                 actionMgr.Begin();
+                break;
             }
         }
+        actionMgr.CanSkill3 = false;
     }
 
     public override bool Ready()
     {
-        return attackInfo.curTime == 0;
+        return PlayerAttackData.AttackTable[102].curTime == 0;
     }
 }

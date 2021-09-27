@@ -26,14 +26,13 @@ public class PlayerAttackSkill03 : IPlayerAction
         isDone = false;
     }
 
-    private void Start()
-    {
+	public void Start()
+	{
         actionMgr = player.ActionMgr;
         attackInfo = PlayerAttackData.AttackTable[103];
     }
 
-
-    public override void Begin()
+	public override void Begin()
     {
         Debug.Log("Attack Skill 03!");
         actionState = ActionState.Skill3;
@@ -126,6 +125,6 @@ public class PlayerAttackSkill03 : IPlayerAction
 
     public override bool Ready()
     {
-        return attackInfo.curTime == 0;
+        return true;
     }
 }

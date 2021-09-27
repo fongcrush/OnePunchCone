@@ -24,7 +24,7 @@ public class PlayerAttackSkill01 : IPlayerAction
         attackInfo = PlayerAttackData.AttackTable[101];
     }
 
-    public override void Begin()
+	public override void Begin()
     {
         Debug.Log("Attack Skill 01!");
         actionState = ActionState.Skill1;
@@ -57,6 +57,7 @@ public class PlayerAttackSkill01 : IPlayerAction
             }
         }
         curTime += Time.deltaTime;
+        Debug.Log(attackInfo.curTime);
     }
 
     public override void End()
@@ -78,6 +79,6 @@ public class PlayerAttackSkill01 : IPlayerAction
 
     public override bool Ready()
     {
-        return attackInfo.curTime == 0;
+        return PlayerAttackData.AttackTable[101].curTime == 0;
     }
 }

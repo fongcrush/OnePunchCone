@@ -25,6 +25,8 @@ public class PlayerActionMgr : MonoBehaviour
 	private PlayerDash dash;
 	public IPlayerAction Dash { get { return dash; } }
 
+	private bool canSkill3;
+	public bool CanSkill3 { get { return canSkill3; } set { canSkill3 = value; } }
 
 	public bool skill_03_On = false;
 
@@ -39,7 +41,7 @@ public class PlayerActionMgr : MonoBehaviour
 		PlayerAttackData.UpdateCSVData();
 
 		dash = GetComponent<PlayerDash>();
-
+		canSkill3 = false;
 	}
 	public void Update()
 	{
