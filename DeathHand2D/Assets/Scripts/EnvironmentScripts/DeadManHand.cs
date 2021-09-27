@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeadManHand : Environment
 {
     bool isDone;
-    [SerializeField]
-    byte stack;
+    BuffManager buffManager;
+
+    float fade;
 
     private void Start()
     {
         isDone = true;
-        stack = 0;
+        buffManager = GameObject.Find("Canvas").GetComponent<BuffManager>();
+        buffManager.DarkDebuffCount = 0;
     }
 
     public void TriggerEnterDeadManHand(Collider2D collision, bool enter)
@@ -44,18 +47,33 @@ public class DeadManHand : Environment
         }
     }
 
+    IEnumerator FadeOut(PlayerEffectController effectController, float time) 
+    {
+        float alpha = 1;
+        while (alpha > 0f && isDone)
+        {
+            effectController.DarkDebuffEffect.GetComponent<SpriteRenderer>().color = new Color(1,1,1,alpha);
+            alpha -= Time.deltaTime / time;
+            if (alpha <= 0f) effectController.DarkDebuffEffect.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+             yield return null;
+        }
+    }
+
     IEnumerator DarkDebuff() 
     {
         StartCoroutine(Timer(10));
         isDone = false;
-        if(stack < 3)
-            stack++;
+        if(buffManager.DarkDebuffCount < 3)
+            buffManager.DarkDebuffCount++;
         PlayerEffectController effectController = GameObject.Find("Player").GetComponent<PlayerEffectController>();
         effectController.DarkDebuff = true;
-        yield return new WaitForSeconds(15 * stack);
+        effectController.DarkDebuffEffect.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+        yield return new WaitForSeconds(15 * buffManager.DarkDebuffCount - 1);
+        StartCoroutine(FadeOut(effectController, 1));
+        yield return new WaitForSeconds(1);
         if (isDone)
         {
-            stack = 0;
+            buffManager.DarkDebuffCount = 0;
             effectController.DarkDebuff = false;
         }
     }
@@ -63,5 +81,6 @@ public class DeadManHand : Environment
     {
         yield return new WaitForSeconds(time);
         isDone = true;
+        Debug.Log("ready");
     }
 }

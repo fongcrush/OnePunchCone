@@ -15,16 +15,19 @@ public class UIController : MonoBehaviour
 
     public GameObject playerGameObject;
     PlayerController playerComponent;
+    BuffManager buffManager;
 
     void Start()
     {
         playerComponent = playerGameObject.GetComponent<PlayerController>();
+        buffManager = GetComponent<BuffManager>();
     }
 
     void Update()
     {
-        //CheckPlayerDashCount();
+        CheckPlayerDashCount();
         //CheckPlayerUseSkill();
+        CheckPlayerDebuff();
     }
 
     void CheckPlayerDashCount() 
@@ -71,4 +74,17 @@ public class UIController : MonoBehaviour
     //        Skill2.GetComponent<Image>().color = Color.white;
     //    }       
     //}
+
+    void CheckPlayerDebuff() 
+    {
+        if (playerGameObject.GetComponent<PlayerEffectController>().DarkDebuff == true) 
+        {
+            buffManager.DarkDebuff.SetActive(true);
+            buffManager.DarkDebuff.transform.Find("Count").GetComponent<Text>().text = buffManager.DarkDebuffCount.ToString();
+        }
+        else 
+        {
+            buffManager.DarkDebuff.SetActive(false);
+        }
+    }
 }
