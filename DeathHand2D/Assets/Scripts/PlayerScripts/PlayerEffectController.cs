@@ -13,7 +13,7 @@ public class PlayerEffectController : MonoBehaviour
     public GameObject DarkDebuffEffect;
     bool darkDebuff;
 
-    public bool DarkDebuff { set { darkDebuff = value; } }
+    public bool DarkDebuff { get { return darkDebuff; } set { darkDebuff = value; } }
 
     private void Awake()
     {
@@ -35,7 +35,6 @@ public class PlayerEffectController : MonoBehaviour
             StartCoroutine("CreateDustEffect");
         }
         DarkDebuffEffect.SetActive(darkDebuff);
-
     }
 
     IEnumerator CreateDustEffect()
