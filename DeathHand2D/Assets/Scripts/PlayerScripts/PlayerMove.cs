@@ -117,8 +117,8 @@ public class PlayerMove : MonoBehaviour
         }
         
         // 맵을 넘어가지 않도록 제한
-        movePos.x = Mathf.Clamp(movePos.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
-        movePos.y = Mathf.Clamp(movePos.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
+        movePos.x = Mathf.Clamp(movePos.x, GameManager.GM.MapSizeMin.x, GameManager.GM.MapSizeMax.x);
+        movePos.y = Mathf.Clamp(movePos.y, GameManager.GM.MapSizeMin.y, GameManager.GM.MapSizeMax.y);
         player.transform.position = movePos;
     }
     private void Turn()

@@ -21,7 +21,7 @@ public class PlayerAttackSkill02 : IPlayerAction
     private ActionStep attackStep;
 
     public void Awake()
-	{
+    {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         dir = Vector3.zero;
         curTime = 0;
@@ -41,7 +41,7 @@ public class PlayerAttackSkill02 : IPlayerAction
 
         coll.gameObject.SetActive(true);
         chargeRange.gameObject.SetActive(true);
-        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        GameManager.GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[102];
         curTime = 0;
         attackStep = ActionStep.First_Delay;
@@ -52,11 +52,11 @@ public class PlayerAttackSkill02 : IPlayerAction
         else
             dir = new Vector3(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y, 0);
 
-        dir.x = Mathf.Clamp(dir.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
-        dir.y = Mathf.Clamp(dir.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
+        dir.x = Mathf.Clamp(dir.x, GameManager.GM.MapSizeMin.x, GameManager.GM.MapSizeMax.x);
+        dir.y = Mathf.Clamp(dir.y, GameManager.GM.MapSizeMin.y, GameManager.GM.MapSizeMax.y);
         fixedChargePos = chargeRange.position;
 
-        StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
+        StartCoroutine(GameManager.GM.SkillTimer(attackInfo.code));
     }
 
     public override void UpdateAction()
@@ -98,10 +98,8 @@ public class PlayerAttackSkill02 : IPlayerAction
 
     public override void End()
     {
-        Debug.Log("Attack Skill 02 end!");
         actionState = ActionState.None;
 
-        Debug.Log("Skill 2 End");
         coll.gameObject.SetActive(false);
         chargeRange.gameObject.SetActive(false);
         //StartCoroutine(CheckCombo(5f));
@@ -111,6 +109,7 @@ public class PlayerAttackSkill02 : IPlayerAction
     {
         coll.gameObject.SetActive(false);
         coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
         chargeRange.localPosition = Vector2.zero;
         chargeRange.gameObject.SetActive(false);
         StartCoroutine(CheckCombo(5f));

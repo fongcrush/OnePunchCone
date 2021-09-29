@@ -14,13 +14,13 @@ public class PlayerActionMgr : MonoBehaviour
 	public IPlayerAction AAttack { get { return aAttack; } }
 
 	private PlayerAttackSkill01 skill_01;
-	public IPlayerAction Skill_01 { get { return skill_01; } }
+	public PlayerAttackSkill01 Skill_01 { get { return skill_01; } }
 
 	private PlayerAttackSkill02 skill_02;
-	public IPlayerAction Skill_02 { get { return skill_02; } }
+	public PlayerAttackSkill02 Skill_02 { get { return skill_02; } }
 
 	private PlayerAttackSkill03 skill_03;
-	public IPlayerAction Skill_03 { get { return skill_03; } }
+	public PlayerAttackSkill03 Skill_03 { get { return skill_03; } }
 
 	private PlayerDash dash;
 	public IPlayerAction Dash { get { return dash; } }
@@ -100,11 +100,11 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void End()
 	{
-		if(actionState == ActionState.Dash) 
-		{
-			curAction = dash;
-			curAction.Begin();
-		}
+		//if(actionState == ActionState.Dash) 
+		//{
+		//	curAction = dash;
+		//	curAction.Begin();
+		//}
 		playerState = PlayerState.Move;
 		player.GetComponent<PlayerMove>().enabled = true;	
 	}

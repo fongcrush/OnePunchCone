@@ -147,7 +147,7 @@ public class EnemyController : MonoBehaviour
             // 데미지 조정 필요
             //gameObject.GetComponent<Enemy>().OnDamage(50.0f);
 
-            enemy.stat.ChangeHP(-player.GetComponent<PlayerController>().stat.Power);
+            enemy.stat.ChangeHP(-GameManager.GM.pcStat.Power);
             Debug.Log("Hit!");
             Debug.Log(gameObject.name + GetComponent<Enemy>().GetEnemyHp());
             currentState.OnCollisionEnter(this);
@@ -313,8 +313,8 @@ public class EnemyController : MonoBehaviour
                 dir = new Vector2(transform.position.x + 10, transform.position.y);
             }
 
-            dir.x = Mathf.Clamp(dir.x, Actor.mapSizeMin.x, Actor.mapSizeMax.x);
-            dir.y = Mathf.Clamp(dir.y, Actor.mapSizeMin.y, Actor.mapSizeMax.y);
+            dir.x = Mathf.Clamp(dir.x, GameManager.GM.MapSizeMin.x, GameManager.GM.MapSizeMax.x);
+            dir.y = Mathf.Clamp(dir.y, GameManager.GM.MapSizeMin.y, GameManager.GM.MapSizeMax.y);
             
             for(var f = 0f; f <= 1f; f += Time.deltaTime)
             {

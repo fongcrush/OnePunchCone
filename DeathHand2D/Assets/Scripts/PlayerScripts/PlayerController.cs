@@ -22,13 +22,6 @@ public class PlayerController : MonoBehaviour
     private bool dashGodMode;
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
 
-
-    [HideInInspector]
-    public StatusManager stat;
-
-    [HideInInspector]
-    public Actor gameManager;
-
     public PlayerState displayPlayerState;
     public CharacterDirection displayCharacterDir;
     public ArrowKey displayCurArrowKey;
@@ -38,11 +31,10 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        gameManager = GameObject.Find("@GM").GetComponent<Actor>();
+        DontDestroyOnLoad(this);
+
         actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
         move = GetComponent<PlayerMove>();
-
-        stat = new StatusManager(100, 100, 50);
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
         dashGodMode = false;

@@ -13,7 +13,7 @@ public class DeadManHand : Environment
     private void Start()
     {
         isDone = true;
-        buffManager = GameObject.Find("Canvas").GetComponent<BuffManager>();
+        buffManager = GameObject.Find("@GM").GetComponent<BuffManager>();
         buffManager.DarkDebuffCount = 0;
     }
 

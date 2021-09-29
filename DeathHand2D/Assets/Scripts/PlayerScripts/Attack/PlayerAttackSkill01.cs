@@ -10,8 +10,8 @@ public class PlayerAttackSkill01 : IPlayerAction
 
     private AttackInfo attackInfo;
 
-	public void Awake()
-	{
+    public void Awake()
+    {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
 
         curTime = 0;
@@ -30,16 +30,17 @@ public class PlayerAttackSkill01 : IPlayerAction
         actionState = ActionState.Skill1;
 
         coll.gameObject.SetActive(true);
-        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        GameManager.GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[101];
         curTime = 0;
         isDone = false;
 
-        StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
+        StartCoroutine(GameManager.GM.SkillTimer(attackInfo.code));
     }
 
 	public override void UpdateAction()
     {
+        
         if(curTime < attackInfo.fDelay) { }
         else if(curTime < attackInfo.sDelay + 0.1f)
         {
@@ -62,7 +63,6 @@ public class PlayerAttackSkill01 : IPlayerAction
 
     public override void End()
     {
-        Debug.Log("Attack Skill 01 end!");
         actionState = ActionState.None;
 
         coll.gameObject.SetActive(false);

@@ -43,7 +43,7 @@ public class PlayerAttackSkill03 : IPlayerAction
         curTime = 0;
         isDone = false;
 
-        StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
+        StartCoroutine(GameManager.GM.SkillTimer(attackInfo.code));
     }
 
     public override void UpdateAction()
@@ -65,7 +65,7 @@ public class PlayerAttackSkill03 : IPlayerAction
                 {
                     if(!coll.transform.gameObject.activeSelf)
                     {
-                        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+                        GameManager.GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
                         coll.gameObject.SetActive(true);
                         coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
                     }

@@ -8,7 +8,7 @@ public class PlayerAttackAuto : IPlayerAction
     [SerializeField]
     private Transform coll;
 
-    private AttackInfo attackInfo;
+	private AttackInfo attackInfo;
 
     private void Awake()
     {
@@ -30,12 +30,12 @@ public class PlayerAttackAuto : IPlayerAction
         actionState = ActionState.AAttack;
 
         coll.gameObject.SetActive(true);
-        player.stat.Power = Random.Range(attackInfo.min, attackInfo.max);
+        GameManager.GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[100];
         curTime = 0;
         isDone = false;
 
-        StartCoroutine(PlayerAttackData.SkillTimer(attackInfo.code));
+        StartCoroutine(GameManager.GM.SkillTimer(attackInfo.code));
 	}
 
 	public override void UpdateAction()
@@ -76,7 +76,7 @@ public class PlayerAttackAuto : IPlayerAction
     }
 
 	public override bool Ready()
-	{
-        return attackInfo.curTime == 0;
-	}
+    {
+        return PlayerAttackData.AttackTable[100].curTime == 0;
+    }
 }

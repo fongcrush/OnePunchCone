@@ -44,16 +44,6 @@ public class PlayerAttackData
 			attackTable.Add(skill.code, skill);
 		}
 	}
-
-	public static IEnumerator SkillTimer(short code)
-	{
-		while(attackTable[code].curTime < attackTable[code].cTime)
-		{
-			attackTable[code].curTime += Time.deltaTime;
-			yield return null;
-		}
-		attackTable[code].curTime = 0f;
-	}
 }
 
 public class AttackInfo
