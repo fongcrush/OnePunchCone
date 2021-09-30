@@ -9,6 +9,8 @@ TagManager:
   - EnemyAttackCollider
   - PerfectTiming
   - Arrow
+  - Room
+  - Gate
   layers:
   - Default
   - TransparentFX
