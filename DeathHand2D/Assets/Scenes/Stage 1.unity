@@ -2806,6 +2806,7 @@ MonoBehaviour:
   background: {fileID: 1391104435}
   section: 2
   clear: 0
+  reset: 0
 --- !u!4 &661733098
 Transform:
   m_ObjectHideFlags: 0
@@ -4559,6 +4560,7 @@ MonoBehaviour:
   background: {fileID: 676318311}
   section: 1
   clear: 0
+  reset: 0
 --- !u!4 &934335111
 Transform:
   m_ObjectHideFlags: 0
@@ -5786,6 +5788,7 @@ MonoBehaviour:
   background: {fileID: 1481719215}
   section: 2
   clear: 0
+  reset: 0
 --- !u!4 &1228285727
 Transform:
   m_ObjectHideFlags: 0
@@ -6935,6 +6938,7 @@ MonoBehaviour:
   background: {fileID: 755480405}
   section: 1
   clear: 0
+  reset: 0
 --- !u!4 &1464218903
 Transform:
   m_ObjectHideFlags: 0
@@ -7097,6 +7101,7 @@ MonoBehaviour:
   background: {fileID: 1206083926}
   section: 2
   clear: 0
+  reset: 0
 --- !u!4 &1483603008
 Transform:
   m_ObjectHideFlags: 0
@@ -7387,6 +7392,7 @@ MonoBehaviour:
   background: {fileID: 1882454621}
   section: 1
   clear: 0
+  reset: 0
 --- !u!4 &1511613006
 Transform:
   m_ObjectHideFlags: 0
@@ -9763,6 +9769,7 @@ MonoBehaviour:
   background: {fileID: 79545057}
   section: 3
   clear: 0
+  reset: 0
 --- !u!4 &2072908856
 Transform:
   m_ObjectHideFlags: 0

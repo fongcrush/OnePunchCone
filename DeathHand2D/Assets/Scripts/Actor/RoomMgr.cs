@@ -19,7 +19,11 @@ public class RoomMgr : MonoBehaviour
 	private int enemyGroupCode;
 
 	public bool clear = false;
+
+	public bool reset = false;
 	//public bool Clear { get { return clear; } }
+
+	private GameObject curGroup;
 
 	private Vector2 mapSizeMin = Vector2.zero;
 	public Vector2 MapSizeMin { get { return mapSizeMin; } }
@@ -43,15 +47,33 @@ public class RoomMgr : MonoBehaviour
 	private void Update()
 	{
 		if(clear && !gates.activeSelf)
-			gates.SetActive(true);			
+			gates.SetActive(true);
+		if(reset)
+			ResetRoom();
 	}
 
 	public void BeginWave()
 	{
 		Debug.Log("enemyGroupCode : " + enemyGroupCode);
-		GM.SecData.InitEnemyGroup(enemyGroupCode, transform);
+		curGroup = GM.SecData.InitEnemyGroup(enemyGroupCode, transform);
 	}
-	
+
+	void ResetRoom()
+	{
+		reset = false;
+		clear = false;
+		if(gates.activeSelf)
+			gates.SetActive(false);
+
+		if(curGroup)
+			Destroy(curGroup);
+
+		enemyGroupCode = ChooseEnemyGroup(GM.SecData.ProbabilityTable[section - 1]);
+		if(GM.CurRoomMgr == this)
+			BeginWave();
+		
+	}
+
 	public void ClampMap()
 	{
 		mapSizeMin = transform.position;

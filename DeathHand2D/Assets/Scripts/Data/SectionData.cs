@@ -40,9 +40,9 @@ public class SectionData : MonoBehaviour
             probabilityTable.Add(intParse(value["CODE"]), probability);
         }
 	}
-    public void InitEnemyGroup(int code, Transform parent)
-	{
-        Instantiate(enemyGroup[code], parent);
+    public GameObject InitEnemyGroup(int code, Transform parent)
+    {
         Debug.Log(enemyGroup[code]);
+        return Instantiate(enemyGroup[code], parent);
 	}
 }
