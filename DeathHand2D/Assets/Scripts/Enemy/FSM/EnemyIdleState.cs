@@ -11,6 +11,10 @@ public class EnemyIdleState : EnemyBaseState
 			ctrl.ChangeState(ctrl.DeadState);
 			return;
 		}
+		if(ctrl.CheckTargetInBush())
+        {
+			return;
+        }
 		if(ctrl.CheckInTraceRange())
 		{
 			ctrl.ChangeState(ctrl.TraceState);
