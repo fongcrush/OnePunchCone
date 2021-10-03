@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7289139182387099758}
   - component: {fileID: 7289139182387099759}
+  - component: {fileID: 6117262729758693830}
+  - component: {fileID: 3681564437408764285}
   m_Layer: 0
   m_Name: sumonAttackCollider
-  m_TagString: Untagged
+  m_TagString: EnemyAttackCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +85,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &6117262729758693830
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7289139182387099757}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.49999997
+--- !u!114 &3681564437408764285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7289139182387099757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41244ba5dc54af14588101bf7ee73863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7289139182573487966
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +127,7 @@ GameObject:
   - component: {fileID: 7289139182573487967}
   m_Layer: 0
   m_Name: summon_Creature
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,7 +188,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 61919fcf80be89448b01b9e39c0d5bdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.39607844}
   m_FlipX: 0
@@ -182,8 +212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 0}
-  backgroundSize: {x: 0, y: 0}
 --- !u!114 &7289139182573487967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +297,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.9811321, g: 0, b: 0, a: 0.4392157}
   m_FlipX: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 
 public class Bush : Environment
 {
@@ -15,7 +16,8 @@ public class Bush : Environment
             }
             if (environmentName == "Bush" && collision.gameObject.tag == "Enemy")
             {
-                collision.GetComponent<SpriteRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder - 1;
+                // collision.GetComponent<MeshRenderer>().sortingOrder = transform.GetComponent<MeshRenderer>().sortingOrder - 1;
+                collision.GetComponent<EnemyController>().isInBush = true;
             }
         }
         else
@@ -27,7 +29,8 @@ public class Bush : Environment
             }
             if (environmentName == "Bush" && collision.gameObject.tag == "Enemy")
             {
-                collision.GetComponent<SpriteRenderer>().sortingOrder = EnemyLayer;
+                // collision.GetComponent<SpriteRenderer>().sortingOrder = EnemyLayer;
+                collision.GetComponent<EnemyController>().isInBush = false;
             }
         }
     }

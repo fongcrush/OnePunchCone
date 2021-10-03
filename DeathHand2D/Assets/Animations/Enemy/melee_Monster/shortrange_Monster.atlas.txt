@@ -1,4 +1,4 @@
-melee_Monster_Walking.png
+shortrange_Monster.png
 size:131,678
 filter:Linear,Linear
 pma:true

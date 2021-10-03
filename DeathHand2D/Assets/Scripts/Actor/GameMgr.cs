@@ -40,6 +40,8 @@ public class GameMgr : MonoBehaviour
     private RoomMgr curRoomMgr = null;
     public RoomMgr CurRoomMgr { get { return curRoomMgr; } }
 
+    private bool isEnemyHit = false;
+
 
     private void Awake()
 	{
@@ -90,4 +92,12 @@ public class GameMgr : MonoBehaviour
         if(!curRoomMgr.clear)
             curRoomMgr.BeginWave();
 	}
+    public bool GetEnemyHit()
+    {
+        return isEnemyHit;
+    }
+    public void SetEnemyHit(bool state)
+    {
+        isEnemyHit = state;
+    }
 }
