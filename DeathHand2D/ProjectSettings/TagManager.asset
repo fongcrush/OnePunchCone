@@ -11,6 +11,8 @@ TagManager:
   - Arrow
   - Room
   - Gate
+  - Bush
+  - GameManager
   layers:
   - Default
   - TransparentFX
