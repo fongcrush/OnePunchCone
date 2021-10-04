@@ -460,6 +460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4473782334809772946}
   - component: {fileID: 6456742655074285099}
+  - component: {fileID: 5582300251284009790}
   m_Layer: 0
   m_Name: Enmey Coll
   m_TagString: Enemy
@@ -507,3 +508,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9684749, y: 0.90151066}
   m_EdgeRadius: 0
+--- !u!114 &5582300251284009790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7747530926313939510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd4542c438679548b27c4df1fd71a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
