@@ -4,6 +4,7 @@ using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
 using static PlayerAttackData;
+using static GameMgr;
 
 public class PlayerDash : IPlayerAction
 {
@@ -56,20 +57,25 @@ public class PlayerDash : IPlayerAction
 
     void Dash()
     {
-        if(Ready())
+        if (Ready())
         {
+            Vector3 movePos = Vector3.zero;
+
             player.DashCount -= 1;
-            if(hAxis != 0 || vAxis != 0)
-                player.transform.position = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+            if (hAxis != 0 || vAxis != 0)
+                movePos = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
             else
             {
-                if(player.LeftOrRight())
-                    player.transform.position = player.transform.position + Vector3.left * DashSpeed;
+                if (player.LeftOrRight())
+                    movePos = player.transform.position + Vector3.left * DashSpeed;
                 else
-                    player.transform.position = player.transform.position + Vector3.right * DashSpeed;
+                    movePos = player.transform.position + Vector3.right * DashSpeed;
             }
+            movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+            movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
+            player.transform.position = movePos;
             CheckPerfectTiming();
-            if(player)
+            if (player)
                 StartCoroutine(UpdateGodMode());
         }
         End();
@@ -77,9 +83,9 @@ public class PlayerDash : IPlayerAction
 
     IEnumerator UpdateDashCount()
     {
-        while(true)
+        while (true)
         {
-            while(player.DashCount < 2)
+            while (player.DashCount < 2)
             {
                 yield return new WaitForSeconds(MaxDashTimer - MaxDashGodModeTimer);
                 player.DashCount++;
@@ -97,7 +103,7 @@ public class PlayerDash : IPlayerAction
 
     private void CheckPerfectTiming()
     {
-        if(isTiming == true)
+        if (isTiming == true)
         {
             foreach (var attackInfo in AttackTable)
             {

@@ -3,35 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Bush : Environment
+public class Bush : IEnvironment
 {
-    public void TriggerEnterBush(Collider2D collision, bool enter)
+    override public void Stay(Collider2D collision)
     {
-        if (enter)
+        if (collision.gameObject.layer == 6)
         {
-            if (environmentName == "Bush" && collision.gameObject.tag == "Player")
-            {
-                collision.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-                collision.GetComponent<SpriteRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder + 1;
-            }
-            if (environmentName == "Bush" && collision.gameObject.tag == "Enemy")
-            {
-                // collision.GetComponent<MeshRenderer>().sortingOrder = transform.GetComponent<MeshRenderer>().sortingOrder - 1;
-                collision.GetComponent<EnemyController>().isInBush = true;
-            }
+            collision.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+            collision.GetComponent<SpriteRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder + 1;
         }
-        else
+        if (collision.gameObject.tag == "Enemy")
         {
-            if (environmentName == "Bush" && collision.gameObject.tag == "Player")
-            {
-                collision.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-                collision.GetComponent<SpriteRenderer>().sortingOrder = PlayerLayer;
-            }
-            if (environmentName == "Bush" && collision.gameObject.tag == "Enemy")
-            {
-                // collision.GetComponent<SpriteRenderer>().sortingOrder = EnemyLayer;
-                collision.GetComponent<EnemyController>().isInBush = false;
-            }
+            collision.GetComponent<EnemyController>().isInBush = true;
         }
     }
+    override public void Exit(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 6)
+        {
+            collision.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            collision.GetComponent<SpriteRenderer>().sortingOrder = PlayerLayer;
+        }
+        if (collision.gameObject.tag == "Enemy")
+        {
+            collision.GetComponent<EnemyController>().isInBush = false;
+        }
+    }   
 }

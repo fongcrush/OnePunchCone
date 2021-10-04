@@ -10,7 +10,6 @@ public class PlayerEffectController : MonoBehaviour
     public GameObject DustEffect;
     bool canCreateDust;
 
-    public GameObject DarkDebuffEffect;
     bool darkDebuff;
 
     public bool DarkDebuff { get { return darkDebuff; } set { darkDebuff = value; } }
@@ -34,11 +33,10 @@ public class PlayerEffectController : MonoBehaviour
         {
             StartCoroutine("CreateDustEffect");
         }
-        DarkDebuffEffect.SetActive(darkDebuff);
     }
 
     IEnumerator CreateDustEffect()
-    {        
+    {
         GameObject dust = Instantiate(DustEffect, transform.position, Quaternion.identity);
         canCreateDust = false;
         yield return new WaitForSeconds(1.0f);

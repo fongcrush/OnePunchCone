@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    EnvironmentInfo info;
-    Bush bush;
-    DeadManHand deadManHans;
-
-    public string environmentName;
+    IEnvironment curTriggerObject;
 
     protected const int PlayerLayer = 20;
     protected const int EnemyLayer = 10;
@@ -16,40 +12,25 @@ public class Environment : MonoBehaviour
     private void Awake()
     {
         EnvironmentData.UpdateCSVData();
-        bush = GetComponent<Bush>();
-        deadManHans = GetComponent<DeadManHand>();
-        
-    }
-
-    void Start()
-    {
-        if(environmentName != "Parent")
-            info = EnvironmentData.EnvironmentTable[environmentName];
+        // GetTableValue
+        // Debug.Log(EnvironmentData.EnvironmentTable["Bush"].name);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        switch (environmentName) 
-        {
-            case "Bush":
-                bush.TriggerEnterBush(collision, true);
-                break;
-            case "DeadManHand":
-                deadManHans.TriggerEnterDeadManHand(collision, true);
-                break;
-        }
+        curTriggerObject = GetComponent<IEnvironment>();
+        curTriggerObject.Stay(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        switch (environmentName)
-        {
-            case "Bush":
-                bush.TriggerEnterBush(collision, false);
-                break;
-            case "DeadManHand":
-                deadManHans.TriggerEnterDeadManHand(collision, false);
-                break;
-        }
+        curTriggerObject = GetComponent<IEnvironment>();
+        curTriggerObject.Exit(collision);
     }
+}
+
+abstract public class IEnvironment : Environment
+{
+    public abstract void Stay(Collider2D collision);
+    public abstract void Exit(Collider2D collision);
 }
