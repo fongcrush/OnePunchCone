@@ -179,7 +179,7 @@ public class EnemyController : MonoBehaviour
         }
         else if(currentState == TraceState)
         {
-            if (attType == AttackType.MELEE)
+            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
                 skeletonAnime.AnimationName = "walking";
         }
         else if(currentState == AttackState)
