@@ -20,6 +20,7 @@ enum PlayerDirectionX
 public class EnemyController : MonoBehaviour
 {
     private GameObject player;
+    private Rigidbody2D rigid;
 
     private Enemy enemy;
     private EnemyBaseState currentState;
@@ -34,7 +35,6 @@ public class EnemyController : MonoBehaviour
     private SkeletonAnimation skeletonAnime;
     private SpriteRenderer spriteRenderer;
     public SkeletonAnimation rangedEnemyAttackSkeletonAnime;
-    private SpriteRenderer playerSpriteRenderer;
 
     public EnemyInfo enemyInfo;
 
@@ -78,6 +78,7 @@ public class EnemyController : MonoBehaviour
         enemy = GetComponent<Enemy>();
 
         ++enemyCount;
+
     }
     private void Start()
     {
@@ -131,7 +132,7 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         currentState.Update(this);
-
+        Debug.Log(targetTransform.position);
         if (attType == AttackType.RANGED || attType == AttackType.RANGED_ELITE)
         {
             if (!isHitCheck && enemyInfo.chase_Range < 10)
@@ -149,6 +150,8 @@ public class EnemyController : MonoBehaviour
         }
 
     }
+
+    
     private void CheckEnemysHit()
     {
         if (GM.GetEnemyHit() == true)
@@ -202,8 +205,7 @@ public class EnemyController : MonoBehaviour
     }
     public bool CheckTargetInBush()
     {
-        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
-        if(playerSpriteRenderer.color.a == 0.5f)
+        if(player.GetComponent<PlayerController>().InBush)
         {
             if (enemyInfo.chase_Range > 10)
                 enemyInfo.chase_Range /= 3f;

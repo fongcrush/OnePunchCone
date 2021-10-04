@@ -22,6 +22,10 @@ public class PlayerController : MonoBehaviour
     private bool dashGodMode;
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
 
+    private bool inBush = false;
+    public bool InBush { get { return inBush; } }
+    public void Bush(bool tf) { inBush = tf; }
+
     public PlayerState displayPlayerState;
     public CharacterDirection displayCharacterDir;
     public ArrowKey displayCurArrowKey;
@@ -41,7 +45,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
 	{
         switch(playerState)
         {
