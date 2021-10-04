@@ -138,19 +138,24 @@ public class EnemyController : MonoBehaviour
                 CheckEnemysHit();
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Hit()
     {
-        if (collision.gameObject.tag == "PlayerAttackCollider")
+        if(attType == AttackType.MELEE || attType == AttackType.RANGED)
         {
-            enemy.stat.ChangeHP(-GM.pcStat.Power);
-            Debug.Log("Hit!");
-            currentState.OnCollisionEnter(this);
-            GM.SetEnemyHit(true);
+            skeletonAnime.skeleton.SetColor(Color.red);
+            Invoke("ResetColor", 0.1f);
         }
-
+        enemy.stat.ChangeHP(-GM.pcStat.Power);
+        Debug.Log("Hit!");
+        currentState.OnCollisionEnter(this);
+        GM.SetEnemyHit(true);
+    }
+    private void ResetColor()
+    {
+        skeletonAnime.skeleton.SetColor(Color.white);
     }
 
-    
+
     private void CheckEnemysHit()
     {
         if (GM.GetEnemyHit() == true)
