@@ -2759,8 +2759,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 611457443}
-  - component: {fileID: 611457444}
   - component: {fileID: 611457445}
+  - component: {fileID: 611457444}
   m_Layer: 0
   m_Name: AttackColl
   m_TagString: PlayerAttackCollider
@@ -2792,7 +2792,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 1.5, y: 1.9}
@@ -2884,7 +2884,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 618548378}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1411073464}
@@ -4480,8 +4480,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900828209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8666668, y: 0.11333339, z: 0}
-  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 208917095}
   m_Father: {fileID: 1485945575}
@@ -6406,8 +6406,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1351612121}
-  - component: {fileID: 1351612122}
   - component: {fileID: 1351612123}
+  - component: {fileID: 1351612122}
   m_Layer: 0
   m_Name: Skill1Coll
   m_TagString: PlayerAttackCollider
@@ -6439,7 +6439,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 1.5, y: 1.9}
@@ -6836,8 +6836,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1411073464}
-  - component: {fileID: 1411073465}
   - component: {fileID: 1411073466}
+  - component: {fileID: 1411073467}
+  - component: {fileID: 1411073465}
   m_Layer: 0
   m_Name: Skill2Coll
   m_TagString: PlayerAttackCollider
@@ -6869,7 +6870,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 1.5, y: 1.9}
@@ -6937,6 +6938,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1411073467
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411073463}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1426725974
 GameObject:
   m_ObjectHideFlags: 0
@@ -7332,8 +7354,8 @@ GameObject:
   - component: {fileID: 1485945568}
   - component: {fileID: 1485945567}
   - component: {fileID: 1485945566}
-  - component: {fileID: 1485945570}
   - component: {fileID: 1485945571}
+  - component: {fileID: 1485945570}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -7414,7 +7436,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.07457948, y: 0.38186595}
+  m_Offset: {x: -0.07457948, y: 1.3353472}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7425,7 +7447,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 0.70213217}
+  m_Size: {x: 1.8850539, y: 2.6090944}
   m_EdgeRadius: 0
 --- !u!50 &1485945571
 Rigidbody2D:

@@ -29,16 +29,15 @@ public class PlayerMove : MonoBehaviour
         moveDirection = Vector3.zero;
         curRunCheckTime = 0;
         canRun = false;
-        CancelMoveKey = new bool[4];
-        for (int i = 0; i < CancelMoveKey.Length; i++)
-            CancelMoveKey[i] = false;
+        //CancelMoveKey = new bool[4];
+        //for (int i = 0; i < CancelMoveKey.Length; i++)
+        //    CancelMoveKey[i] = false;
     }
 
     public void UpdateMove()
     {
         moveDirection = new Vector3(hAxis, vAxis, 0f).normalized;
 
-        MoveCheck();
         if (moveDirection != Vector3.zero)
             Move();
         Turn();
@@ -49,12 +48,13 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+
     public void End()
     {
         moveDirection = Vector3.zero;
     }
 
-    private void MoveCheck()
+    public void MoveCheck()
     {
         if (moveDirection == Vector3.zero)
         {
@@ -112,28 +112,6 @@ public class PlayerMove : MonoBehaviour
         movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
         rigid.MovePosition(movePos);
-
-        //player.transform.position = movePos;
-    }
-
-    private void CheckCollider()
-    {
-        if (CancelMoveKey[0] && curArrowKey == ArrowKey.Left)
-        {
-            moveDirection.x = 0;
-        }
-        if (CancelMoveKey[1] && curArrowKey == ArrowKey.Right)
-        {
-            moveDirection.x = 0;
-        }
-        if (CancelMoveKey[2] && curArrowKey == ArrowKey.Up)
-        {
-            moveDirection.y = 0;
-        }
-        if (CancelMoveKey[3] && curArrowKey == ArrowKey.Down)
-        {
-            moveDirection.y = 0;
-        }
     }
 
     private void Turn()

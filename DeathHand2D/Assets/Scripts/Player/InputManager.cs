@@ -50,11 +50,11 @@ public class InputManager : MonoBehaviour
     void UpdateActionInput()
     {
         // ¾×¼Ç
-        if(Input.GetKeyDown(KeyCode.Z)) { actionKey = ActionKey.Z;}
+        if(Input.GetKey(KeyCode.Z)) { actionKey = ActionKey.Z;}
 
-        else if(Input.GetKeyDown(KeyCode.X)) { actionKey = ActionKey.X;}
+        else if(Input.GetKey(KeyCode.X)) { actionKey = ActionKey.X;}
 
-        else if(Input.GetKeyDown(KeyCode.C)) { actionKey = ActionKey.C;}
+        else if(Input.GetKey(KeyCode.C)) { actionKey = ActionKey.C;}
 
         else if(Input.GetKeyDown(KeyCode.LeftShift)) { actionKey = ActionKey.LeftShift;}
 

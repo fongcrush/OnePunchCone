@@ -132,7 +132,6 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         currentState.Update(this);
-        Debug.Log(targetTransform.position);
         if (attType == AttackType.RANGED || attType == AttackType.RANGED_ELITE)
         {
             if (!isHitCheck && enemyInfo.chase_Range < 10)

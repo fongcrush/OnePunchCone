@@ -12,6 +12,8 @@ public class PlayerAttackSkill02 : IPlayerAction
     [SerializeField]
     private Transform chargeRange;
 
+    private Rigidbody2D rigid;
+
     private AttackInfo attackInfo;
     public AttackInfo Info { get { return attackInfo; } }
 
@@ -24,6 +26,7 @@ public class PlayerAttackSkill02 : IPlayerAction
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        rigid = player.GetComponent<Rigidbody2D>();
         dir = Vector3.zero;
         curTime = 0;
         attackStep = ActionStep.None;
@@ -47,15 +50,15 @@ public class PlayerAttackSkill02 : IPlayerAction
         curTime = 0;
         attackStep = ActionStep.First_Delay;
 
-        // 돌진 목표 지점 계산 : 300(플레이어의 월드 크기) * chargeRange.localScale.x - 150(플레이어의 pivot 이 Bottom center)
+        // 돌진 목표 지점 계산
         if(player.LeftOrRight())
-            dir = new Vector3(chargeRange.position.x - 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x - 4f * player.transform.lossyScale.x, player.transform.position.y, 0);
         else
-            dir = new Vector3(chargeRange.position.x + 3f * (chargeRange.localScale.x - 0.5f), player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x + 4f * player.transform.lossyScale.x, player.transform.position.y, 0);
 
         dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
-        fixedChargePos = chargeRange.position;
+        fixedChargePos = player.transform.position;
 
         StartCoroutine(SkillTimer(attackInfo.code));
     }
@@ -73,9 +76,9 @@ public class PlayerAttackSkill02 : IPlayerAction
             }
             break;
         case ActionStep.Action:
-            player.transform.position = Vector3.Lerp(transform.position, dir, Time.deltaTime * 20);
+            rigid.MovePosition(Vector3.Lerp(transform.position, dir, Time.deltaTime * 20));
             chargeRange.position = fixedChargePos;
-            if(player.transform.position == dir)
+            if(curTime > 1f)
             {
                 curTime = 0;
                 attackStep = ActionStep.Second_Delay;

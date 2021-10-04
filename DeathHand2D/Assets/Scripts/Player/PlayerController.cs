@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
 	{
         switch(playerState)
         {
@@ -63,8 +63,24 @@ public class PlayerController : MonoBehaviour
 		UpdateDisplayStates();
     }
 
+	private void Update()
+    {
+        switch(playerState)
+        {
+        case PlayerState.Move:
+            move.MoveCheck();
+            break;
+        case PlayerState.Action:
+            break;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+        case PlayerState.Dead:
+
+            break;
+        }
+
+    }
+
+	private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Arrow")
         {
