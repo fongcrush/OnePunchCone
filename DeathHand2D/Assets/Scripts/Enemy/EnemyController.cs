@@ -179,10 +179,8 @@ public class EnemyController : MonoBehaviour
         // 나중에 변경
         if(currentState == IdleState)
         {
-            if (attType == AttackType.MELEE)
+            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
                 skeletonAnime.AnimationName = "idle";
-            else if (attType == AttackType.RANGED)
-                skeletonAnime.AnimationName = "animation";
         }
         else if(currentState == TraceState)
         {
