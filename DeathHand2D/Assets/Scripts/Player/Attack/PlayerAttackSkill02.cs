@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
 
@@ -12,7 +13,11 @@ public class PlayerAttackSkill02 : IPlayerAction
     [SerializeField]
     private Transform chargeRange;
 
-    private Rigidbody2D rigid;
+	private Rigidbody2D rigid;
+
+    private SkeletonAnimation skelAnim;
+
+    private Animator anim;
 
     private AttackInfo attackInfo;
     public AttackInfo Info { get { return attackInfo; } }
@@ -26,6 +31,8 @@ public class PlayerAttackSkill02 : IPlayerAction
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        skelAnim = player.GetComponent<SkeletonAnimation>();
+        anim = player.GetComponent<Animator>();
         rigid = player.GetComponent<Rigidbody2D>();
         dir = Vector3.zero;
         curTime = 0;
@@ -52,14 +59,15 @@ public class PlayerAttackSkill02 : IPlayerAction
 
         // 돌진 목표 지점 계산
         if(player.LeftOrRight())
-            dir = new Vector3(player.transform.position.x - 4f * player.transform.lossyScale.x, player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x - 4f, player.transform.position.y, 0);
         else
-            dir = new Vector3(player.transform.position.x + 4f * player.transform.lossyScale.x, player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x + 4f, player.transform.position.y, 0);
 
         dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
         fixedChargePos = player.transform.position;
 
+        anim.SetTrigger("Skill1");
         StartCoroutine(SkillTimer(attackInfo.code));
     }
 

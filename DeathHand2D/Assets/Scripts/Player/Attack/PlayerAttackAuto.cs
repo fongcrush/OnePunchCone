@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
 
@@ -10,10 +11,14 @@ public class PlayerAttackAuto : IPlayerAction
     private Transform coll;
 
 	private AttackInfo attackInfo;
+    private SkeletonAnimation skelAnim;
+    private Animator anim;
 
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        skelAnim = player.GetComponent<SkeletonAnimation>();
+        anim = player.GetComponent<Animator>();
 
         curTime = 0;
         isDone = false;
@@ -36,6 +41,7 @@ public class PlayerAttackAuto : IPlayerAction
         curTime = 0;
         isDone = false;
 
+        anim.SetTrigger("AAttack");
         StartCoroutine(SkillTimer(attackInfo.code));
 	}
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
 
@@ -8,6 +9,8 @@ public class PlayerAttackSkill03 : IPlayerAction
 {
     [SerializeField]
     private Transform coll;
+
+    private SkeletonAnimation skelAnim;
 
     private AttackInfo attackInfo;
 
@@ -19,6 +22,7 @@ public class PlayerAttackSkill03 : IPlayerAction
     public void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        skelAnim = player.GetComponent<SkeletonAnimation>();
 
         attackStep = ActionStep.None;
         count = 0;

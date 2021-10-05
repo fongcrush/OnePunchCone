@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 {
     private InputManager inputController;
 
+    private BoxCollider2D boxColl;
+
     private PlayerActionMgr actionMgr;
     public PlayerActionMgr ActionMgr { get { return actionMgr; } }
 
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
 
         actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
+        boxColl = GetComponent<BoxCollider2D>();
         move = GetComponent<PlayerMove>();
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
@@ -65,6 +68,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Update()
     {
+        //Debug.Log("boxColl : " + boxColl.bounds);
         switch(playerState)
         {
         case PlayerState.Move:
