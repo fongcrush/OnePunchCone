@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 180930100492844853}
   - component: {fileID: 3154072335537533646}
   - component: {fileID: 5681080943883768723}
-  - component: {fileID: 7195007711992932808}
   m_Layer: 7
   m_Name: enemy_Ranged
   m_TagString: Enemy
@@ -157,18 +156,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7195007711992932808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 353293402101036335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efd4542c438679548b27c4df1fd71a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1286679920149534093
@@ -413,6 +400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8960473087472675}
   - component: {fileID: 1042210190172043337}
+  - component: {fileID: 1655742164235600421}
   m_Layer: 0
   m_Name: Enmey Coll
   m_TagString: Enemy
@@ -460,6 +448,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.7542086, y: 0.7132957}
   m_EdgeRadius: 0
+--- !u!114 &1655742164235600421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7604912975195100230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd4542c438679548b27c4df1fd71a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2719512692090971052
 PrefabInstance:
   m_ObjectHideFlags: 0
