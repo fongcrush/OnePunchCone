@@ -27,10 +27,10 @@ public class EnemySection : MonoBehaviour
 			}
 			else if(waveCount > wave.Length)
 			{
-				GM.CurRoomMgr.clear = true;
+				GM.CurRoomMgr.Clear = true;
 			}
 		}
-		if(GM.CurRoomMgr.clear)
+		if(GM.CurRoomMgr.Clear)
 		{
 			Destroy(this.gameObject);
 		}

@@ -33,7 +33,7 @@ public class GateMgr : MonoBehaviour
 			transform.localPosition = new Vector3(19.2f, 5.4f, 0f);
 			break;
 		case GateDirection.Down:
-			transform.localPosition = new Vector3(19.2f, 1f, 0f);
+			transform.localPosition = new Vector3(19.2f, 0f, 0f);
 			break;
 		}
 	}

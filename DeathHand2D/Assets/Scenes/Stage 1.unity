@@ -1907,7 +1907,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7790055, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2398,8 +2398,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 1809008921}
   section: 2
-  clear: 0
-  reset: 0
+  Clear: 0
+  Reset: 0
+  Here: 0
 --- !u!4 &661733098
 Transform:
   m_ObjectHideFlags: 0
@@ -3557,9 +3558,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 1079411379}
-  section: 1
-  clear: 0
-  reset: 0
+  section: 2
+  Clear: 1
+  Reset: 0
+  Here: 0
 --- !u!4 &934335111
 Transform:
   m_ObjectHideFlags: 0
@@ -3714,7 +3716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.1391234, y: 4.3, z: 0}
+  m_LocalPosition: {x: 4.132482, y: 4.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 484638124}
@@ -4747,8 +4749,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 1539425039}
   section: 2
-  clear: 0
-  reset: 0
+  Clear: 0
+  Reset: 0
+  Here: 0
 --- !u!4 &1228285727
 Transform:
   m_ObjectHideFlags: 0
@@ -5369,8 +5372,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 1551061834}
   section: 1
-  clear: 0
-  reset: 0
+  Clear: 1
+  Reset: 0
+  Here: 0
 --- !u!4 &1464218903
 Transform:
   m_ObjectHideFlags: 0
@@ -5419,8 +5423,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 1012541861}
   section: 2
-  clear: 0
-  reset: 0
+  Clear: 0
+  Reset: 0
+  Here: 0
 --- !u!4 &1483603008
 Transform:
   m_ObjectHideFlags: 0
@@ -5884,8 +5889,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 1390222647260640303}
   section: 1
-  clear: 0
-  reset: 0
+  Clear: 1
+  Reset: 0
+  Here: 0
 --- !u!4 &1511613006
 Transform:
   m_ObjectHideFlags: 0
@@ -5901,7 +5907,7 @@ Transform:
   - {fileID: 80371415}
   - {fileID: 1698816673}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1536550794
 GameObject:
@@ -8091,8 +8097,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 289734585}
   section: 3
-  clear: 0
-  reset: 0
+  Clear: 0
+  Reset: 0
+  Here: 0
 --- !u!4 &2072908856
 Transform:
   m_ObjectHideFlags: 0
@@ -8174,7 +8181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2113701671
 GameObject:

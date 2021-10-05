@@ -63,12 +63,11 @@ public class GameMgr : MonoBehaviour
         curRoomMgr.BeginWave();
     }
 
-    private void Update()
-    {
-    }
-
-    public void ChangeRoom(RoomMgr room, GateDirection gateDir)
+	public void ChangeRoom(RoomMgr room, GateDirection gateDir)
 	{
+        if(curRoomMgr == room)
+            return;
+
         curRoomMgr = room;
         Vector3 dir = Vector2.zero;
         switch(gateDir)
@@ -80,15 +79,15 @@ public class GameMgr : MonoBehaviour
             dir = new Vector3(33.4f, 2.4f, 0f);
             break;
         case GateDirection.Up:
-            dir = new Vector3(19.2f, 4.2f, 0f);
+            dir = new Vector3(19.2f, 4f, 0f);
             break;
         case GateDirection.Down:
-            dir = new Vector3(19.2f, 1f, 0f);
+            dir = new Vector3(19.2f, 1.2f, 0f);
             break;
         }
-        player.GetComponent<Rigidbody2D>().position = transform.position + dir;
+        player.transform.position = curRoomMgr.transform.position + dir;
         cineConfiner.m_BoundingShape2D = curRoomMgr.transform.Find("Clamp").GetComponent<PolygonCollider2D>();
-        if(!curRoomMgr.clear)
+        if(!curRoomMgr.Clear)
             curRoomMgr.BeginWave();
 	}
     public bool GetEnemyHit()

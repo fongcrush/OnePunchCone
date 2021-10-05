@@ -18,10 +18,11 @@ public class RoomMgr : MonoBehaviour
 
 	private int enemyGroupCode;
 
-	public bool clear = false;
+	public bool Clear = false;
 
-	public bool reset = false;
-	//public bool Clear { get { return clear; } }
+	public bool Reset = false;
+
+	public bool Here = false;
 
 	private GameObject curGroup;
 
@@ -40,35 +41,40 @@ public class RoomMgr : MonoBehaviour
 	private void Start()
 	{
 		ClampMap();
-		enemyGroupCode = ChooseEnemyGroup(GM.SecData.ProbabilityTable[section-1]);
 		gates.SetActive(false);
 	}
 
 	private void Update()
 	{
-		if(clear && !gates.activeSelf)
+		if(Clear && !gates.activeSelf)
 			gates.SetActive(true);
-		if(reset)
+		if(Reset)
 			ResetRoom();
+
+		if(Here)
+		{
+			GM.ChangeRoom(this, GateDirection.Left);
+			Here = false;
+		}
 	}
 
 	public void BeginWave()
 	{
 		//Debug.Log("enemyGroupCode : " + enemyGroupCode);
+		enemyGroupCode = ChooseEnemyGroup(GM.SecData.ProbabilityTable[section - 1]);
 		curGroup = GM.SecData.InitEnemyGroup(enemyGroupCode, transform);
 	}
 
 	void ResetRoom()
 	{
-		reset = false;
-		clear = false;
+		Reset = false;
+		Clear = false;
 		if(gates.activeSelf)
 			gates.SetActive(false);
 
 		if(curGroup)
 			Destroy(curGroup);
 
-		enemyGroupCode = ChooseEnemyGroup(GM.SecData.ProbabilityTable[section - 1]);
 		if(GM.CurRoomMgr == this)
 			BeginWave();
 		
