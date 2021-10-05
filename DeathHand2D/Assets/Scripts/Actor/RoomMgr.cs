@@ -28,7 +28,7 @@ public class RoomMgr : MonoBehaviour
 	private Vector2 mapSizeMin = Vector2.zero;
 	public Vector2 MapSizeMin { get { return mapSizeMin; } }
 
-	private Vector2 mapSizeMax = new Vector2(38.4f, 16.2f);
+	private Vector2 mapSizeMax = new Vector2(38.4f, 10.8f);
 	public Vector2 MapSizeMax { get { return mapSizeMax; } }
 
 	private void Awake()
@@ -54,7 +54,7 @@ public class RoomMgr : MonoBehaviour
 
 	public void BeginWave()
 	{
-		Debug.Log("enemyGroupCode : " + enemyGroupCode);
+		//Debug.Log("enemyGroupCode : " + enemyGroupCode);
 		curGroup = GM.SecData.InitEnemyGroup(enemyGroupCode, transform);
 	}
 
@@ -76,10 +76,8 @@ public class RoomMgr : MonoBehaviour
 
 	public void ClampMap()
 	{
-		mapSizeMin = transform.position;
-		mapSizeMin.x += GetSpriteSize(player).x;
-		mapSizeMax = new Vector2(transform.position.x, transform.position.y) + GetSpriteSize(background);
-		mapSizeMax.x -= GetSpriteSize(player).x;
+		mapSizeMin = new Vector2(transform.position.x + 2f, transform.position.y);
+		mapSizeMax = mapSizeMin + GetSpriteSize(background) + new Vector2(-4.0f, -0.5f);
 	}
 
 	public Vector2 GetSpriteSize(GameObject _target)

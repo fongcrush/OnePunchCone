@@ -65,7 +65,6 @@ public class GameMgr : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Enemy Left : " + EnemyController.enemyCount);
     }
 
     public void ChangeRoom(RoomMgr room, GateDirection gateDir)
@@ -78,7 +77,7 @@ public class GameMgr : MonoBehaviour
             dir = new Vector3(5f, 2.4f, 0f);
             break;
         case GateDirection.Right:
-            dir = new Vector3(34.4f, 2.4f, 0f);
+            dir = new Vector3(33.4f, 2.4f, 0f);
             break;
         case GateDirection.Up:
             dir = new Vector3(19.2f, 4.2f, 0f);
@@ -87,7 +86,7 @@ public class GameMgr : MonoBehaviour
             dir = new Vector3(19.2f, 1f, 0f);
             break;
         }
-        player.transform.position = curRoomMgr.transform.position + dir;
+        player.GetComponent<Rigidbody2D>().position = transform.position + dir;
         cineConfiner.m_BoundingShape2D = curRoomMgr.transform.Find("Clamp").GetComponent<PolygonCollider2D>();
         if(!curRoomMgr.clear)
             curRoomMgr.BeginWave();

@@ -28,7 +28,6 @@ public class PlayerDash : IPlayerAction
     }
     public override void Begin()
     {
-        Debug.Log("DashBegin");
         actionState = ActionState.Dash;
         Dash();
     }

@@ -24,19 +24,18 @@ public class GateMgr : MonoBehaviour
 		switch(gateDir)
 		{
 		case GateDirection.Left:
-			transform.localPosition = new Vector3(1.5f, 2.4f, 0f);
+			transform.localPosition = new Vector3(1.5f, 2.7f, 0f);
 			break;
 		case GateDirection.Right:
-			transform.localPosition = new Vector3(36.9f, 2.4f, 0f);
+			transform.localPosition = new Vector3(36.9f, 2.7f, 0f);
 			break;
 		case GateDirection.Up:
 			transform.localPosition = new Vector3(19.2f, 5.4f, 0f);
 			break;
 		case GateDirection.Down:
-			transform.localPosition = new Vector3(19.2f, 0f, 0f);
+			transform.localPosition = new Vector3(19.2f, 1f, 0f);
 			break;
 		}
-		Debug.Log("Gate Awake");
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)

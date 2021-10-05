@@ -98,20 +98,16 @@ public class PlayerMove : MonoBehaviour
 
     private void Move()
     {
-        //CheckCollider();
         Vector3 movePos = Vector3.zero;
         if (moveMode == MoveMode.Run)
-        {
             movePos = player.transform.position + moveDirection * runSpeed * Time.deltaTime;
-        }
         else
-        {
             movePos = player.transform.position + moveDirection * walkSpeed * Time.deltaTime;
-        }
+
         // 맵을 넘어가지 않도록 제한
         movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
-        rigid.MovePosition(movePos);
+        rigid.position = movePos;
     }
 
     private void Turn()

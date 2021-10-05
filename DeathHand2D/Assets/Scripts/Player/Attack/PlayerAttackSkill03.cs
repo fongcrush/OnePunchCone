@@ -11,6 +11,7 @@ public class PlayerAttackSkill03 : IPlayerAction
     private Transform coll;
 
     private SkeletonAnimation skelAnim;
+    private Animator anim;
 
     private AttackInfo attackInfo;
 
@@ -23,6 +24,7 @@ public class PlayerAttackSkill03 : IPlayerAction
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         skelAnim = player.GetComponent<SkeletonAnimation>();
+        anim = player.GetComponent<Animator>();
 
         attackStep = ActionStep.None;
         count = 0;
@@ -65,29 +67,27 @@ public class PlayerAttackSkill03 : IPlayerAction
             break;
         case ActionStep.Action:
             if(count < 4)
-            {
-                if(curTime < 0.05f)
+            {                
+                if(curTime > 0.1f)
+                {
+                    if(coll.gameObject.activeSelf)
+                    {
+                        coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                        coll.gameObject.SetActive(false);
+                        ++count;
+                        curTime = 0;
+                    }
+                }
+                else if(curTime > 0.05f)
                 {
                     if(!coll.transform.gameObject.activeSelf)
                     {
                         GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
                         coll.gameObject.SetActive(true);
                         coll.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+
+                        anim.SetTrigger("Skill3");
                     }
-                }
-                else if(curTime < 0.1f) { }
-                else if(curTime < 0.3f)
-                {
-                    if(coll.gameObject.activeSelf)
-                    {
-                        coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                        coll.gameObject.SetActive(false);
-                    }
-                }
-                else
-                {
-                    ++count;
-                    curTime = 0;
                 }
             }
             else

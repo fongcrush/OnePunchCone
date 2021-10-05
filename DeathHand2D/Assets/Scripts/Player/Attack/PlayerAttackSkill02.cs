@@ -19,6 +19,8 @@ public class PlayerAttackSkill02 : IPlayerAction
 
     private Animator anim;
 
+    private BoxCollider2D boxColl;
+
     private AttackInfo attackInfo;
     public AttackInfo Info { get { return attackInfo; } }
 
@@ -34,6 +36,7 @@ public class PlayerAttackSkill02 : IPlayerAction
         skelAnim = player.GetComponent<SkeletonAnimation>();
         anim = player.GetComponent<Animator>();
         rigid = player.GetComponent<Rigidbody2D>();
+        boxColl = coll.GetComponent<BoxCollider2D>();
         dir = Vector3.zero;
         curTime = 0;
         attackStep = ActionStep.None;
@@ -50,8 +53,6 @@ public class PlayerAttackSkill02 : IPlayerAction
         //Debug.Log("Attack Skill 02!");
         actionState = ActionState.Skill2;
 
-        coll.gameObject.SetActive(true);
-        chargeRange.gameObject.SetActive(true);
         GM.pcStat.Power = Random.Range(attackInfo.min, attackInfo.max);
         attackInfo = PlayerAttackData.AttackTable[102];
         curTime = 0;
@@ -59,13 +60,12 @@ public class PlayerAttackSkill02 : IPlayerAction
 
         // 돌진 목표 지점 계산
         if(player.LeftOrRight())
-            dir = new Vector3(player.transform.position.x - 4f, player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x - 5f, player.transform.position.y, 0);
         else
-            dir = new Vector3(player.transform.position.x + 4f, player.transform.position.y, 0);
+            dir = new Vector3(player.transform.position.x + 5f, player.transform.position.y, 0);
 
         dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
-        dir.y = Mathf.Clamp(dir.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
-        fixedChargePos = player.transform.position;
+        fixedChargePos = chargeRange.transform.position;
 
         anim.SetTrigger("Skill1");
         StartCoroutine(SkillTimer(attackInfo.code));
@@ -84,12 +84,34 @@ public class PlayerAttackSkill02 : IPlayerAction
             }
             break;
         case ActionStep.Action:
-            rigid.MovePosition(Vector3.Lerp(transform.position, dir, Time.deltaTime * 20));
+            rigid.position = Vector3.Lerp(rigid.position, dir, Time.deltaTime * 20);
             chargeRange.position = fixedChargePos;
-            if(curTime > 1f)
+            RaycastHit2D[] hits;
+            Vector2 castDir;
+            if(player.LeftOrRight())
+                castDir = Vector2.left;
+            else
+                castDir = Vector2.right;
+            int cnt = 0;
+            hits = Physics2D.BoxCastAll(rigid.position, new Vector2(1f, 1f), transform.eulerAngles.y, castDir, 1f);
+            foreach(var hit in hits)
+			{
+                if(hit.collider.tag == "Enemy")
+				{
+                    Vector3 pos = hit.collider.transform.position;
+                    hit.collider.transform.parent.position = new Vector3(player.transform.position.x + 0.5f* castDir.x, pos.y, 0);
+                    cnt++;
+                    Debug.Log(hit.collider.transform.parent);
+                }
+			}
+            Debug.Log(cnt);
+
+            if(player.transform.position == dir || curTime > 1f)
             {
                 curTime = 0;
                 attackStep = ActionStep.Second_Delay;
+                coll.gameObject.SetActive(true);
+                chargeRange.gameObject.SetActive(true);
             }
             break;
         case ActionStep.Second_Delay:

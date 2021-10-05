@@ -42,7 +42,7 @@ public class SectionData : MonoBehaviour
 	}
     public GameObject InitEnemyGroup(int code, Transform parent)
     {
-        Debug.Log(enemyGroup[code]);
+        //Debug.Log(enemyGroup[code]);
         return Instantiate(enemyGroup[code], parent);
 	}
 }
