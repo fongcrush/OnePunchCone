@@ -18,9 +18,6 @@ public class PlayerMove : MonoBehaviour
     private float curRunCheckTime;
     private bool canRun;
 
-    [HideInInspector]
-    public bool[] CancelMoveKey;
-
     private void Awake()
     {
         player = GetComponent<PlayerController>();
@@ -29,32 +26,30 @@ public class PlayerMove : MonoBehaviour
         moveDirection = Vector3.zero;
         curRunCheckTime = 0;
         canRun = false;
-        //CancelMoveKey = new bool[4];
-        //for (int i = 0; i < CancelMoveKey.Length; i++)
-        //    CancelMoveKey[i] = false;
     }
 
-    public void UpdateMove()
+	private void OnEnable()
+	{
+        playerState = PlayerState.Move;
+	}
+
+	private void Update()
     {
         moveDirection = new Vector3(hAxis, vAxis, 0f).normalized;
-
-        if (moveDirection != Vector3.zero)
-            Move();
+        MoveCheck();
         Turn();
 
-        if (curActionKey != ActionKey.None)
-        {
+        if(curActionKey != ActionKey.None)
             player.ActionMgr.Begin();
-        }
     }
 
-
-    public void End()
+    private void FixedUpdate()
     {
-        moveDirection = Vector3.zero;
+        if(moveDirection != Vector3.zero)
+            Move();
     }
 
-    public void MoveCheck()
+	private void MoveCheck()
     {
         if (moveDirection == Vector3.zero)
         {

@@ -14,30 +14,43 @@ public class SpineAnimationBehaviour : StateMachineBehaviour
 	private int layer = 0;
 	[SerializeField]
 	private float timeScale = 1.0f;
+    [SerializeField]
+    public float exitTime = .85f;
 
+    [SerializeField]
 	private SkeletonAnimation skeletonAnimation;
 	private Spine.AnimationState spineAnimationState;
 	private Spine.TrackEntry trackEntry;
 
-	private void Awake()
+    private float normalizedTime;
+
+    private void Awake()
 	{
 		if(motion != null)
 			animationClip = motion.name;
 	}
 
-	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		if(skeletonAnimation == null)
-		{
-			skeletonAnimation = animator.GetComponent<SkeletonAnimation>();
-			spineAnimationState = skeletonAnimation.state;
-		}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if(skeletonAnimation == null)
+        {
+            skeletonAnimation = animator.GetComponentInChildren<SkeletonAnimation>();
+            spineAnimationState = skeletonAnimation.state;
+        }
 
-		if(animationClip != null)
-		{
-			loop = stateInfo.loop;
-			trackEntry = spineAnimationState.SetAnimation(layer, animationClip, loop);
-			trackEntry.TimeScale = timeScale;
-		}
-	}
+        trackEntry = spineAnimationState.SetAnimation(layer, animationClip, loop);
+        trackEntry.TimeScale = timeScale;
+
+        normalizedTime = 0f;
+    }
+
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        normalizedTime = trackEntry.AnimationLast / trackEntry.AnimationEnd;
+
+        if(!loop && normalizedTime >= exitTime)
+        {
+            animator.SetTrigger("transition");
+        }
+    }
 }

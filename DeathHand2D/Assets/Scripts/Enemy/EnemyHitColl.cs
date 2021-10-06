@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyHitColl : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.gameObject.tag == "PlayerAttackCollider")
-        {
-            gameObject.GetComponentInParent<EnemyController>().Hit();
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if(other.gameObject.tag == "PlayerAttackCollider")
+    //    {
+    //        gameObject.GetComponentInParent<EnemyController>().Hit();
+    //    }
+    //}
 }

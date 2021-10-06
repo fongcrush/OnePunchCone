@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public int DashCount { get { return dashCount; } set { dashCount = value; } }
 
     [SerializeField]
-    private bool dashGodMode;
+    private bool dashGodMode = false;
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
 
     private bool inBush = false;
@@ -37,50 +37,32 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
-
         actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
         boxColl = GetComponent<BoxCollider2D>();
         move = GetComponent<PlayerMove>();
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
-        dashGodMode = false;
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
 	{
         switch(playerState)
         {
         case PlayerState.Move:
-            move.UpdateMove();
+            if(!move.enabled)
+                move.enabled = true;
             break;
+
         case PlayerState.Action:
-            actionMgr.UpdateAction();
+                actionMgr.UpdateAction();
             break;
 
         case PlayerState.Dead:
 
             break;
         }
-		UpdateDisplayStates();
-    }
-
-	private void Update()
-    {
-        //Debug.Log("boxColl : " + boxColl.bounds);
-        switch(playerState)
-        {
-        case PlayerState.Move:
-            move.MoveCheck();
-            break;
-        case PlayerState.Action:
-            break;
-
-        case PlayerState.Dead:
-
-            break;
-        }
+        UpdateDisplayStates();
     }
 
 	private void OnTriggerEnter2D(Collider2D collision)
@@ -108,15 +90,4 @@ public class PlayerController : MonoBehaviour
         else
             return false;
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if(collision.transform.tag == "Enemy") 
-    //    {
-    //        if (dashGodMode == false) 
-    //        {
-    //            //Hp -= 0.5f;
-    //        }
-    //    }
-    //}
 }

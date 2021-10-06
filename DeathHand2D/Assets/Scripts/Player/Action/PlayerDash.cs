@@ -6,7 +6,7 @@ using static InputManager;
 using static PlayerAttackData;
 using static GameMgr;
 
-public class PlayerDash : IPlayerAction
+public class PlayerDash : PlayerAction
 {
     private const float MaxDashGodModeTimer = 0.3f;
     private const float MaxDashTimer = 10.0f;
@@ -19,31 +19,6 @@ public class PlayerDash : IPlayerAction
         isTiming = false;
     }
 
-    private void Start()
-    {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
-        actionMgr = player.ActionMgr;
-        if (player)
-            StartCoroutine(UpdateDashCount());
-    }
-    public override void Begin()
-    {
-        actionState = ActionState.Dash;
-        Dash();
-    }
-
-    public override void UpdateAction()
-    {
-
-    }
-
-    public override void End()
-    {
-        actionState = ActionState.None;
-
-        actionMgr.End();
-    }
-
     public override void Quit()
     {
 
@@ -54,30 +29,36 @@ public class PlayerDash : IPlayerAction
         return player.DashCount > 0;
     }
 
-    void Dash()
+    public override IEnumerator ActionRoutine()
     {
-        if (Ready())
-        {
-            Vector3 movePos = Vector3.zero;
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        actionMgr = player.ActionMgr;
+        if(player)
+            StartCoroutine(UpdateDashCount());
 
-            player.DashCount -= 1;
-            if (hAxis != 0 || vAxis != 0)
-                movePos = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+        actionState = ActionState.Dash;
+        Vector3 movePos = Vector3.zero;
+
+        player.DashCount -= 1;
+        if(hAxis != 0 || vAxis != 0)
+            movePos = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
+        else
+        {
+            if(player.LeftOrRight())
+                movePos = player.transform.position + Vector3.left * DashSpeed;
             else
-            {
-                if (player.LeftOrRight())
-                    movePos = player.transform.position + Vector3.left * DashSpeed;
-                else
-                    movePos = player.transform.position + Vector3.right * DashSpeed;
-            }
-            movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
-            movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
-            player.transform.position = movePos;
-            CheckPerfectTiming();
-            if (player)
-                StartCoroutine(UpdateGodMode());
+                movePos = player.transform.position + Vector3.right * DashSpeed;
         }
-        End();
+        movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+        movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
+        player.transform.position = movePos;
+        CheckPerfectTiming();
+
+        if(player)
+            StartCoroutine(UpdateGodMode());
+
+        yield return null;
+        actionState = ActionState.None;
     }
 
     IEnumerator UpdateDashCount()

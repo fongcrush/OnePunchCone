@@ -68,11 +68,3 @@ public enum ActionState
     Skill3,
     Dash
 }
-
-public enum ActionStep
-{
-    None,
-    First_Delay,
-    Second_Delay,
-    Action
-}

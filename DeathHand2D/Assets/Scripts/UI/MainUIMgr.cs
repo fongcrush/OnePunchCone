@@ -30,14 +30,14 @@ public class MainUIMgr : MonoBehaviour
     [SerializeField]
     private Image[] skill;
 
-    [SerializeField]
-    private PlayerActionMgr playerActionMgr;
+    private PlayerAttackSkill02 skill_02;
 
     private BuffMgr buffManager;
 
 	private void Awake()
 	{
         buffManager = GetComponent<BuffMgr>();
+        skill_02 = GameObject.Find("Skill2 Coll").GetComponent<PlayerAttackSkill02>();
     }
 
 	void Update()
@@ -70,7 +70,7 @@ public class MainUIMgr : MonoBehaviour
 
         skillCoolImage[1].fillAmount = AttackTable[102].curTime / AttackTable[102].cTime;
 
-        if(playerActionMgr.CanSkill3)
+        if(skill_02.CanCombo)
             skill[2].gameObject.SetActive(true);
         else
             skill[2].gameObject.SetActive(false);

@@ -48,6 +48,7 @@ public class EnemyController : MonoBehaviour
     private bool isAttackColliderActivation = false;
     public bool isInBush = false;
     private bool isHitCheck = false;
+    //public bool skill_02_Check = false;
 
     public EnemyBaseState CurrentState
     {
@@ -138,14 +139,14 @@ public class EnemyController : MonoBehaviour
                 CheckEnemysHit();
         }
     }
-    public void Hit()
+    public void Hit(int damage)
     {
+        enemy.stat.ChangeHP(-damage);
         if(attType == AttackType.MELEE || attType == AttackType.RANGED)
         {
             skeletonAnime.skeleton.SetColor(Color.red);
             Invoke("ResetColor", 0.1f);
         }
-        enemy.stat.ChangeHP(-GM.pcStat.Power);
         Debug.Log("Hit!");
         currentState.OnCollisionEnter(this);
         GM.SetEnemyHit(true);

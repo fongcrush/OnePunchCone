@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerAttackData;
 
-public abstract class IPlayerAction : MonoBehaviour
+public abstract class PlayerAction : MonoBehaviour
 {
     protected PlayerController player;
 
@@ -13,11 +13,11 @@ public abstract class IPlayerAction : MonoBehaviour
 
 	protected bool isDone;
 
-	public abstract void Begin();
-    public abstract void UpdateAction();
-    public abstract void End();
-    public abstract void Quit();
     public abstract bool Ready();
+
+    public abstract void Quit();
+
+    public abstract IEnumerator ActionRoutine();
 
     public IEnumerator SkillTimer(short code)
     {

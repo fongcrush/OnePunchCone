@@ -8,45 +8,44 @@ public class PlayerActionMgr : MonoBehaviour
 {
 	private PlayerController player;
 
-	private IPlayerAction curAction;
+	private PlayerAction curAction;
 
+	[SerializeField]
 	private PlayerAttackAuto aAttack;
-	public IPlayerAction AAttack { get { return aAttack; } }
+	public PlayerAttackAuto AAttack { get { return aAttack; } }
 
+	[SerializeField]
 	private PlayerAttackSkill01 skill_01;
 	public PlayerAttackSkill01 Skill_01 { get { return skill_01; } }
 
+	[SerializeField]
 	private PlayerAttackSkill02 skill_02;
 	public PlayerAttackSkill02 Skill_02 { get { return skill_02; } }
 
+	[SerializeField]
 	private PlayerAttackSkill03 skill_03;
 	public PlayerAttackSkill03 Skill_03 { get { return skill_03; } }
 
 	private PlayerDash dash;
-	public IPlayerAction Dash { get { return dash; } }
+	public PlayerAction Dash { get { return dash; } }
 
-	private bool canSkill3;
-	public bool CanSkill3 { get { return canSkill3; } set { canSkill3 = value; } }
+	private bool skill_03_On = false;
+	public bool Skill_03_On { get { return skill_03_On; } set { skill_03_On = value; } }
 
-	public bool skill_03_On = false;
 
 	void Awake()
 	{
 		player = GameObject.Find("Player").GetComponent<PlayerController>();
-
-		aAttack = GetComponent<PlayerAttackAuto>();
-		skill_01 = GetComponent<PlayerAttackSkill01>();
-		skill_02 = GetComponent<PlayerAttackSkill02>();
-		skill_03 = GetComponent<PlayerAttackSkill03>();
 		PlayerAttackData.ReadAttackData();
 
 		dash = GetComponent<PlayerDash>();
-		canSkill3 = false;
+		curAction = AAttack;
 	}
-	public void Update()
-	{
-		//PlayerAttackData.UpdateCSVData();
-	}
+
+	//public void Update()
+	//{
+	//	PlayerAttackData.UpdateCSVData();
+	//}
 
 	public void Begin()
 	{
@@ -79,36 +78,24 @@ public class PlayerActionMgr : MonoBehaviour
 		player.GetComponent<PlayerMove>().enabled = false;
 
 		if (curAction != null)
-			curAction.Begin();
+			StartCoroutine(curAction.ActionRoutine());
 	}
 
 	public void UpdateAction()
 	{
-		if (curActionKey == ActionKey.LeftShift && dash.Ready())
-		{
-			if(curAction != skill_02)
-				ChangeAction(dash);
-		}
-
-		if (curAction != null)
-			curAction.UpdateAction();
-
+		if(curActionKey == ActionKey.LeftShift && dash.Ready())
+			ChangeAction(dash);
 		if (actionState == ActionState.None)
 			End();
 	}
 
 	public void End()
 	{
-		//if(actionState == ActionState.Dash) 
-		//{
-		//	curAction = dash;
-		//	curAction.Begin();
-		//}
 		playerState = PlayerState.Move;
 		player.GetComponent<PlayerMove>().enabled = true;	
 	}
 
-	public void ChangeAction(IPlayerAction action)
+	public void ChangeAction(PlayerAction action)
 	{
 		if(curAction != null)
 			curAction.Quit();
@@ -118,6 +105,6 @@ public class PlayerActionMgr : MonoBehaviour
 
 		curAction = action;
 		if(curAction != null)
-			curAction.Begin();
+			StartCoroutine(curAction.ActionRoutine());
 	}
 }
