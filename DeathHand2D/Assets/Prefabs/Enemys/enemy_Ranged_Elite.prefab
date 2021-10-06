@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 6539474994884317031}
   - component: {fileID: 6539474994884317030}
   - component: {fileID: 6539474994884317029}
+  - component: {fileID: -132861973858945158}
   m_Layer: 0
   m_Name: enemy_Ranged_Elite
   m_TagString: Enemy
@@ -367,7 +368,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 60db937cbead50141b70a04ad3a10576, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -410,6 +411,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!210 &-132861973858945158
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6539474994884317026}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
 --- !u!1 &6539474995337215028
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2571016110213591352}
   - component: {fileID: 8381237671253108181}
   - component: {fileID: -7514795497039991822}
+  - component: {fileID: 5103686511145278564}
   m_Layer: 0
   m_Name: RangedEnemyAttack
   m_TagString: EnemyAttackCollider
@@ -148,3 +149,14 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.57146215, y: 0.53171813}
   m_EdgeRadius: 0
+--- !u!210 &5103686511145278564
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307517714749144511}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
