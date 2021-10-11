@@ -16,14 +16,6 @@ public class Jangseung : IEnvironment
         isAlive = true;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "PlayerAttackCollider")
-        {
-            this.ChangeHP(-GM.pcStat.Power);
-        }
-    }
-
     public override void Stay(Collider2D collision)
     {
         if (collision.gameObject.layer == 6)
@@ -48,9 +40,9 @@ public class Jangseung : IEnvironment
         }
     }
 
-    void ChangeHP(float damage)
+    public void Hit(float damage)
     {
-        Hp += damage;
+        Hp -= damage;
         if (Hp <= 0)
         {
             GetComponent<SpriteRenderer>().color = Color.black;

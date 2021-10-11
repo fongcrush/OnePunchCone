@@ -73,9 +73,9 @@ public class PlayerAttackSkill02 : PlayerAction
         {
             for(int i =0; i< boxColl.Cast(transform.position, hitResults, 0); i++)
             {
-                if(hitResults[i].collider.gameObject.tag == "Enemy")
+                if (hitResults[i].collider.gameObject.tag == "Enemy")
                 {
-                    var obj = hitResults[i].collider.transform.parent;                    
+                    var obj = hitResults[i].collider.transform.parent;
                     obj.transform.position = new Vector3(player.transform.position.x + castDir.x, obj.transform.position.y, 0);
                 }
             }
