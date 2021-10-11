@@ -24,6 +24,12 @@ public class Enemy : MonoBehaviour
         ReadAttackData();
         enemyController = GetComponent<EnemyController>();
     }
+    public void AttCollsSetActiveFalse()
+    {
+        enemyAttackCollider.SetActive(false);
+        enemyAttackTimingBox.SetActive(false);
+        enemyAttackWarningArea.SetActive(false);
+    }
     public float GetEnemyDamage()
     {
         return enemyInfo.monster_Damage;
