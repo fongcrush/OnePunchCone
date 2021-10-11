@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static GameMgr;
 
 public class EliteMeleeEnemy : Enemy
 {
@@ -41,8 +40,8 @@ public class EliteMeleeEnemy : Enemy
             dir = new Vector2(transform.position.x + 10, transform.position.y);
         }
 
-        dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
-        dir.y = Mathf.Clamp(dir.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
+        dir.x = Mathf.Clamp(dir.x, gm.CurRoomMgr.MapSizeMin.x, gm.CurRoomMgr.MapSizeMax.x);
+        dir.y = Mathf.Clamp(dir.y, gm.CurRoomMgr.MapSizeMin.y, gm.CurRoomMgr.MapSizeMax.y);
 
         // Á¶Á¤
         for (var f = 0f; f <= 1f; f += Time.deltaTime)
@@ -50,6 +49,9 @@ public class EliteMeleeEnemy : Enemy
             transform.position = Vector2.MoveTowards(transform.position, dir, 10 * Time.deltaTime);
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        //Attack
+        CheckCollider();
 
         enemyAttackCollider.SetActive(false);
 

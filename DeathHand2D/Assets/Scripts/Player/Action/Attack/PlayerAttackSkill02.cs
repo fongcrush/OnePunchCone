@@ -73,7 +73,7 @@ public class PlayerAttackSkill02 : PlayerAction
         {
             for(int i =0; i< boxColl.Cast(transform.position, hitResults, 0); i++)
             {
-                if (hitResults[i].collider.gameObject.tag == "Enemy")
+                if (hitResults[i].collider.gameObject.tag == "EnemyHitColl")
                 {
                     var obj = hitResults[i].collider.transform.parent;
                     obj.transform.position = new Vector3(player.transform.position.x + castDir.x, obj.transform.position.y, 0);
@@ -122,7 +122,7 @@ public class PlayerAttackSkill02 : PlayerAction
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-        if(collision.gameObject.tag == "Enemy" && on)
+        if(collision.gameObject.tag == "EnemyHitColl" && on)
         {
             int power = Random.Range(attackInfo.min, attackInfo.max);
             collision.transform.parent.GetComponent<EnemyController>().Hit(power);
