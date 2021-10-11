@@ -58,14 +58,14 @@ public class SummonScript : MonoBehaviour
         c = new Color(c.r, c.g, c.b + 0.01f, c.a);
         summonMesh.material.color = c;
 
-        if (BombTimer > 1.5f || summonCreature.stat.GetHP() < 0 && !isAttack)
+        if (BombTimer > 1.5f || summonCreature.stat.curHP < 0 && !isAttack)
         {
             StartCoroutine(Attack());
         }
     }
     private void CheckHP()
     {
-        if (summonCreature.stat.GetHP() < 0)
+        if (summonCreature.stat.curHP < 0)
             Destroy(gameObject);
     }
 }

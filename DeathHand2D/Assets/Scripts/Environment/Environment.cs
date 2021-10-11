@@ -5,7 +5,8 @@ using UnityEngine;
 public class Environment : MonoBehaviour
 {
     IEnvironment curTriggerObject;
-
+    
+    protected BuffMgr buffManager;
     protected const int PlayerLayer = 20;
     protected const int EnemyLayer = 10;
 
@@ -14,6 +15,13 @@ public class Environment : MonoBehaviour
         EnvironmentData.UpdateCSVData();
         // GetTableValue
         // Debug.Log(EnvironmentData.EnvironmentTable["Bush"].name);
+    }
+
+    private void Start()
+    {
+        buffManager = GameObject.Find("UI").GetComponent<BuffMgr>();
+        buffManager.DarkDebuffCount = 0;
+        buffManager.SlowDebuffCount = 0;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

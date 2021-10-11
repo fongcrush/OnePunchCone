@@ -6,32 +6,29 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class DeadManHand : IEnvironment
 {
-    BuffMgr buffManager;
     Vignette vignette;
 
     bool isDone;
     bool canTrigger;
 
-    private void Start()
+    private void Awake()
     {
         isDone = false;
         canTrigger = true;
-        buffManager = GameObject.Find("UI").GetComponent<BuffMgr>();
-        buffManager.DarkDebuffCount = 0;
-
     }
+
     public override void Stay(Collider2D collision)
     {
-        if(collision.gameObject.layer == 6)
+        if (collision.gameObject.layer == 6)
         {
-            collision.GetComponent<MeshRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder + 1;
-            if(canTrigger)
+            // 플레이어가 망자의 손 뒤로 보이도록 레이어 설정해주세요
+            if (canTrigger)
             {
                 Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
                 StartCoroutine(DarkDebuff());
             }
         }
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             // 적이 망자의 손 위로 보이도록 레이어 설정해주세요
         }
@@ -39,11 +36,11 @@ public class DeadManHand : IEnvironment
 
     public override void Exit(Collider2D collision)
     {
-        if(collision.gameObject.layer == 6)
+        if (collision.gameObject.layer == 6)
         {
-            collision.GetComponent<MeshRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder + 1;
+            // 레이어를 원상복구시켜주세요 
         }
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             // 레이어를 원상복구시켜주세요 
         }
@@ -51,7 +48,7 @@ public class DeadManHand : IEnvironment
 
     IEnumerator CenterToPlayer(GameObject playerObject)
     {
-        while(!isDone)
+        while (!isDone)
         {
             Vector2 pos = Camera.main.WorldToViewportPoint(playerObject.transform.position);
             vignette.center.value = pos;
@@ -63,11 +60,11 @@ public class DeadManHand : IEnvironment
     {
         float intensity = vignette.intensity.value;
 
-        while(intensity > 0f)
+        while (intensity > 0f)
         {
             vignette.intensity.value = intensity;
             intensity -= Time.deltaTime / time;
-            if(intensity <= 0f) vignette.intensity.value = 0;
+            if (intensity <= 0f) vignette.intensity.value = 0;
             yield return null;
         }
     }
@@ -77,38 +74,40 @@ public class DeadManHand : IEnvironment
         StartCoroutine(Timer(10));
         isDone = false;
         canTrigger = false;
-        if(buffManager.DarkDebuffCount < 3)
+        if (buffManager.DarkDebuffCount < 3)
             buffManager.DarkDebuffCount++;
         GameObject playerObject = GameObject.Find("Player");
         StartCoroutine(CenterToPlayer(playerObject));
         PlayerEffectController effectController = playerObject.GetComponent<PlayerEffectController>();
         effectController.DarkDebuff = true;
-        switch(buffManager.DarkDebuffCount)
+        switch (buffManager.DarkDebuffCount)
         {
-        case 1:
-            vignette.intensity.value = 0.55f;
-            break;
-        case 2:
-            vignette.intensity.value = 0.6f;
-            break;
-        case 3:
-            vignette.intensity.value = 0.63f;
-            break;
+            case 1:
+                vignette.intensity.value = 0.55f;
+                break;
+            case 2:
+                vignette.intensity.value = 0.6f;
+                break;
+            case 3:
+                vignette.intensity.value = 0.63f;
+                break;
         }
         yield return new WaitForSeconds(15 * buffManager.DarkDebuffCount - 1);
-        StartCoroutine(FadeOut(1));
-        yield return new WaitForSeconds(1);
-        isDone = true;
-        if(isDone)
+        if (canTrigger)
         {
-            buffManager.DarkDebuffCount = 0;
-            effectController.DarkDebuff = false;
+            StartCoroutine(FadeOut(1));
+            yield return new WaitForSeconds(1);
+            isDone = true;
+            if (isDone)
+            {
+                buffManager.DarkDebuffCount = 0;
+                effectController.DarkDebuff = false;
+            }
         }
     }
     IEnumerator Timer(int time)
     {
         yield return new WaitForSeconds(time);
         canTrigger = true;
-        //Debug.Log("ready");
     }
 }

@@ -5,16 +5,16 @@ using static CSVUtil;
 
 public class EnvironmentData
 {
-    private static List<Dictionary<string, object>> CSVData;
+	private static List<Dictionary<string, object>> CSVData;
 
-    private static Dictionary<string, EnvironmentInfo> environmentTable;
-    public static Dictionary<string, EnvironmentInfo> EnvironmentTable { get { return environmentTable; } set { environmentTable = value; } }
+	private static Dictionary<string, EnvironmentInfo> environmentTable;
+	public static Dictionary<string, EnvironmentInfo> EnvironmentTable { get { return environmentTable; } set { environmentTable = value; } }
 
-    public static void UpdateCSVData()
-    {
-        CSVData = null;
-        environmentTable = null;
-        environmentTable = new Dictionary<string, EnvironmentInfo>();
+	public static void UpdateCSVData()
+	{
+		CSVData = null;
+		environmentTable = null;
+		environmentTable = new Dictionary<string, EnvironmentInfo>();
 
 		CSVData = ReadCSV("EnvironmentTable");
 
@@ -27,6 +27,7 @@ public class EnvironmentData
 			environment.scale_x = floatParse(value["SCALE_X"]);
 			environment.scale_y = floatParse(value["SCALE_Y"]);
 			environment.time = shortParse(value["TIME"]);
+			environment.respawn = shortParse(value["RESPAWN"]);
 
 			environmentTable.Add(environment.name, environment);
 		}
@@ -36,9 +37,10 @@ public class EnvironmentData
 public class EnvironmentInfo
 {
 	public string name;
-    public byte type;
-    public int durability;
-    public float scale_x;
-    public float scale_y;
-    public short time;
+	public byte type;
+	public int durability;
+	public float scale_x;
+	public float scale_y;
+	public short time;
+	public short respawn;
 }

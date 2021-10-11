@@ -42,11 +42,6 @@ public class PlayerActionMgr : MonoBehaviour
 		curAction = AAttack;
 	}
 
-	//public void Update()
-	//{
-	//	PlayerAttackData.UpdateCSVData();
-	//}
-
 	public void Begin()
 	{
 		switch(curActionKey)
@@ -83,7 +78,7 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void UpdateAction()
 	{
-		if(curActionKey == ActionKey.LeftShift && dash.Ready())
+		if(curActionKey == ActionKey.LeftShift && dash.Ready() && curAction!=dash)
 			ChangeAction(dash);
 		if (actionState == ActionState.None)
 			End();
@@ -104,7 +99,7 @@ public class PlayerActionMgr : MonoBehaviour
 		player.GetComponent<PlayerMove>().enabled = false;
 
 		curAction = action;
-		if(curAction != null)
+		if (curAction != null)
 			StartCoroutine(curAction.ActionRoutine());
 	}
 }

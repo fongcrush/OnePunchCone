@@ -12,35 +12,40 @@ public class PlayerDash : PlayerAction
     private const float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
 
-    private bool isTiming;
+    Coroutine UpdateDashCountCoroutine = null;
 
     private void Awake()
     {
-        isTiming = false;
+
     }
 
     public override void Quit()
     {
-
+        actionState = ActionState.None;
     }
 
     public override bool Ready()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
         return player.DashCount > 0;
     }
 
     public override IEnumerator ActionRoutine()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
         actionMgr = player.ActionMgr;
-        if(player)
-            StartCoroutine(UpdateDashCount());
-
         actionState = ActionState.Dash;
         Vector3 movePos = Vector3.zero;
 
         player.DashCount -= 1;
-        if(hAxis != 0 || vAxis != 0)
+        if (player) 
+        {
+            if(UpdateDashCountCoroutine == null)
+                UpdateDashCountCoroutine = StartCoroutine(UpdateDashCount());
+            StartCoroutine(UpdateGodMode());
+        }
+        CheckPerfectTiming();
+
+        if (hAxis != 0 || vAxis != 0)
             movePos = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
         else
         {
@@ -52,26 +57,18 @@ public class PlayerDash : PlayerAction
         movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
         player.transform.position = movePos;
-        CheckPerfectTiming();
-
-        if(player)
-            StartCoroutine(UpdateGodMode());
-
+        Quit();
         yield return null;
-        actionState = ActionState.None;
     }
 
     IEnumerator UpdateDashCount()
     {
-        while (true)
+        while (player.DashCount < 2)
         {
-            while (player.DashCount < 2)
-            {
-                yield return new WaitForSeconds(MaxDashTimer - MaxDashGodModeTimer);
-                player.DashCount++;
-            }
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(MaxDashTimer - MaxDashGodModeTimer);
+            player.DashCount++;
         }
+        UpdateDashCountCoroutine = null;
     }
 
     IEnumerator UpdateGodMode()
@@ -83,28 +80,12 @@ public class PlayerDash : PlayerAction
 
     private void CheckPerfectTiming()
     {
-        if (isTiming == true)
+        if (player.isTiming == true)
         {
             foreach (var attackInfo in AttackTable)
             {
                 attackInfo.Value.curTime = 0;
             }
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "PerfectTiming")
-        {
-            isTiming = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "PerfectTiming")
-        {
-            isTiming = false;
         }
     }
 }

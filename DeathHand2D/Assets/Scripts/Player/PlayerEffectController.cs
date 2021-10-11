@@ -11,13 +11,15 @@ public class PlayerEffectController : MonoBehaviour
     bool canCreateDust;
 
     bool darkDebuff;
-
     public bool DarkDebuff { get { return darkDebuff; } set { darkDebuff = value; } }
+    bool slowDebuff;
+    public bool SlowDebuff { get { return slowDebuff; } set { slowDebuff = value; } }
 
     private void Awake()
     {
         canCreateDust = true;
         darkDebuff = false;
+        slowDebuff = false;
     }
 
     // Start is called before the first frame update

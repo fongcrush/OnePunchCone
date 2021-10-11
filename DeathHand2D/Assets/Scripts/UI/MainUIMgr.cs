@@ -34,10 +34,13 @@ public class MainUIMgr : MonoBehaviour
 
     private BuffMgr buffManager;
 
+    private List<GameObject> BuffList;
+
 	private void Awake()
 	{
         buffManager = GetComponent<BuffMgr>();
         skill_02 = GameObject.Find("Skill2 Coll").GetComponent<PlayerAttackSkill02>();
+        BuffList = new List<GameObject>();
     }
 
 	void Update()
@@ -45,6 +48,7 @@ public class MainUIMgr : MonoBehaviour
         CheckPlayerDashCount();
         CheckPlayerUseSkill();
         CheckPlayerDebuff();
+        DrawPlayerDebuff();
     }
 
     void CheckPlayerDashCount()
@@ -78,16 +82,53 @@ public class MainUIMgr : MonoBehaviour
 
     void CheckPlayerDebuff()
     {
-        if(playerController.GetComponent<PlayerEffectController>().DarkDebuff == true)
+        if (playerController.GetComponent<PlayerEffectController>().DarkDebuff == true)
         {
-            buffManager.DarkDebuff.SetActive(true);
+            if(!IsListInGameObject(buffManager.DarkDebuff.name))
+                BuffList.Add(buffManager.DarkDebuff);
             buffManager.DarkDebuff.transform.Find("Count").GetComponent<Text>().text = buffManager.DarkDebuffCount.ToString();
         }
         else
         {
+            if (IsListInGameObject(buffManager.DarkDebuff.name))
+                BuffList.Remove(buffManager.DarkDebuff);
             buffManager.DarkDebuff.SetActive(false);
         }
+        if (playerController.GetComponent<PlayerEffectController>().SlowDebuff == true)
+        {
+            if (!IsListInGameObject(buffManager.SlowDebuff.name))
+                BuffList.Add(buffManager.SlowDebuff);
+            buffManager.SlowDebuff.transform.Find("Count").GetComponent<Text>().text = buffManager.SlowDebuffCount.ToString();
+        }
+        else
+        {
+            if (IsListInGameObject(buffManager.SlowDebuff.name))
+                BuffList.Remove(buffManager.SlowDebuff);
+            buffManager.SlowDebuff.SetActive(false);
+        }
     }
+
+    bool IsListInGameObject(string name) 
+    {
+        foreach(GameObject buff in BuffList)
+        {
+            if (buff.name == name) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void DrawPlayerDebuff()
+    {
+        for (int i = 0; i < BuffList.Count; i++)
+        {
+            BuffList[i].SetActive(true);
+            BuffList[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(i * 110, 0, 0);
+        }
+    }
+
     public IEnumerator SkillReady(short code)
     {
         float curTime = 0;

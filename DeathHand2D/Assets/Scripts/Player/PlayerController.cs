@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private int dashCount;
     public int DashCount { get { return dashCount; } set { dashCount = value; } }
 
+    [HideInInspector]
+    public bool isTiming;
+
     [SerializeField]
     private bool dashGodMode = false;
     public bool DashGodMode { get { return dashGodMode; } set { dashGodMode = value; } }
@@ -42,6 +45,7 @@ public class PlayerController : MonoBehaviour
         move = GetComponent<PlayerMove>();
         characterDirection = CharacterDirection.Right;
         dashCount = 2;
+        isTiming = false;
     }
 
     // Update is called once per frame
@@ -70,6 +74,22 @@ public class PlayerController : MonoBehaviour
         if(collision.gameObject.tag == "Arrow")
         {
             Destroy(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "PerfectTiming")
+        {
+            isTiming = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "PerfectTiming")
+        {
+            isTiming = false;
         }
     }
 

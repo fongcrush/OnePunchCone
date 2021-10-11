@@ -226,7 +226,7 @@ public class EnemyController : MonoBehaviour
     }
     public bool IsAlive()
     {
-        return (enemy.stat.GetHP() > 0) ? true : false;
+        return (enemy.stat.curHP > 0) ? true : false;
     }
     public bool IsAliveTarget()
     {

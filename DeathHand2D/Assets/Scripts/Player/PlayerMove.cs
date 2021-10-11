@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
 
     private PlayerController player;
     private Rigidbody2D rigid;
+    private BuffMgr buffMgr;
 
     private ArrowKey curDoubleCheckKey;
     private Vector3 moveDirection;
@@ -28,7 +29,12 @@ public class PlayerMove : MonoBehaviour
         canRun = false;
     }
 
-	private void OnEnable()
+    private void Start()
+    {
+        buffMgr = GameObject.Find("UI").GetComponent<BuffMgr>();
+    }
+
+    private void OnEnable()
 	{
         playerState = PlayerState.Move;
 	}
@@ -94,6 +100,12 @@ public class PlayerMove : MonoBehaviour
     private void Move()
     {
         Vector3 movePos = Vector3.zero;
+
+        if (buffMgr.SlowDebuffCount > 0) 
+        {
+            moveDirection *= (buffMgr.SlowDebuffCount * 0.1f) + 0.3f;
+        }
+
         if (moveMode == MoveMode.Run)
             movePos = player.transform.position + moveDirection * runSpeed * Time.deltaTime;
         else
