@@ -121,6 +121,13 @@ public class EnemyController : MonoBehaviour
         currentState.Begin(this);
 
         // 나중에 변경
+
+        if (prevState == AttackState)
+        {
+            StopCoroutine(enemy.Attack());
+            enemy.AttCollsSetActiveFalse();
+        }
+
         if (currentState == IdleState)
         {
             if (attType == AttackType.MELEE || attType == AttackType.RANGED)
@@ -135,6 +142,16 @@ public class EnemyController : MonoBehaviour
         {
             if (attType == AttackType.MELEE || attType == AttackType.RANGED)
                 skeletonAnime.AnimationName = "attack";
+        }
+        else if (currentState == HitState)
+        {
+            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+                skeletonAnime.AnimationName = "shot";
+        }
+        else if (currentState == DeadState)
+        {
+            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+                skeletonAnime.AnimationName = "dead";
         }
     }
     public float CalcTargetDistance()
@@ -177,14 +194,13 @@ public class EnemyController : MonoBehaviour
 
         return true;
     }
+    public void EnemyDead()
+    {
+        --enemyCount;
+    }
     public void DestroyEnemy()
     {
         Destroy(gameObject);
-    }
-
-    public void OnDestroy()
-    {
-        --enemyCount;
     }
     public int GetPlayerDirectionX()
     {
