@@ -5,6 +5,7 @@ using static GameMgr;
 
 public class PowderKeg : IEnvironment
 {
+    public Sprite[] Sprites;
     public GameObject explosion;
     float Hp;
 
@@ -15,10 +16,7 @@ public class PowderKeg : IEnvironment
 
     public override void Stay(Collider2D collision)
     {
-        if (collision.gameObject.tag == "PlayerAttackCollider")
-        {
-            this.ChangeHP(-GM.pcStat.Power);
-        }
+
     }
 
     public override void Exit(Collider2D collision)
@@ -26,9 +24,9 @@ public class PowderKeg : IEnvironment
 
     }
 
-    void ChangeHP(float damage)
+    public void Hit(float damage)
     {
-        Hp += damage;
+        Hp -= damage;
         if (Hp <= 0)
         {
             StartExplosion();
@@ -40,6 +38,7 @@ public class PowderKeg : IEnvironment
         explosion.SetActive(true);
         StartEffect();
 
+        GetComponent<SpriteRenderer>().sprite = Sprites[1];
         GetComponent<BoxCollider2D>().enabled = false;
         explosion.GetComponent<BoxCollider2D>().enabled = false;
     }

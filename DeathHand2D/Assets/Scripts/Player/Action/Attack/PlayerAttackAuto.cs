@@ -41,7 +41,21 @@ public class PlayerAttackAuto : PlayerAction
         RaycastHit2D[] hitResults = new RaycastHit2D[100];
         for(int i = 0; i < boxColl.Cast(Vector2.left, hitResults, 0); i++)
         {
-            if(hitResults[i].collider.gameObject.tag == "Enemy")
+            if (hitResults[i].collider.gameObject.tag == "Jangseung")
+            {
+                Debug.Log(hitResults[i].collider.gameObject.name);
+                int power = Random.Range(attackInfo.min, attackInfo.max);
+                hitResults[i].collider.gameObject.transform.GetComponent<Jangseung>().Hit(power);
+                break;
+            }
+            if (hitResults[i].collider.gameObject.tag == "PowderKeg")
+            {
+                Debug.Log(hitResults[i].collider.gameObject.name);
+                int power = Random.Range(attackInfo.min, attackInfo.max);
+                hitResults[i].collider.gameObject.transform.GetComponent<PowderKeg>().Hit(power);
+                break;
+            }
+            if (hitResults[i].collider.gameObject.tag == "Enemy")
             {
                 Debug.Log(hitResults[i].collider.gameObject.name);
                 int power = Random.Range(attackInfo.min, attackInfo.max);
@@ -54,7 +68,6 @@ public class PlayerAttackAuto : PlayerAction
         actionState = ActionState.None;
         isDone = true;
     }
-
 
     public override void Quit()
     {

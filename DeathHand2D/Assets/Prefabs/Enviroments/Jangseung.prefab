@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4488814847339877796}
   m_Layer: 0
   m_Name: Jangseung
-  m_TagString: Untagged
+  m_TagString: Jangseung
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
