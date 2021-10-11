@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static EnemyData;
+using static GameMgr;
 
 public class Enemy : MonoBehaviour
 {
     public Status stat;
+
+    protected GameMgr gm;
 
     protected EnemyController enemyController;
     protected EnemyInfo enemyInfo;
@@ -19,8 +22,12 @@ public class Enemy : MonoBehaviour
 
     protected bool isAttackActivation = false;
 
+    [SerializeField]
+    protected BoxCollider2D enemyAttackBoxColl;
+
     private void Awake()
     {
+        gm = GM;
         ReadAttackData();
         enemyController = GetComponent<EnemyController>();
     }
@@ -66,5 +73,30 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Enemy Attack");
         yield return 0;
+    }
+
+    protected void CheckCollider()
+    {
+        RaycastHit2D[] hitResults = new RaycastHit2D[100];
+        for (int i = 0; i < enemyAttackBoxColl.Cast(Vector2.left, hitResults, 0); i++)
+        {
+            if (hitResults[i].collider.gameObject.tag == "Jangseung")
+            {
+                Debug.Log(hitResults[i].collider.gameObject.name);
+                hitResults[i].collider.gameObject.transform.GetComponent<Jangseung>().Hit(enemyInfo.monster_Damage);
+                break;
+            }
+            if (hitResults[i].collider.gameObject.tag == "PowderKeg")
+            {
+                Debug.Log(hitResults[i].collider.gameObject.name);
+                hitResults[i].collider.gameObject.transform.GetComponent<PowderKeg>().Hit(enemyInfo.monster_Damage);
+                break;
+            }
+            if (hitResults[i].collider.gameObject.tag == "Player")
+            {
+                Debug.Log(hitResults[i].collider.gameObject.name);
+                gm.pcStat.curHP -= enemyInfo.monster_Damage;
+            }
+        }
     }
 }

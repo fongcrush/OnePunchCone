@@ -17,6 +17,7 @@ TagManager:
   - EnvironmentAttackCollider
   - Jangseung
   - PowderKeg
+  - EnemyHitColl
   layers:
   - Default
   - TransparentFX

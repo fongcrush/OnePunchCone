@@ -55,7 +55,7 @@ public class PlayerAttackAuto : PlayerAction
                 hitResults[i].collider.gameObject.transform.GetComponent<PowderKeg>().Hit(power);
                 break;
             }
-            if (hitResults[i].collider.gameObject.tag == "Enemy")
+            if (hitResults[i].collider.gameObject.tag == "EnemyHitColl")
             {
                 Debug.Log(hitResults[i].collider.gameObject.name);
                 int power = Random.Range(attackInfo.min, attackInfo.max);

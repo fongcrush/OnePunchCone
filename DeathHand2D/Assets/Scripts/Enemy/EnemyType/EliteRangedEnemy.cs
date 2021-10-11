@@ -32,6 +32,8 @@ public class EliteRangedEnemy : Enemy
 
         enemyAttackCollider.SetActive(true);
 
+        CheckCollider();
+
         for (int i = 0; i < 4; i++)
         {
             x = Random.Range(-2f, 2f);

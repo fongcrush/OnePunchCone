@@ -7,10 +7,12 @@ public class EnemyAttackCollScript : MonoBehaviour
 {
     private Enemy enemy;
     private EnemyController enemyController;
+    private BoxCollider2D boxColl;
 
     private void Awake()
     {
         enemyController = GetComponentInParent<EnemyController>();
+        boxColl = GetComponent<BoxCollider2D>();
 
         if (enemyController.attTypeValue == (int)AttackType.MELEE)
             enemy = GetComponentInParent<MeleeEnemy>();
@@ -20,13 +22,5 @@ public class EnemyAttackCollScript : MonoBehaviour
             enemy = GetComponentInParent<EliteMeleeEnemy>();
         else if (enemyController.attTypeValue == (int)AttackType.RANGED_ELITE)
             enemy = GetComponentInParent<EliteRangedEnemy>();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-            GM.pcStat.curHP -= enemy.GetEnemyDamage();
-        }
     }
 }

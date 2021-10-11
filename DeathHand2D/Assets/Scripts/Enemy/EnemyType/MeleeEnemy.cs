@@ -25,6 +25,9 @@ public class MeleeEnemy : Enemy
 
         enemyAttackCollider.SetActive(true);
 
+        //Attack
+        CheckCollider();
+
         yield return new WaitForSeconds(enemyInfo.monster_AttackSpeed);
 
         enemyAttackCollider.SetActive(false);
