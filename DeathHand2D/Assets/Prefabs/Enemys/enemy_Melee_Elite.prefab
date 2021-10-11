@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5680041004451712711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 10, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5680041005969016287}
   m_RootOrder: 2
@@ -136,8 +136,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5680041004603118644}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 10, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5680041005969016287}
   m_RootOrder: 1
@@ -246,8 +246,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5680041005827491406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 2, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 5680041005969016287}
   m_RootOrder: 0
@@ -341,8 +341,8 @@ GameObject:
   - component: {fileID: 5680041005969016287}
   - component: {fileID: 5680041005969016291}
   - component: {fileID: 5680041005969016290}
-  - component: {fileID: 5680041005969016285}
   - component: {fileID: -1464775679621006126}
+  - component: {fileID: 2333844851673760346}
   m_Layer: 0
   m_Name: enemy_Melee_Elite
   m_TagString: Enemy
@@ -432,25 +432,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970634cacf660d041ba749ddb4722b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAttackCollider: {fileID: 5680041005827491406}
-  enemyWarningBox: {fileID: 5680041004603118644}
-  enemyTimingBox: {fileID: 5680041004451712711}
-  summonCreature: {fileID: 0}
-  rangedEnemyAttackSkeletonAnime: {fileID: 0}
   attTypeValue: 2
   isInBush: 0
---- !u!114 &5680041005969016285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5680041005969016286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!210 &-1464775679621006126
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -462,6 +445,21 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
+--- !u!114 &2333844851673760346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680041005969016286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c3221481d36964e8e07ee61f4d8220, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAttackCollider: {fileID: 5680041005827491406}
+  enemyAttackWarningArea: {fileID: 5680041004603118644}
+  enemyAttackTimingBox: {fileID: 5680041004451712711}
 --- !u!1 &7747530926313939510
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +505,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.48423743, y: 0.37754098}
+  m_Offset: {x: 0, y: 0.37754098}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
