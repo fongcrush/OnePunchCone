@@ -45,7 +45,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.1901679, y: 0.21182477}
+  m_Offset: {x: -0.3, y: 0.21182477}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -82,9 +82,9 @@ GameObject:
   - component: {fileID: 5979934078788664665}
   - component: {fileID: 5979934078788664664}
   - component: {fileID: 5979934078788664667}
-  - component: {fileID: 5979934078788664663}
   - component: {fileID: 4084869977849221744}
   - component: {fileID: 5311808304573027272}
+  - component: {fileID: -2929083661749721670}
   m_Layer: 7
   m_Name: enemy_Melee 1
   m_TagString: Enemy
@@ -198,18 +198,6 @@ MonoBehaviour:
   _animationName: idle
   loop: 1
   timeScale: 1
---- !u!114 &5979934078788664663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5979934078788664666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4084869977849221744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,11 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970634cacf660d041ba749ddb4722b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAttackCollider: {fileID: 5979934080482034915}
-  enemyWarningBox: {fileID: 5979934079572186182}
-  enemyTimingBox: {fileID: 5979934079308559049}
-  summonCreature: {fileID: 0}
-  rangedEnemyAttackSkeletonAnime: {fileID: 0}
   attTypeValue: 0
   isInBush: 0
 --- !u!210 &5311808304573027272
@@ -240,6 +223,21 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
+--- !u!114 &-2929083661749721670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5979934078788664666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d97614c5f52435848bc4d86c64815548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAttackCollider: {fileID: 5979934080482034915}
+  enemyAttackWarningArea: {fileID: 5979934079572186182}
+  enemyAttackTimingBox: {fileID: 5979934079308559049}
 --- !u!1 &5979934079308559049
 GameObject:
   m_ObjectHideFlags: 0

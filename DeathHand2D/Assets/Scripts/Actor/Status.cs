@@ -1,18 +1,18 @@
 public class Status
 {
-    private int maxHP = 0;
+    private float maxHP = 0;
     private float HP = 0;
-    private int maxMP = 0;
-    private int MP = 0;
-    private int power = 0;
+    private float maxMP = 0;
+    private float MP = 0;
+    private float power = 0;
 
-    public Status(int MaxHP, int MaxMP, int Power) { HP = maxHP = MaxHP; MP = maxMP = MaxMP; power = Power; }
+    public Status(float MaxHP, float MaxMP, float Power) { HP = maxHP = MaxHP; MP = maxMP = MaxMP; power = Power; }
 
-    public int MaxHP { get { return maxHP; } set { maxHP = value; } }
+    public float MaxHP { get { return maxHP; } set { maxHP = value; } }
     public float curHP { get { return HP; } set { HP = value; } }
-    public int MaxMP { get { return maxMP; } set { maxMP = value; } }
-    public int curMP { get { return MP; } set { MP = value; } }
-    public int Power { get { return power; } set { power = value; } }
+    public float MaxMP { get { return maxMP; } set { maxMP = value; } }
+    public float curMP { get { return MP; } set { MP = value; } }
+    public float Power { get { return power; } set { power = value; } }
     public void ChangeHP(float value)
     {
         HP += value;
@@ -33,7 +33,7 @@ public class Status
     public bool IsZero() { return HP == 0; }
     public float GetHP_Ratio() { return (float)HP / maxHP; }
     public float GetST_Ratio() { return (float)MP / maxMP; }
-    public void ChangeMP(int value)
+    public void ChangeMP(float value)
     {
         MP += value;
 

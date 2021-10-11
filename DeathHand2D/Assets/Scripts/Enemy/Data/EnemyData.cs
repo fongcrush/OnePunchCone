@@ -22,14 +22,14 @@ public class EnemyData : MonoBehaviour
         {
             EnemyInfo enemy = new EnemyInfo();
             enemy.monster_Code = shortParse(value["Monster_Code"]);
-            enemy.monster_Damage = intParse(value["Monster_Damage"]);
+            enemy.monster_Damage = floatParse(value["Monster_Damage"]);
             enemy.monster_Speed = floatParse(value["Monster_Speed"]);
             enemy.monster_AttackDelay = floatParse(value["Monster_AttackDelay"]);
             enemy.monster_AttackSpeed = floatParse(value["Monster_AttackSpeed"]);
             enemy.monster_MinDistance = floatParse(value["Monster_MinDistance"]);
             enemy.chase_Range = floatParse(value["Chase_Range"]);
             enemy.attack_Range = floatParse(value["Attack_Range"]);
-            enemy.monster_Hp = intParse(value["Monster_Hp"]);
+            enemy.monster_Hp = floatParse(value["Monster_Hp"]);
 
             enemyTable.Add(enemy.monster_Code, enemy);
         }
@@ -37,14 +37,14 @@ public class EnemyData : MonoBehaviour
     public class EnemyInfo
     {
         public short monster_Code;
-        public int monster_Damage;
+        public float monster_Damage;
         public float monster_Speed;
         public float monster_AttackDelay;
         public float monster_AttackSpeed;
         public float monster_MinDistance;
         public float chase_Range;
         public float attack_Range;
-        public int monster_Hp;
+        public float monster_Hp;
     }
 
 }

@@ -15,7 +15,7 @@ public class EnemyAttackState : EnemyBaseState
             ctrl.ChangeState(ctrl.DeadState);
             return;
         }
-        if (ctrl.GetIsAttackColliderActivation())
+        if (ctrl.GetIsAttackActivation())
             return;
         if (!ctrl.IsAliveTarget())
         {

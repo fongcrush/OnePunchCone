@@ -45,7 +45,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.1531817, y: 0.37754098}
+  m_Offset: {x: 0, y: 0.37754098}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -96,8 +96,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6539474994255036285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 6539474994884317027}
   m_RootOrder: 0
@@ -206,8 +206,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6539474994381021421}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 6539474994884317027}
   m_RootOrder: 1
@@ -301,8 +301,8 @@ GameObject:
   - component: {fileID: 6539474994884317027}
   - component: {fileID: 6539474994884317031}
   - component: {fileID: 6539474994884317030}
-  - component: {fileID: 6539474994884317029}
   - component: {fileID: -132861973858945158}
+  - component: {fileID: -77605092110159618}
   m_Layer: 0
   m_Name: enemy_Ranged_Elite
   m_TagString: Enemy
@@ -392,25 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970634cacf660d041ba749ddb4722b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAttackCollider: {fileID: 6539474994255036285}
-  enemyWarningBox: {fileID: 6539474994381021421}
-  enemyTimingBox: {fileID: 6539474995337215028}
-  summonCreature: {fileID: 7289139182573487966, guid: 5a4d2c198339172448f5793a260e754d, type: 3}
-  rangedEnemyAttackSkeletonAnime: {fileID: 0}
   attTypeValue: 3
   isInBush: 0
---- !u!114 &6539474994884317029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6539474994884317026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!210 &-132861973858945158
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -422,6 +405,22 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
+--- !u!114 &-77605092110159618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6539474994884317026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b1d837ba3f72a488af0a5f6d3b14dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAttackCollider: {fileID: 6539474994255036285}
+  enemyAttackWarningArea: {fileID: 6539474994381021421}
+  enemyAttackTimingBox: {fileID: 6539474995337215028}
+  summonCreature: {fileID: 7289139182573487966, guid: 5a4d2c198339172448f5793a260e754d, type: 3}
 --- !u!1 &6539474995337215028
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,8 +447,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6539474995337215028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 6539474994884317027}
   m_RootOrder: 2

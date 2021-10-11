@@ -68,7 +68,6 @@ GameObject:
   - component: {fileID: 1693362843579163824}
   - component: {fileID: 1693362843579164492}
   - component: {fileID: 1693362843579163827}
-  - component: {fileID: 1693362843579163826}
   m_Layer: 0
   m_Name: enemy_Ranged_prev
   m_TagString: Enemy
@@ -143,7 +142,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!114 &1693362843579163827
@@ -165,18 +164,6 @@ MonoBehaviour:
   rangedEnemyAttackSkeletonAnime: {fileID: 0}
   attTypeValue: 1
   isInBush: 0
---- !u!114 &1693362843579163826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1693362843579163831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c97ed00016eca44a865005873245233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1693362843773366479
 GameObject:
   m_ObjectHideFlags: 0
