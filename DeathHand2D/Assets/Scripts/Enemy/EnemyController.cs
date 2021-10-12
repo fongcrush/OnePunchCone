@@ -25,9 +25,7 @@ public class EnemyController : MonoBehaviour
     private EnemyBaseState currentState;
     private EnemyBaseState prevState;
 
-    private SpriteRenderer enemyWarningBoxMesh;
     private SkeletonAnimation skeletonAnime;
-    private SpriteRenderer spriteRenderer;
 
     public int attTypeValue;
     private AttackType attType;
@@ -60,7 +58,6 @@ public class EnemyController : MonoBehaviour
         currentState = IdleState;
         playerDirectionX = PlayerDirectionX.LEFT;
 
-        spriteRenderer = GetComponent<SpriteRenderer>();
         skeletonAnime = GetComponent<SkeletonAnimation>();
 
         attType = (AttackType)attTypeValue;
@@ -130,12 +127,12 @@ public class EnemyController : MonoBehaviour
 
         if (currentState == IdleState)
         {
-            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+            if (attType != AttackType.RANGED_ELITE)
                 skeletonAnime.AnimationName = "idle";
         }
         else if (currentState == TraceState)
         {
-            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+            if (attType != AttackType.RANGED_ELITE)
                 skeletonAnime.AnimationName = "walking";
         }
         else if (currentState == AttackState)
@@ -145,12 +142,12 @@ public class EnemyController : MonoBehaviour
         }
         else if (currentState == HitState)
         {
-            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+            if (attType != AttackType.RANGED_ELITE)
                 skeletonAnime.AnimationName = "shot";
         }
         else if (currentState == DeadState)
         {
-            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+            if (attType != AttackType.RANGED_ELITE)
                 skeletonAnime.AnimationName = "dead";
         }
     }
