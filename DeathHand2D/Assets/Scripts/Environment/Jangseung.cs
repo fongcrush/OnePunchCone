@@ -47,6 +47,7 @@ public class Jangseung : IEnvironment
         {
             GetComponent<SpriteRenderer>().color = Color.black;
             GetComponent<BoxCollider2D>().enabled = false;
+            StartCoroutine(FadeOut(1));
             StartCoroutine(Respawn(EnvironmentData.EnvironmentTable["Jangseung"].respawn));
         }
     }
@@ -57,6 +58,19 @@ public class Jangseung : IEnvironment
         isAlive = true;
         GetComponent<BoxCollider2D>().enabled = true;
         Hp = EnvironmentData.EnvironmentTable["Jangseung"].durability;
-        GetComponent<SpriteRenderer>().color = new Color(0.3018868f, 0.1766642f, 0, 1.0f);
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, 1.0f);
+    }
+
+    IEnumerator FadeOut(float time)
+    {
+        float intensity = 1;
+
+        while (intensity > 0f)
+        {
+            intensity -= Time.deltaTime / time;
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, intensity);
+            if (GetComponent<SpriteRenderer>().color.a <= 0f) new Color(1, 1, 0, 0);
+            yield return null;
+        }
     }
 }

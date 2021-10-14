@@ -25,30 +25,31 @@ public class Bush : IEnvironment
     {
         if (collision.gameObject.layer == 6)
         {
-            //collision.GetComponent<SkeletonAnimation>().skeleton.SetColor(new Color(1, 1, 1, 0.5f));
-            //collision.GetComponent<MeshRenderer>().sortingOrder = transform.GetComponent<SpriteRenderer>().sortingOrder + 1;
+            if(collision.name=="Player")
+                collision.transform.Find("Spine Animation").GetComponent<MeshRenderer>().material.color = (new Color(1, 1, 1, 0.5f));
+
             player.Bush(true);
-            if (StartRecoveryCoroutine == null && berryCount > 0 && GM.pcStat.curHP >= GM.pcStat.MaxHP)
+            if (isBerryBush && StartRecoveryCoroutine == null && berryCount > 0 && GM.pcStat.curHP >= GM.pcStat.MaxHP)
                 StartRecoveryCoroutine = StartCoroutine(Recovery());
             if(canTrigger)
                 StartCoroutine(SlowDebuff());
         }
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.transform.parent.GetComponent<EnemyController>().isInBush = true;
+            collision.transform.GetComponent<EnemyController>().isInBush = true;
         }
     }
     override public void Exit(Collider2D collision)
     {
         if (collision.gameObject.layer == 6)
         {
-            //collision.GetComponent<SkeletonAnimation>().skeleton.SetColor(new Color(1, 1, 1, 1));
-            //collision.GetComponent<MeshRenderer>().sortingOrder = PlayerLayer;
+            if (collision.name == "Player")
+                collision.transform.Find("Spine Animation").GetComponent<MeshRenderer>().material.color = (new Color(1, 1, 1, 1f));
             player.Bush(false);
         }
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.transform.parent.GetComponent<EnemyController>().isInBush = false;
+            collision.transform.GetComponent<EnemyController>().isInBush = false;
         }
     }
     IEnumerator Recovery()

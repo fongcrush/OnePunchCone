@@ -22,7 +22,7 @@ public class DeadManHand : IEnvironment
         if (collision.gameObject.layer == 6)
         {
             // 플레이어가 망자의 손 뒤로 보이도록 레이어 설정해주세요
-            if (canTrigger)
+            if (canTrigger && collision.name == "Player")
             {
                 Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
                 StartCoroutine(DarkDebuff());

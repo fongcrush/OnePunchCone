@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a237f26213589e14d902cd019c9d4f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBerryBush: 0
 --- !u!61 &-7435679362820085982
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -110,16 +111,16 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.2802495}
+  m_Offset: {x: -0.10721302, y: 0.5410359}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 13.91, y: 6.38}
+    oldSize: {x: 5.564, y: 2.552}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 13.91, y: 2.560499}
+  m_Size: {x: 4.218959, y: 1.0820718}
   m_EdgeRadius: 0

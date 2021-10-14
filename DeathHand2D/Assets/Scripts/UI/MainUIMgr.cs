@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static PlayerAttackData;
+using static GameMgr;
 
 public class MainUIMgr : MonoBehaviour
 {
@@ -45,10 +46,16 @@ public class MainUIMgr : MonoBehaviour
 
 	void Update()
     {
+        CheckPlayerState();
         CheckPlayerDashCount();
         CheckPlayerUseSkill();
         CheckPlayerDebuff();
         DrawPlayerDebuff();
+    }
+
+    void CheckPlayerState()
+    {
+        HPBar.GetComponent<Slider>().value = GM.pcStat.GetHP_Ratio();
     }
 
     void CheckPlayerDashCount()
