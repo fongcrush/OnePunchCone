@@ -5,6 +5,9 @@ using static GameMgr;
 
 public class Jangseung : IEnvironment
 {
+    public Sprite Origin;
+    public Sprite BrokenBody;
+    public GameObject BrokenHead;
     float Hp;
     float RespownTime;
     bool isAlive;
@@ -45,9 +48,10 @@ public class Jangseung : IEnvironment
         Hp -= damage;
         if (Hp <= 0)
         {
-            GetComponent<SpriteRenderer>().color = Color.black;
+            GetComponent<SpriteRenderer>().sprite = BrokenBody;
+            BrokenHead.SetActive(true);
             GetComponent<BoxCollider2D>().enabled = false;
-            StartCoroutine(FadeOut(1));
+            StartCoroutine(FadeOut(2));
             StartCoroutine(Respawn(EnvironmentData.EnvironmentTable["Jangseung"].respawn));
         }
     }
@@ -58,7 +62,8 @@ public class Jangseung : IEnvironment
         isAlive = true;
         GetComponent<BoxCollider2D>().enabled = true;
         Hp = EnvironmentData.EnvironmentTable["Jangseung"].durability;
-        GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, 1.0f);
+        GetComponent<SpriteRenderer>().sprite = Origin;
+        BrokenHead.SetActive(false);
     }
 
     IEnumerator FadeOut(float time)
@@ -69,6 +74,7 @@ public class Jangseung : IEnvironment
         {
             intensity -= Time.deltaTime / time;
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, intensity);
+            BrokenHead.GetComponent<SpriteRenderer>().color = new Color(1, 1, 0, intensity);
             if (GetComponent<SpriteRenderer>().color.a <= 0f) new Color(1, 1, 0, 0);
             yield return null;
         }
