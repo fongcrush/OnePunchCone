@@ -419,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970634cacf660d041ba749ddb4722b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attTypeValue: 0
+  attTypeValue: 2
   isInBush: 0
 --- !u!210 &3455115976862949751
 SortingGroup:
