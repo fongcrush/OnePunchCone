@@ -9,7 +9,7 @@ using static GameMgr;
 public class PlayerDash : PlayerAction
 {
     private const float MaxDashGodModeTimer = 0.3f;
-    private const float MaxDashTimer = 10.0f;
+    public float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
 
     Coroutine UpdateDashCountCoroutine = null;

@@ -52,7 +52,7 @@ public class Jangseung : IEnvironment
             BrokenHead.SetActive(true);
             GetComponent<BoxCollider2D>().enabled = false;
             StartCoroutine(FadeOut(2));
-            StartCoroutine(Respawn(EnvironmentData.EnvironmentTable["Jangseung"].respawn));
+            //StartCoroutine(Respawn(EnvironmentData.EnvironmentTable["Jangseung"].respawn));
         }
     }
 

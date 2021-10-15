@@ -29,7 +29,7 @@ public class Bush : IEnvironment
                 collision.transform.Find("Spine Animation").GetComponent<MeshRenderer>().material.color = (new Color(1, 1, 1, 0.5f));
 
             player.Bush(true);
-            if (isBerryBush && StartRecoveryCoroutine == null && berryCount > 0 && GM.pcStat.curHP >= GM.pcStat.MaxHP)
+            if (isBerryBush && StartRecoveryCoroutine == null && berryCount > 0 && GM.pcStat.curHP < GM.pcStat.MaxHP)
                 StartRecoveryCoroutine = StartCoroutine(Recovery());
             if(canTrigger)
                 StartCoroutine(SlowDebuff());

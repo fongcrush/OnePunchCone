@@ -101,10 +101,10 @@ public class PlayerMove : MonoBehaviour
     {
         Vector3 movePos = Vector3.zero;
 
-        if (buffMgr.SlowDebuffCount > 0) 
-        {
-            moveDirection *= (buffMgr.SlowDebuffCount * 0.1f) + 0.3f;
-        }
+        //if (buffMgr.SlowDebuffCount > 0) 
+        //{
+        //    moveDirection *= (buffMgr.SlowDebuffCount * 0.1f) + 0.3f;
+        //}
 
         if (moveMode == MoveMode.Run)
             movePos = player.transform.position + moveDirection * runSpeed * Time.deltaTime;
