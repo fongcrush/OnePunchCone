@@ -7,6 +7,7 @@ using static GameMgr;
 public class Bush : IEnvironment
 {
     public bool isBerryBush = false;
+    public GameObject[] BerryObject;
     private PlayerController player;
 
     Coroutine StartRecoveryCoroutine = null;
@@ -56,6 +57,7 @@ public class Bush : IEnvironment
     {
         berryCount--;
         GM.pcStat.ChangeHP(GM.pcStat.MaxHP * 0.05f);
+        BerryObject[berryCount].SetActive(false);
         yield return new WaitForSeconds(5.0f);
         StartRecoveryCoroutine = null;
     }

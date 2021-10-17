@@ -7,6 +7,8 @@ using static InputManager;
 
 public class PlayerController : MonoBehaviour
 {
+    public float PlayerMaxHP;
+
     private InputManager inputController;
 
     private BoxCollider2D boxColl;

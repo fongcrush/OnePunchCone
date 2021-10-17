@@ -59,7 +59,7 @@ public class GameMgr : MonoBehaviour
 
 	void Start()
     {
-        pcStat = new Status(1000, 100, AttackTable[100].max);
+        pcStat = new Status(player.GetComponent<PlayerController>().PlayerMaxHP, 100, AttackTable[100].max);
         curRoomMgr.BeginWave();
     }
 
