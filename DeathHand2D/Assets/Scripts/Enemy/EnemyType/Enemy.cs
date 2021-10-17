@@ -7,6 +7,7 @@ using static GameMgr;
 public class Enemy : MonoBehaviour
 {
     public Status stat;
+    public GameObject hitEffect;
 
     protected GameMgr gm;
 
@@ -73,6 +74,16 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Enemy Attack");
         yield return 0;
+    }
+    public IEnumerator PrintHitEffect()
+    {
+        var hitEffectObject = Instantiate(hitEffect, transform.position, Quaternion.identity);
+
+        if (enemyController.GetPlayerDirectionX() == (int)PlayerDirectionX.LEFT)
+            hitEffectObject.transform.rotation = Quaternion.Euler(0, -90, 0);
+        yield return new WaitForSeconds(0.3f);
+
+        Destroy(hitEffectObject);
     }
 
     protected void CheckCollider()

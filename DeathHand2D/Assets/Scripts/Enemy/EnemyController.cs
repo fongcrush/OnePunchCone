@@ -137,11 +137,14 @@ public class EnemyController : MonoBehaviour
         }
         else if (currentState == AttackState)
         {
-            if (attType == AttackType.MELEE || attType == AttackType.RANGED)
+            if (attType == AttackType.MELEE)
                 skeletonAnime.AnimationName = "attack";
+            if (attType == AttackType.RANGED)
+                skeletonAnime.AnimationName = "attack2";
         }
         else if (currentState == HitState)
         {
+            StartCoroutine(enemy.PrintHitEffect());
             if (attType != AttackType.RANGED_ELITE)
                 skeletonAnime.AnimationName = "shot";
         }
@@ -263,5 +266,9 @@ public class EnemyController : MonoBehaviour
     public bool GetIsAttackActivation()
     {
         return enemy.GetIsAttackActivation();
+    }
+    public void SetAnimation(string animeName)
+    {
+        skeletonAnime.AnimationName = animeName;
     }
 }

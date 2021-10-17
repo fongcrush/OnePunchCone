@@ -19,17 +19,21 @@ public class EliteMeleeEnemy : Enemy
     {
         isAttackActivation = true;
 
+        enemyController.SetAnimation("Elite_rush_1");
+
         playerDirectionX = (PlayerDirectionX)enemyController.GetPlayerDirectionX();
 
         enemyAttackWarningArea.SetActive(true);
         enemyAttackTimingBox.SetActive(true);
 
-        yield return new WaitForSeconds(enemyInfo.monster_AttackDelay);
+        yield return new WaitForSeconds(enemyInfo.monster_AttackDelay * 1.8f);
 
         enemyAttackWarningArea.SetActive(false);
         enemyAttackTimingBox.SetActive(false);
 
         enemyAttackCollider.SetActive(true);
+
+        enemyController.SetAnimation("Elite_rush_2");
 
         if (playerDirectionX == PlayerDirectionX.LEFT)
         {
