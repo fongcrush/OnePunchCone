@@ -347,7 +347,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fc569dbb80f738a4c889970c15f9af1d, type: 2}
+  - {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -491,6 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c3221481d36964e8e07ee61f4d8220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffect: {fileID: 1962516439210982, guid: 3c657dedc43d33a4987fbf09e6363067, type: 3}
   enemyAttackCollider: {fileID: 3798964899298195036}
   enemyAttackWarningArea: {fileID: 3798964898589697785}
   enemyAttackTimingBox: {fileID: 3798964900471668854}

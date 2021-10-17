@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00b1d837ba3f72a488af0a5f6d3b14dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffect: {fileID: 1962516439210982, guid: 3c657dedc43d33a4987fbf09e6363067, type: 3}
   enemyAttackCollider: {fileID: 6539474994255036285}
   enemyAttackWarningArea: {fileID: 6539474994381021421}
   enemyAttackTimingBox: {fileID: 6539474995337215028}

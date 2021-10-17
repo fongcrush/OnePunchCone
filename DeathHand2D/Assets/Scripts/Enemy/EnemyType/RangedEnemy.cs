@@ -15,21 +15,18 @@ public class RangedEnemy : Enemy
     }
     public override IEnumerator Attack()
     {
-        enemyAttackCollider.transform.position = enemyController.GetTargetTransformPosition();
         enemyAttackWarningArea.transform.position = enemyController.GetTargetTransformPosition();
-        enemyAttackTimingBox.transform.position = enemyController.GetTargetTransformPosition();
 
         isAttackActivation = true;
 
         enemyAttackWarningArea.SetActive(true);
-        enemyAttackTimingBox.SetActive(true);
 
         yield return new WaitForSeconds(enemyInfo.monster_AttackDelay);
 
         enemyAttackWarningArea.SetActive(false);
-        enemyAttackTimingBox.SetActive(false);
 
-        Instantiate(summonCreature, enemyAttackWarningArea.transform.position, Quaternion.identity);
+        var summonObject = Instantiate(summonCreature, transform.position + new Vector3(0, 2.5f, 0), Quaternion.identity);
+        summonObject.GetComponent<SummonScript>().targetPosition = enemyAttackWarningArea.transform.position;
 
         // rangedEnemyAttackSkeletonAnime.AnimationState.SetAnimation(0, "animation", true).MixDuration = 0f;
 
