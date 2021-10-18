@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class EnemyAttackState : EnemyBaseState
 {
+    float timer;
+    float randomValue;
     public override void Begin(EnemyController ctrl)
     {
-        
+        randomValue = Random.Range(1f, 100f);
     }
     public override void Update(EnemyController ctrl)
     {
@@ -17,6 +19,10 @@ public class EnemyAttackState : EnemyBaseState
         }
         if (ctrl.GetIsAttackActivation())
             return;
+        if(ctrl.GetIsChangeState())
+        {
+            return;
+        }    
         if (!ctrl.IsAliveTarget())
         {
             ctrl.ChangeState(ctrl.IdleState);
@@ -32,8 +38,12 @@ public class EnemyAttackState : EnemyBaseState
             ctrl.ChangeState(ctrl.TraceState);
             return;
         }
-
+        if (randomValue <= ctrl.GetEnemyStateProbability().attackToEscapeProbability)
+        {
+            ctrl.ChangeState(ctrl.EscapeState);
+        }
         ctrl.Attack();
+        randomValue = Random.Range(1f, 100f);
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {

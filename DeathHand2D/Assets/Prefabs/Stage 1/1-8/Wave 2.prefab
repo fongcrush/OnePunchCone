@@ -294,6 +294,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -414,6 +418,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -480,6 +488,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -662,6 +674,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -708,6 +724,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -750,6 +770,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -792,6 +816,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -838,6 +866,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5979934078788664664, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ebf31aed8d406264480925124498e58b, type: 2}
     - target: {fileID: 5979934078788664665, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Mesh
       value: 

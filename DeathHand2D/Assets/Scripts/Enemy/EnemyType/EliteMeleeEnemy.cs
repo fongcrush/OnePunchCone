@@ -6,6 +6,7 @@ public class EliteMeleeEnemy : Enemy
 {
     Vector2 dir;
     PlayerDirectionX playerDirectionX;
+    Rigidbody2D playerRigid;
     
     // Start is called before the first frame update
     void Start()
@@ -13,6 +14,8 @@ public class EliteMeleeEnemy : Enemy
         enemyInfo = EnemyData.EnemyTable[3];
 
         stat = new Status(enemyInfo.monster_Hp, 0, enemyInfo.monster_Damage);
+
+        playerRigid = GameObject.Find("Player").GetComponent<Rigidbody2D>();
     }
 
     public override IEnumerator Attack()
@@ -51,14 +54,47 @@ public class EliteMeleeEnemy : Enemy
         for (var f = 0f; f <= 1f; f += Time.deltaTime)
         {
             transform.position = Vector2.MoveTowards(transform.position, dir, 10 * Time.deltaTime);
-            yield return new WaitForSeconds(Time.deltaTime);
+            if (!isPlayerHit)
+            {
+                CheckCollider();
+                if (isPlayerHit)
+                {
+                    StartCoroutine(KnockBackPlayer());
+                }
+            }
+                yield return new WaitForFixedUpdate();
         }
 
-        //Attack
-        CheckCollider();
+        if (isPlayerHit)
+        {
+            isPlayerHit = false;
+        }
 
         enemyAttackCollider.SetActive(false);
 
         isAttackActivation = false;
+    }
+    IEnumerator KnockBackPlayer()
+    {
+        Vector3 dir;
+
+        if(enemyController.GetTargetTransformPosition().y > transform.position.y)
+        {
+            dir = enemyController.GetTargetTransformPosition() + new Vector3(0, 3, 0);
+        }
+        else
+        {
+            dir = enemyController.GetTargetTransformPosition() + new Vector3(0, -3, 0);
+        }
+        dir.y = Mathf.Clamp(dir.y, gm.CurRoomMgr.MapSizeMin.y, gm.CurRoomMgr.MapSizeMax.y);
+
+        float curTime = 0;
+
+        while (curTime < 0.5f)
+        {
+            playerRigid.MovePosition(Vector3.Lerp(playerRigid.position, dir, Time.deltaTime * 20));
+            curTime += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
     }
 }

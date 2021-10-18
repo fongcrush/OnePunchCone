@@ -1,8 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class EnemyIdleState : EnemyBaseState
 {
 	public override void Begin(EnemyController ctrl)
 	{
-
+		
 	}
 	public override void Update(EnemyController ctrl)
 	{
@@ -15,7 +19,7 @@ public class EnemyIdleState : EnemyBaseState
         {
 			return;
         }
-		if(ctrl.CheckInTraceRange())
+		if (!ctrl.GetIsChangeState() && ctrl.CheckInTraceRange())
 		{
 			ctrl.ChangeState(ctrl.TraceState);
 			return;

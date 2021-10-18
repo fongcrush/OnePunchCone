@@ -2,49 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTraceState : EnemyBaseState
+public class EnemyEscapeState : EnemyBaseState
 {
-    float timer = 0f;
-    float traceTime = 1f;
     public override void Begin(EnemyController ctrl)
     {
 
     }
     public override void Update(EnemyController ctrl)
     {
-        timer += Time.deltaTime;
-
-        if(!ctrl.IsAlive())
+        if (!ctrl.IsAlive())
         {
             ctrl.ChangeState(ctrl.DeadState);
-            return;
-        }
-        if(!ctrl.IsAliveTarget())
-        {
-            ctrl.ChangeState(ctrl.IdleState);
-            return;
-        }
-        if (ctrl.CheckTargetInBush() && timer > traceTime && !ctrl.CheckEnemyInBush())
-        {
-            timer = 0;
-            ctrl.ChangeState(ctrl.IdleState);
             return;
         }
         if (ctrl.GetIsChangeState())
         {
             return;
         }
-        if (!ctrl.CheckInTraceRange())
+        if (!ctrl.IsAliveTarget())
         {
             ctrl.ChangeState(ctrl.IdleState);
             return;
         }
-        if(ctrl.CheckInAttackRange())
+        if (ctrl.EscapeCompleted())
         {
-            ctrl.ChangeState(ctrl.AttackState);
+            ctrl.ChangeState(ctrl.IdleState);
             return;
         }
-        ctrl.TraceTarget();
+        ctrl.Escape();
     }
     public override void OnCollisionEnter(EnemyController ctrl)
     {
@@ -52,6 +37,6 @@ public class EnemyTraceState : EnemyBaseState
     }
     public override void End(EnemyController ctrl)
     {
-        
+
     }
 }
