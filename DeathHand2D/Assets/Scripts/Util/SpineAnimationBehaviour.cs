@@ -50,7 +50,7 @@ public class SpineAnimationBehaviour : StateMachineBehaviour
 
         if(!loop && normalizedTime >= exitTime)
         {
-            animator.SetTrigger("transition");
+            //animator.SetTrigger("transition");
         }
     }
 }
