@@ -23,6 +23,8 @@ public class Enemy : MonoBehaviour
 
     protected bool isAttackActivation = false;
 
+    protected bool isPlayerHit = false;
+
     [SerializeField]
     protected BoxCollider2D enemyAttackBoxColl;
 
@@ -70,7 +72,7 @@ public class Enemy : MonoBehaviour
     {
         enemyAttackWarningArea.transform.rotation = rotation;
     }
-    virtual public IEnumerator Attack()
+    public virtual IEnumerator Attack()
     {
         Debug.Log("Enemy Attack");
         yield return 0;
@@ -85,6 +87,19 @@ public class Enemy : MonoBehaviour
 
         Destroy(hitEffectObject);
     }
+    public virtual IEnumerator PrintAttackEffect()
+    {
+        Debug.Log("AttackEffect");
+        yield return null;
+    }
+    public virtual void StartAttackCoroutine()
+    {
+        StartCoroutine(Attack());
+    }
+    public virtual void StopAttackCoroutine()
+    {
+        StopCoroutine(Attack());
+    }
 
     protected void CheckCollider()
     {
@@ -95,6 +110,7 @@ public class Enemy : MonoBehaviour
             {
                 Debug.Log(hitResults[i].collider.gameObject.name);
                 gm.pcStat.curHP -= enemyInfo.monster_Damage;
+                isPlayerHit = true;
             }
         }
     }

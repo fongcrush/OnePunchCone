@@ -5,7 +5,8 @@ using UnityEngine;
 public class MeleeEnemy : Enemy
 {
     public GameObject attackEffect;
-    private GameObject attackEffectObject;
+    public GameObject attackEffectObject;
+    private Coroutine effectCoroutine;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +30,7 @@ public class MeleeEnemy : Enemy
         //Attack
         CheckCollider();
 
-        StartCoroutine(PrintAttackEffect());
-        
+        effectCoroutine = StartCoroutine(PrintAttackEffect());
 
         yield return new WaitForSeconds(enemyInfo.monster_AttackSpeed);
 
@@ -38,9 +38,8 @@ public class MeleeEnemy : Enemy
 
         isAttackActivation = false;
     }
-    IEnumerator PrintAttackEffect()
+    public override IEnumerator PrintAttackEffect()
     {
-        yield return new WaitForSeconds(0.3f);
         if(attackEffectObject == null)
            attackEffectObject = Instantiate(attackEffect, transform.position + new Vector3(-1, 1, 0), Quaternion.identity);
         if (enemyController.GetPlayerDirectionX() == (int)PlayerDirectionX.LEFT)
@@ -51,8 +50,20 @@ public class MeleeEnemy : Enemy
         {
             attackEffectObject.transform.position = transform.position + new Vector3(1, 1, 0);
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.3f);
         Destroy(attackEffectObject);
         attackEffectObject = null;
+    }
+    public override void StartAttackCoroutine()
+    {
+        StartCoroutine(Attack());
+    }
+    public override void StopAttackCoroutine()
+    {
+        StopCoroutine(Attack());
+        if (attackEffectObject != null)
+            Destroy(attackEffectObject);
+        if (effectCoroutine != null)
+            StopCoroutine(effectCoroutine);
     }
 }
