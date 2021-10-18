@@ -10,11 +10,13 @@ public class DeadManHand : IEnvironment
 
     bool isDone;
     bool canTrigger;
+    int curCount;
 
     private void Awake()
     {
         isDone = false;
         canTrigger = true;
+        curCount = 0;
     }
 
     public override void Stay(Collider2D collision)
@@ -24,8 +26,11 @@ public class DeadManHand : IEnvironment
             // 플레이어가 망자의 손 뒤로 보이도록 레이어 설정해주세요
             if (canTrigger && collision.name == "Player")
             {
-                Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
-                StartCoroutine(DarkDebuff());
+                if (buffManager.DarkDebuffCount < 3)
+                {
+                    Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
+                    StartCoroutine(DarkDebuff());
+                }
             }
         }
         if (collision.gameObject.tag == "Enemy")
@@ -74,8 +79,8 @@ public class DeadManHand : IEnvironment
         StartCoroutine(Timer(10));
         isDone = false;
         canTrigger = false;
-        if (buffManager.DarkDebuffCount < 3)
-            buffManager.DarkDebuffCount++;
+        buffManager.DarkDebuffCount++;
+        curCount = buffManager.DarkDebuffCount;
         GameObject playerObject = GameObject.Find("Player");
         StartCoroutine(CenterToPlayer(playerObject));
         PlayerEffectController effectController = playerObject.GetComponent<PlayerEffectController>();
@@ -93,7 +98,7 @@ public class DeadManHand : IEnvironment
                 break;
         }
         yield return new WaitForSeconds(15 * buffManager.DarkDebuffCount - 1);
-        if (canTrigger)
+        if (canTrigger && curCount == buffManager.DarkDebuffCount)
         {
             StartCoroutine(FadeOut(1));
             yield return new WaitForSeconds(1);

@@ -14,6 +14,7 @@ public class Bush : IEnvironment
     int berryCount;
     bool isDone;
     bool canTrigger;
+    int curCount;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class Bush : IEnvironment
         berryCount = 5;
         isDone = false;
         canTrigger = true;
+        curCount = 0;
     }
     override public void Stay(Collider2D collision)
     {
@@ -32,7 +34,7 @@ public class Bush : IEnvironment
             player.Bush(true);
             if (isBerryBush && StartRecoveryCoroutine == null && berryCount > 0 && GM.pcStat.curHP < GM.pcStat.MaxHP)
                 StartRecoveryCoroutine = StartCoroutine(Recovery());
-            if(canTrigger)
+            if(canTrigger && buffManager.SlowDebuffCount < 3)
                 StartCoroutine(SlowDebuff());
         }
         if (collision.gameObject.tag == "Enemy")
@@ -67,13 +69,13 @@ public class Bush : IEnvironment
         StartCoroutine(Timer(10));
         isDone = false;
         canTrigger = false;
-        if (buffManager.SlowDebuffCount < 3)
-            buffManager.SlowDebuffCount++;
+        buffManager.SlowDebuffCount++;
+        curCount = buffManager.SlowDebuffCount;
         GameObject playerObject = GameObject.Find("Player");
         PlayerEffectController effectController = playerObject.GetComponent<PlayerEffectController>();
         effectController.SlowDebuff = true;
         yield return new WaitForSeconds(10 * buffManager.SlowDebuffCount - 1);
-        if (canTrigger)
+        if (canTrigger && curCount == buffManager.SlowDebuffCount)
         {
             yield return new WaitForSeconds(1);
             isDone = true;
