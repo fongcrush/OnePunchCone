@@ -4,6 +4,7 @@ using UnityEngine;
 using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
+using static PlayerEffectMgr;
 
 public class PlayerAttackSkill01 : PlayerAction
 {
@@ -37,6 +38,7 @@ public class PlayerAttackSkill01 : PlayerAction
         isDone = false;
 
         yield return new WaitForSeconds(attackInfo.fDelay);
+        PlayerEffect.PlayEffect(PlayerEffect.Skill01_Effect[0]);
 
         RaycastHit2D[] hitResults = new RaycastHit2D[100];
         for(int i = 0; i < boxColl.Cast(Vector2.left, hitResults, 0); i++)

@@ -3328,6 +3328,7 @@ Transform:
   - {fileID: 1485945575}
   - {fileID: 2056928415}
   - {fileID: 530700328}
+  - {fileID: 1840324707}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3432,7 +3433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b34ff66161ab84f8a079dfca887d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DustEffect: {fileID: 4585383210467943283, guid: ea7c18198b2674649a22d20524e286d1, type: 3}
 --- !u!114 &1125520157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5715,6 +5715,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5642333472182361662, guid: 487046c7f474eed42a98b9699bc6a975, type: 3}
   m_PrefabInstance: {fileID: 1796338108}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1840324706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1840324707}
+  - component: {fileID: 1840324708}
+  m_Layer: 6
+  m_Name: Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1840324707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840324706}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1125520150}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1840324708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840324706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acea7bc682960a74f814bcc0c47babe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack_Effect:
+  - {fileID: 1120700576932125711, guid: 25d0edfd3a701054fa424e7dd09d3b70, type: 3}
+  - {fileID: 670971819085699694, guid: e1ae255b7e783be4dada033504424c66, type: 3}
+  skill01_Effect:
+  - {fileID: 4531042142806066997, guid: 92258051aa742334f815df98807ec229, type: 3}
+  skill02_Effect:
+  - {fileID: 1115641076847360, guid: 73ccedaa8ed8dc14594ca7cc04041f4c, type: 3}
+  - {fileID: 4946058000841914318, guid: d51a215174dc8124c8768fd42f15b7c7, type: 3}
+  - {fileID: 2585218417467618672, guid: 4b14d61ea5d830446ba6b6112e342133, type: 3}
+  skill03_Effect:
+  - {fileID: 6634618683189886791, guid: 7e98f228ca0ecc847b19e419af8c698b, type: 3}
+  run_Effect:
+  - {fileID: 4585383210467943283, guid: ea7c18198b2674649a22d20524e286d1, type: 3}
 --- !u!1001 &1848736917
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
+using static PlayerEffectMgr;
 
 public class PlayerAttackSkill03 : PlayerAction
 {
@@ -43,6 +44,7 @@ public class PlayerAttackSkill03 : PlayerAction
 
 
         yield return new WaitForSeconds(attackInfo.fDelay);
+        PlayerEffect.PlayEffect(PlayerEffect.Skill03_Effect[0]);
         while(count < 4)
         {
             anim.SetTrigger("Skill3");

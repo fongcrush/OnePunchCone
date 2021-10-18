@@ -4,6 +4,7 @@ using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
 using static GameMgr;
+using static PlayerEffectMgr;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -78,18 +79,26 @@ public class PlayerMove : MonoBehaviour
         else
         {
             curRunCheckTime += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-                if (curDoubleCheckKey == ArrowKey.Left) { moveMode = MoveMode.Run; } else { canRun = false; }
+            if(moveMode != MoveMode.Run)
+            {
+                if(Input.GetKeyDown(KeyCode.LeftArrow))
+                    if(curDoubleCheckKey == ArrowKey.Left) { moveMode = MoveMode.Run; } else { canRun = false; }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-                if (curDoubleCheckKey == ArrowKey.Right) { moveMode = MoveMode.Run; } else { canRun = false; }
+                if(Input.GetKeyDown(KeyCode.RightArrow))
+                    if(curDoubleCheckKey == ArrowKey.Right) { moveMode = MoveMode.Run; } else { canRun = false; }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-                if (curDoubleCheckKey == ArrowKey.Up) { moveMode = MoveMode.Run; } else { canRun = false; }
+                if(Input.GetKeyDown(KeyCode.UpArrow))
+                    if(curDoubleCheckKey == ArrowKey.Up) { moveMode = MoveMode.Run; } else { canRun = false; }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-                if (curDoubleCheckKey == ArrowKey.Down) { moveMode = MoveMode.Run; } else { canRun = false; }
+                if(Input.GetKeyDown(KeyCode.DownArrow))
+                    if(curDoubleCheckKey == ArrowKey.Down) { moveMode = MoveMode.Run; } else { canRun = false; }
 
+                if(moveMode == MoveMode.Run)
+                {
+                    Destroy(Instantiate(PlayerEffect.Run_Effect[0], player.transform.position, Quaternion.identity),
+                        PlayerEffect.Run_Effect[0].GetComponent<ParticleSystem>().main.duration);
+                }
+            }
             if (curRunCheckTime > 0.5f)
                 canRun = false;
             if (!canRun)
@@ -110,6 +119,7 @@ public class PlayerMove : MonoBehaviour
             movePos = player.transform.position + moveDirection * runSpeed * Time.deltaTime;
         else
             movePos = player.transform.position + moveDirection * walkSpeed * Time.deltaTime;
+
 
         // 맵을 넘어가지 않도록 제한
         movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);

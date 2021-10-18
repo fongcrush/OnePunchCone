@@ -4,6 +4,7 @@ using UnityEngine;
 using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
+using static PlayerEffectMgr;
 
 public class PlayerAttackAuto : PlayerAction
 {
@@ -37,6 +38,8 @@ public class PlayerAttackAuto : PlayerAction
         isDone = false;
 
         yield return new WaitForSeconds(attackInfo.fDelay);
+        GameObject effect =  Instantiate(PlayerEffect.Attack_Effect[Random.Range(0, 1)], player.transform.position, player.transform.rotation, player.transform);
+        Destroy(effect ,effect.GetComponent<ParticleSystem>().main.duration);
 
         RaycastHit2D[] hitResults = new RaycastHit2D[100];
         for(int i = 0; i < boxColl.Cast(Vector2.left, hitResults, 0); i++)

@@ -4,6 +4,7 @@ using UnityEngine;
 using Spine.Unity;
 using static PlayerStatesData;
 using static GameMgr;
+using static PlayerEffectMgr;
 
 public class PlayerAttackSkill02 : PlayerAction
 {
@@ -59,7 +60,13 @@ public class PlayerAttackSkill02 : PlayerAction
         dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
 
         yield return new WaitForSeconds(attackInfo.fDelay);
-        
+        GameObject effect = PlayerEffect.Skill02_Effect[0];
+        GameObject effectObj = Instantiate(
+            effect, 
+            player.transform.position,
+            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
+            );
+
         Vector2 castDir;
         if(player.LeftOrRight())
             castDir = Vector2.left;
@@ -86,6 +93,24 @@ public class PlayerAttackSkill02 : PlayerAction
         on = false;
         actionState = ActionState.None;
         isDone = true;
+
+
+        effect = PlayerEffect.Skill02_Effect[1];
+        Destroy(
+            Instantiate(
+            effect,
+            effectObj.transform.position,
+            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
+            ), effect.GetComponent<ParticleSystem>().main.duration);
+
+        effect = PlayerEffect.Skill02_Effect[2];
+        Destroy(
+            Instantiate(
+            effect,
+            effectObj.transform.position,
+            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
+            ), effect.GetComponent<ParticleSystem>().main.duration);
+        Destroy(effectObj);
 
         yield return CheckCombo(5f);
     }
