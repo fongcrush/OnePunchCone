@@ -35,10 +35,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _Color_Inten: 3
     - _Dis_Str: 0.2
-    - _Lerp_Inten: 3.11
+    - _Lerp_Inten: 3.5
     - _Lerp_Scale: 3
     - __dirty: 0
     m_Colors:
@@ -48,3 +49,4 @@ Material:
     - _Dis_UV: {r: 5, g: 1, b: 0, a: 0}
     - _Tex01_Pan: {r: 0, g: 1, b: 0, a: 0}
     - _Tex01_UV: {r: 3, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
