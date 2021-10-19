@@ -98,6 +98,7 @@ public class Enemy : MonoBehaviour
     }
     public virtual void StopAttackCoroutine()
     {
+        Debug.Log(1);
         StopCoroutine(Attack());
     }
 

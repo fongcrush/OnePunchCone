@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EliteMeleeEnemy : Enemy
 {
-    Vector2 dir;
+    Vector3 dir;
     PlayerDirectionX playerDirectionX;
     Rigidbody2D playerRigid;
     
@@ -22,12 +22,14 @@ public class EliteMeleeEnemy : Enemy
     {
         isAttackActivation = true;
 
-        enemyController.SetAnimation("Elite_rush_1");
+        enemyController.SetAnimation("isRush");
 
         playerDirectionX = (PlayerDirectionX)enemyController.GetPlayerDirectionX();
 
         enemyAttackWarningArea.SetActive(true);
         enemyAttackTimingBox.SetActive(true);
+
+        enemyController.SetIsRushAttack(true);
 
         yield return new WaitForSeconds(enemyInfo.monster_AttackDelay * 1.8f);
 
@@ -36,20 +38,19 @@ public class EliteMeleeEnemy : Enemy
 
         enemyAttackCollider.SetActive(true);
 
-        enemyController.SetAnimation("Elite_rush_2");
+        enemyController.SetAnimation("isRush2");
 
         if (playerDirectionX == PlayerDirectionX.LEFT)
         {
-            dir = new Vector2(transform.position.x - 10, transform.position.y);
+            dir = new Vector3(transform.position.x - 10, transform.position.y, 0);
         }
         else
         {
-            dir = new Vector2(transform.position.x + 10, transform.position.y);
+            dir = new Vector3(transform.position.x + 10, transform.position.y, 0);
         }
 
         dir.x = Mathf.Clamp(dir.x, gm.CurRoomMgr.MapSizeMin.x, gm.CurRoomMgr.MapSizeMax.x);
         dir.y = Mathf.Clamp(dir.y, gm.CurRoomMgr.MapSizeMin.y, gm.CurRoomMgr.MapSizeMax.y);
-
         // Á¶Á¤
         for (var f = 0f; f <= 1f; f += Time.deltaTime)
         {
@@ -62,8 +63,14 @@ public class EliteMeleeEnemy : Enemy
                     StartCoroutine(KnockBackPlayer());
                 }
             }
-                yield return new WaitForFixedUpdate();
+            if (transform.position == dir)
+            {
+                enemyController.SetAnimation("isIdle");
+                break;
+            }
+            yield return new WaitForFixedUpdate();
         }
+        enemyController.SetIsRushAttack(false);
 
         if (isPlayerHit)
         {

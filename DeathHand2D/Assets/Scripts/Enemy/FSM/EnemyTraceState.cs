@@ -6,9 +6,10 @@ public class EnemyTraceState : EnemyBaseState
 {
     float timer = 0f;
     float traceTime = 1f;
+    float randomValue = 0f;
     public override void Begin(EnemyController ctrl)
     {
-
+        randomValue = Random.Range(1f, 100f);
     }
     public override void Update(EnemyController ctrl)
     {
@@ -41,7 +42,16 @@ public class EnemyTraceState : EnemyBaseState
         }
         if(ctrl.CheckInAttackRange())
         {
+            if (randomValue <= ctrl.GetEnemyStateProbability().traceToIdleProbability)
+            {
+                ctrl.ChangeState(ctrl.IdleState);
+            }
+            else if (randomValue <= ctrl.GetEnemyStateProbability().traceToIdleProbability + ctrl.GetEnemyStateProbability().traceToEscapeProbability)
+            {
+                ctrl.ChangeState(ctrl.EscapeState);
+            }
             ctrl.ChangeState(ctrl.AttackState);
+
             return;
         }
         ctrl.TraceTarget();

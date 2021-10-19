@@ -33,8 +33,6 @@ public class EnemyController : MonoBehaviour
     private EnemyBaseState currentState;
     private EnemyBaseState prevState;
 
-    private SkeletonAnimation skeletonAnime;
-
     public int attTypeValue;
     private AttackType attType;
 
@@ -49,7 +47,8 @@ public class EnemyController : MonoBehaviour
     private Vector2 targetPosition;
 
     Coroutine stateCoroutine;
-    Coroutine attackCoroutine;
+
+    Animator enemyAnimator;
 
     EnemyStateProbability enemyStateProbability;
 
@@ -57,6 +56,7 @@ public class EnemyController : MonoBehaviour
     private bool isChangeState = false;
     private bool isHitCheck = false;
     private bool isEscape = false;
+    private bool isRushAttack = false;
     //public bool skill_02_Check = false;
 
     public EnemyBaseState CurrentState
@@ -79,8 +79,6 @@ public class EnemyController : MonoBehaviour
         currentState = IdleState;
         playerDirectionX = PlayerDirectionX.LEFT;
 
-        skeletonAnime = GetComponent<SkeletonAnimation>();
-
         attType = (AttackType)attTypeValue;
         traceTypeValue = 0;
 
@@ -92,6 +90,7 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         ReadProbabilityData();
+        enemyAnimator = GetComponent<Animator>();
 
         if (attType == AttackType.MELEE)
         {
@@ -114,7 +113,7 @@ public class EnemyController : MonoBehaviour
             enemyStateProbability = EnemyProbabilityTable[4];
         }
 
-            currentState = IdleState;
+        currentState = IdleState;
     }
     private void Update()
     {
@@ -152,30 +151,23 @@ public class EnemyController : MonoBehaviour
     }
     IEnumerator ChangeStateDelay(EnemyBaseState state)
     {
-        float delayTime = Random.Range(1f, 2f);
+        float delayTime = 2f;
 
-        if (state != DeadState && state != HitState && prevState != HitState)
+        if (state != DeadState && state != HitState && currentState != HitState && state != EscapeState)
             yield return new WaitForSeconds(delayTime);
 
         float randomValue = Random.Range(1f, 100f);
 
-        if (currentState == IdleState && state == TraceState)
+        if (prevState == IdleState && state == TraceState)
         {
             if(randomValue <= enemyStateProbability.idleToEscapeProbability)
             {
                 state = EscapeState;
             }
         }
-        if(currentState == TraceState && state == AttackState)
+        if (prevState == EscapeState)
         {
-            if(randomValue <= enemyStateProbability.traceToIdleProbability)
-            {
-                state = IdleState;
-            }
-            else if(randomValue <= enemyStateProbability.traceToIdleProbability + enemyStateProbability.traceToEscapeProbability)
-            {
-                state = EscapeState;
-            }
+            isEscape = false;
         }
         
 
@@ -202,71 +194,56 @@ public class EnemyController : MonoBehaviour
                 targetPosition = (Vector2)transform.position + new Vector2(-5, 0);
         }
 
+        targetPosition.x = Mathf.Clamp(targetPosition.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
 
-        // 나중에 변경
-
-        if (currentState == IdleState)
+        if (state == IdleState)
         {
-            if (attType != AttackType.RANGED_ELITE)
-                skeletonAnime.AnimationName = "idle";
+            enemyAnimator.SetTrigger("isIdle");
         }
-        else if (currentState == TraceState || currentState == EscapeState)
+        else if (state == TraceState || state == EscapeState)
         {
-            if (attType != AttackType.RANGED_ELITE)
-                skeletonAnime.AnimationName = "walking";
+            enemyAnimator.SetTrigger("isMove");
         }
-        else if (currentState == AttackState)
-        {
-            if (attType == AttackType.MELEE)
-                skeletonAnime.AnimationName = "attack";
-            if (attType == AttackType.RANGED)
-                skeletonAnime.AnimationName = "attack2";
-        }
-        else if (currentState == HitState)
+        else if (state == HitState)
         {
             StartCoroutine(enemy.PrintHitEffect());
-            if (attType != AttackType.RANGED_ELITE)
-                skeletonAnime.AnimationName = "shot";
+
+            if (!isRushAttack)
+            enemyAnimator.SetTrigger("isHit");
         }
-        else if (currentState == DeadState)
+        else if (state == DeadState)
         {
-            if (attType != AttackType.RANGED_ELITE)
-                skeletonAnime.AnimationName = "dead";
+            enemyAnimator.SetTrigger("isDead");
         }
         isChangeState = false;
     }
     public void ChangeState(EnemyBaseState state)
     {
-        if (currentState == AttackState && state != HitState)
-        {
-            enemy.StopAttackCoroutine();
-            enemy.AttCollsSetActiveFalse();
-        }
-        if (currentState != IdleState && state != DeadState && state != HitState && prevState != HitState)
+        if (currentState != HitState && currentState != IdleState && state != DeadState && state != HitState  && state != EscapeState)
         {
             if (currentState == TraceState)
             {
                 traceType = TraceType.TRACE1;
                 AddPosition = new Vector2(0, 0);
             }
-            if (currentState == EscapeState)
-            {
-                isEscape = false;
-            }
 
             currentState.End(this);
             prevState = currentState;
             currentState = IdleState;
             currentState.Begin(this);
+
+            enemyAnimator.SetTrigger("isIdle");
         }
         else
         {
-            if(isChangeState)
+            if (isChangeState)
+            {
                 StopCoroutine(stateCoroutine);
+                isChangeState = false;
+            }
         }
-
-        if (attType != AttackType.RANGED_ELITE && skeletonAnime.AnimationName != "attack")
-            SetAnimation("idle");
+            
 
         isChangeState = true;
 
@@ -412,27 +389,12 @@ public class EnemyController : MonoBehaviour
         else if (traceType == TraceType.TRACE3)
             x = -10;
 
-        AddPosition = new Vector2(x, 0);
+        AddPosition = new Vector2(0, 0);
 
         if (traceType != TraceType.TRACE1)
         {
-            if (targetPosition.x + AddPosition.x < GM.CurRoomMgr.MapSizeMin.x)
-            {
-                x = -x;
-            }
-            else if (targetPosition.x + AddPosition.x > GM.CurRoomMgr.MapSizeMax.x)
-            {
-                x = -x;
-            }
-
-            if (targetPosition.y + AddPosition.y < GM.CurRoomMgr.MapSizeMin.y)
-            {
-                y = -y;
-            }
-            else if (targetPosition.y + AddPosition.y > GM.CurRoomMgr.MapSizeMax.y - 3f)
-            {
-                y = -y;
-            }
+            x = Mathf.Clamp(x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+            y = Mathf.Clamp(y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y - 2.5f);
             AddPosition = new Vector2(x, y);
         }
     }
@@ -452,9 +414,18 @@ public class EnemyController : MonoBehaviour
         traceTypeValue = 0;
         traceType = (TraceType)traceTypeValue;
 
+        float randomValue = 0f;
+        randomValue = Random.Range(1f, 100f);
+
+        if (randomValue <= enemyStateProbability.attackToEscapeProbability)
+        {
+            ChangeState(EscapeState);
+            return;
+        }
         CheckPlayerDirectionX();
         ChangeRotation();
-
+        
+        enemyAnimator.SetTrigger("isAttack");
         enemy.StartAttackCoroutine();
     }
     public void Escape()
@@ -477,9 +448,13 @@ public class EnemyController : MonoBehaviour
     {
         return enemy.GetIsAttackActivation();
     }
+    public void SetIsRushAttack(bool set)
+    {
+        isRushAttack = set;
+    }
     public void SetAnimation(string animeName)
     {
-        skeletonAnime.AnimationName = animeName;
+        enemyAnimator.SetTrigger(animeName);
     }
     public EnemyStateProbability GetEnemyStateProbability()
     {
