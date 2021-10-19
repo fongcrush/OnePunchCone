@@ -15,6 +15,7 @@ public class EnemyDeadState : EnemyBaseState
     {
         timer += Time.deltaTime;
 
+
         if (timer > delayTime)
         {
             ctrl.DestroyEnemy();

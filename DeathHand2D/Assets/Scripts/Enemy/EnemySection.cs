@@ -11,6 +11,8 @@ public class EnemySection : MonoBehaviour
 	[SerializeField]
 	private int waveCount = 0;
 
+	private GameObject curWave;
+
 	private void Awake()
 	{
 		++waveCount;
@@ -22,7 +24,8 @@ public class EnemySection : MonoBehaviour
 		{
 			if(waveCount <= wave.Length)
 			{
-				Instantiate(wave[waveCount-1], transform);
+				curWave = Instantiate(wave[waveCount-1], transform);
+				StartCoroutine(Show());
 				++waveCount;
 			}
 			else if(waveCount > wave.Length)
@@ -32,7 +35,43 @@ public class EnemySection : MonoBehaviour
 		}
 		if(GM.CurRoomMgr.Clear)
 		{
-			Destroy(this.gameObject);
+			Destroy(gameObject);
+		}
+	}
+
+	private IEnumerator Show()
+	{
+		yield return null;
+		//enemys.GetComponentsInChildren<>();
+		float curTIme = 0;
+		float duration = 2f;
+		float invDuration = 1 / duration;
+
+		Transform[] allChildren = curWave.GetComponentsInChildren<Transform>();
+		List<Renderer> rendererList = new List<Renderer>();
+		foreach(var child in allChildren)
+		{
+			Transform spine = child.Find("SpineAnimation");
+			if(spine == null) continue;
+
+			if(spine.gameObject.activeSelf)
+				rendererList.Add(spine.GetComponent<Renderer>());
+		}
+
+		Color[] color = new Color[rendererList.Count];
+		for(int i = 0; i < rendererList.Count; i++)
+			color[i] = rendererList[i].materials[0].GetColor("_Color");
+
+		while(curTIme < duration)
+		{
+			curTIme += Time.deltaTime;
+
+			for(int i = 0; i < rendererList.Count; i++)
+			{
+				color[i].a = curTIme * invDuration;
+				rendererList[i].materials[0].SetColor("_Color", color[i]);
+			}
+			yield return null;
 		}
 	}
 }

@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected GameObject enemyAttackTimingBox;
 
+    private PlayerHit playerHit;
+
     protected bool isAttackActivation = false;
 
     protected bool isPlayerHit = false;
@@ -33,6 +35,7 @@ public class Enemy : MonoBehaviour
         gm = GM;
         ReadAttackData();
         enemyController = GetComponent<EnemyController>();
+        playerHit = gm.Player.GetComponent<PlayerHit>();
     }
     public void AttCollsSetActiveFalse()
     {
@@ -110,7 +113,7 @@ public class Enemy : MonoBehaviour
             if (hitResults[i].collider.gameObject.tag == "Player")
             {
                 Debug.Log(hitResults[i].collider.gameObject.name);
-                gm.pcStat.curHP -= enemyInfo.monster_Damage;
+                playerHit.Hit(-enemyInfo.monster_Damage);
                 isPlayerHit = true;
             }
         }

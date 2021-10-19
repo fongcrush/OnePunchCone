@@ -52,7 +52,12 @@ public class PlayerAttackAuto : PlayerAction
         Debug.Log("attackInfo.fDelay : " + attackInfo.fDelay);
 
         Quaternion effectQuaternion = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
-        Vector3 effectPosition = new Vector3(boxColl.transform.position.x - 0.5f, boxColl.transform.position.y +1.5f, 0f);
+        Vector3 effectPosition;
+        if(player.LeftOrRight())
+            effectPosition = new Vector3(boxColl.transform.position.x + 0.5f, boxColl.transform.position.y +1.5f, 0f);
+        else
+            effectPosition = new Vector3(boxColl.transform.position.x - 0.5f, boxColl.transform.position.y + 1.5f, 0f);
+
 
         int randomIndex = Random.Range(0, 1);
         Destroy(

@@ -4,10 +4,13 @@ using UnityEngine;
 using System.Timers;
 using static PlayerStatesData;
 using static InputManager;
+using static GameMgr;
 
 public class PlayerController : MonoBehaviour
 {
     public float PlayerMaxHP;
+
+    private Animator anim;
 
     private InputManager inputController;
 
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         actionMgr = transform.Find("ActionManager").GetComponent<PlayerActionMgr>();
+        anim = GetComponent<Animator>();
         boxColl = GetComponent<BoxCollider2D>();
         move = GetComponent<PlayerMove>();
         characterDirection = CharacterDirection.Right;
@@ -52,23 +56,38 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
-	{
+    {
         switch(playerState)
         {
-        case PlayerState.Move:
+        case PlayerState.None:
             if(!move.enabled)
                 move.enabled = true;
             break;
 
         case PlayerState.Action:
-                actionMgr.UpdateAction();
+            actionMgr.UpdateAction();
+            break;
+
+        case PlayerState.Hit:
+
             break;
 
         case PlayerState.Dead:
-
+            Dead();
             break;
         }
+        if(playerState != PlayerState.None)
+            move.enabled = false;
+
         UpdateDisplayStates();
+    }
+
+    void Dead()
+	{
+        anim.SetTrigger("Dead");
+        move.enabled = false;
+        moveMode = MoveMode.Idle;
+        attackState = AttackState.None;
     }
 
 	private void OnTriggerEnter2D(Collider2D collision)

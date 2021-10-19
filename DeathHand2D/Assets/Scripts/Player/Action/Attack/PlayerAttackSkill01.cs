@@ -53,12 +53,12 @@ public class PlayerAttackSkill01 : PlayerAction
         for(int i = 0;i< effectList.Count; i++)
         {
             Destroy(
-            Instantiate(
-            effectList[i],
-            effectPosition,
-            effectQuaternion,
-            player.transform
-            ), particleSyetemList[i].main.duration);
+                Instantiate(
+                effectList[i],
+                effectPosition,
+                effectQuaternion,
+                player.transform), particleSyetemList[i].main.duration
+            );
         }
 
         RaycastHit2D[] hitResults = new RaycastHit2D[100];

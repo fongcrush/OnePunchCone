@@ -49,13 +49,14 @@ public class PlayerAttackSkill03 : PlayerAction
         curTime = 0;
         isDone = false;
 
+        yield return new WaitForSeconds(attackInfo.fDelay);
 
         Quaternion effectQuaternion = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
-        Vector3 effectPosition = boxColl.transform.position;
-        effectPosition.y += 1.5f;
-
-
-        yield return new WaitForSeconds(attackInfo.fDelay);
+        Vector3 effectPosition;
+        if(player.LeftOrRight())
+            effectPosition = new Vector3(boxColl.transform.position.x + 0.5f, boxColl.transform.position.y + 1.5f, 0f);
+        else
+            effectPosition = new Vector3(boxColl.transform.position.x - 0.5f, boxColl.transform.position.y + 1.5f, 0f);
 
         for(int i = 0; i < effectList.Count; i++)
         {

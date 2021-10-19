@@ -69,18 +69,25 @@ public class PlayerAttackSkill02 : PlayerAction
             dirPos = new Vector3(player.transform.position.x + 5f, player.transform.position.y, 0);
         dirPos.x = Mathf.Clamp(dirPos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
 
-        Vector3 effectPostion = (startPos + player.transform.position) / 2;
-        Quaternion effectQuaternion = Quaternion.Euler(-90, 0f, 0f);
-
         yield return new WaitForSeconds(attackInfo.fDelay);
+
+        Vector3 effectPostion = player.transform.position;
+        if(player.LeftOrRight())
+            effectPostion.x += 0.5f;
+        else
+            effectPostion.x -= 0.5f;
+        Quaternion effectQuaternion = Quaternion.Euler(0, player.transform.eulerAngles.y, 0f);
+
         Destroy(
             Instantiate(
             effectList[0],
-            player.transform.position,
+            effectPostion,
             effectQuaternion
             ), particleSyetemList[0].main.duration
         );
 
+        effectPostion = (startPos + player.transform.position) / 2;
+        effectQuaternion = Quaternion.Euler(-90f, 0f, 0f);
 
         Destroy(
             Instantiate(

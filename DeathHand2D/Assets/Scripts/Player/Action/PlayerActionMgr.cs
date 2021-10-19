@@ -92,7 +92,7 @@ public class PlayerActionMgr : MonoBehaviour
 
 	public void End()
 	{
-		playerState = PlayerState.Move;
+		playerState = PlayerState.None;
 		player.GetComponent<PlayerMove>().enabled = true;
 	}
 

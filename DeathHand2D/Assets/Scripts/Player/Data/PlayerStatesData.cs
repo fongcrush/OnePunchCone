@@ -3,7 +3,7 @@
 //[CreateAssetMenu(fileName = "StatesData", menuName = "Scriptable Object/Player/States", order = 1)]
 public class PlayerStatesData
 {
-    public static PlayerState playerState = PlayerState.Move;
+    public static PlayerState playerState = PlayerState.None;
 
     public static MoveMode moveMode = MoveMode.Idle;
 
@@ -14,8 +14,9 @@ public class PlayerStatesData
 
 public enum PlayerState
 {
-    Move,
+    None,
     Action,
+    Hit,
     Dead
 }
 

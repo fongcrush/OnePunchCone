@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
 using static PlayerAttackData;
+using static PlayerStatesData;
 
 public class GameMgr : MonoBehaviour
 {
@@ -63,6 +64,18 @@ public class GameMgr : MonoBehaviour
         pcStat = new Status(player.GetComponent<PlayerController>().PlayerMaxHP, 100, AttackTable[100].max);
         curRoomMgr.BeginWave();
     }
+
+	private void Update()
+	{
+		if(pcStat.IsZero())
+            GameOver();
+	}
+
+    private void GameOver()
+	{
+        playerState = PlayerState.Dead;
+
+	}
 
 	public void ChangeRoom(RoomMgr room, GateDirection gateDir)
 	{

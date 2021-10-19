@@ -39,7 +39,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnEnable()
 	{
-        playerState = PlayerState.Move;
+        playerState = PlayerState.None;
 	}
 
 	private void Update()
