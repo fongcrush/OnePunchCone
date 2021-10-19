@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
   m_Name: long_distance_monster_Atlas
   m_EditorClassIdentifier: 
-  atlasFile: {fileID: 4900000, guid: 4133de1ddb070d84aa62518a61d01aeb, type: 3}
+  atlasFile: {fileID: 4900000, guid: 8b41d4eb9e03a4c42a18b5e09d67246f, type: 3}
   materials:
-  - {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+  - {fileID: 2100000, guid: f0a1a3720ab6cc34d8c1afe6c8e8681a, type: 2}

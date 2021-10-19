@@ -365,6 +365,7 @@ MonoBehaviour:
   motion: {fileID: 9114048776583566995}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!114 &-3800693403273601350
 MonoBehaviour:
@@ -381,6 +382,7 @@ MonoBehaviour:
   motion: {fileID: -3528006760318123826}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!74 &-3528006760318123826
 AnimationClip:
@@ -511,6 +513,7 @@ MonoBehaviour:
   motion: {fileID: 5020549344780042740}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!91 &9100000
 AnimatorController:
@@ -526,31 +529,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Dodge
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill1
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill2
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill3
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -623,6 +626,7 @@ MonoBehaviour:
   motion: {fileID: -7718423581702429910}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!1102 &2653386766710134791
 AnimatorState:
@@ -897,6 +901,7 @@ MonoBehaviour:
   motion: {fileID: 5020549344780042740}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!1101 &6181644630043494867
 AnimatorStateTransition:
@@ -988,6 +993,7 @@ MonoBehaviour:
   motion: {fileID: 8262624278714845996}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!114 &7038650986242152375
 MonoBehaviour:
@@ -1004,7 +1010,34 @@ MonoBehaviour:
   motion: {fileID: -3528006760318123826}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
+--- !u!1102 &7274772803622005810
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: pc_NormalSkill_1
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 0}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!114 &7731843092875549330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1020,6 +1053,7 @@ MonoBehaviour:
   motion: {fileID: -7841023815901384186}
   layer: 0
   timeScale: 1
+  exitTime: 0.85
   skeletonAnimation: {fileID: 0}
 --- !u!1102 &7819021824480033836
 AnimatorState:

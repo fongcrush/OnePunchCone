@@ -30,7 +30,7 @@ public class EnemyHitState : EnemyBaseState
             }
 			else
             {
-				ctrl.ChangeState(ctrl.IdleState);
+				ctrl.ChangeState(ctrl.TraceState);
 				return;
             }
 		}

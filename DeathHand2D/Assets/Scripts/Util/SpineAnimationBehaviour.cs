@@ -28,6 +28,7 @@ public class SpineAnimationBehaviour : StateMachineBehaviour
 	{
 		if(motion != null)
 			animationClip = motion.name;
+        loop = motion.isLooping;
 	}
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
