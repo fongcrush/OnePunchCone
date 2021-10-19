@@ -20,11 +20,7 @@ public class EliteRangedEnemy : Enemy
 
         isAttackActivation = true;
 
-        enemyAttackWarningArea.SetActive(true);
-
         yield return new WaitForSeconds(enemyInfo.monster_AttackDelay);
-
-        enemyAttackWarningArea.SetActive(false);
 
         for (int i = 0; i < 4; i++)
         {

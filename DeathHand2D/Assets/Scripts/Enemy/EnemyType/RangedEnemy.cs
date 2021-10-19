@@ -19,11 +19,7 @@ public class RangedEnemy : Enemy
 
         isAttackActivation = true;
 
-        enemyAttackWarningArea.SetActive(true);
-
         yield return new WaitForSeconds(enemyInfo.monster_AttackDelay);
-
-        enemyAttackWarningArea.SetActive(false);
 
         var summonObject = Instantiate(summonCreature, transform.position + new Vector3(0, 2.5f, 0), Quaternion.identity);
         summonObject.GetComponent<SummonScript>().targetPosition = enemyAttackWarningArea.transform.position;

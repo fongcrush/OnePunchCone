@@ -237,7 +237,6 @@ public class EnemyController : MonoBehaviour
                 isChangeState = false;
             }
         }
-            
 
         isChangeState = true;
 
