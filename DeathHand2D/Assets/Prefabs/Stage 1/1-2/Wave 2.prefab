@@ -101,6 +101,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -108,7 +112,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &6131071316787806877 stripped
@@ -175,6 +179,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -182,7 +190,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &4833581416666102606 stripped
@@ -248,6 +256,10 @@ PrefabInstance:
     - target: {fileID: 5979934078788664666, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Name
       value: enemy_Melee 1 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
@@ -315,6 +327,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -322,7 +338,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &2248082163147804272 stripped
@@ -388,6 +404,10 @@ PrefabInstance:
     - target: {fileID: 5979934078788664666, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Name
       value: enemy_Melee 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
@@ -455,6 +475,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_Melee 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
 --- !u!4 &866957125298915863 stripped
@@ -520,6 +544,10 @@ PrefabInstance:
     - target: {fileID: 5979934078788664666, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Name
       value: enemy_Melee 1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
@@ -587,6 +615,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -594,7 +626,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &3677425962133604640 stripped
@@ -661,6 +693,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -668,7 +704,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &4309667999013150742 stripped
@@ -734,6 +770,10 @@ PrefabInstance:
     - target: {fileID: 5979934078788664666, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
       propertyPath: m_Name
       value: enemy_Melee 1 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
@@ -801,6 +841,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_Melee 1 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5981130823739184149, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edfddf214070aa429562fe6f8101a57, type: 3}
 --- !u!4 &4447182837705938196 stripped
@@ -867,6 +911,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6730957794399690452, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7502287434701468091, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -874,7 +922,7 @@ PrefabInstance:
     - target: {fileID: 8190036438415902824, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dd3c63f87f1d6d947916ea5359a7e5bc, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d43ed0e28c66f47a87507e27552dd7, type: 3}
 --- !u!4 &4109458111106098654 stripped

@@ -360,12 +360,12 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition + AddPosition, enemy.GetEnemySpeed() * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, enemy.GetEnemySpeed() * Time.deltaTime);
         }
     }
     public void CheckArrivedInPosition()
     {
-        if ((Vector2)transform.position == targetPosition + AddPosition)
+        if ((Vector2)transform.position == targetPosition)
         {
             if (traceType == TraceType.TRACE2 || traceType == TraceType.TRACE3)
             {
@@ -393,9 +393,10 @@ public class EnemyController : MonoBehaviour
 
         if (traceType != TraceType.TRACE1)
         {
-            x = Mathf.Clamp(x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
-            y = Mathf.Clamp(y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y - 2.5f);
             AddPosition = new Vector2(x, y);
+            targetPosition += AddPosition;
+            targetPosition.x = Mathf.Clamp(targetPosition.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+            targetPosition.y = Mathf.Clamp(targetPosition.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
         }
     }
     public void TraceTarget()
