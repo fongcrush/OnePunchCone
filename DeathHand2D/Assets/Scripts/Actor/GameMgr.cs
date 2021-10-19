@@ -29,6 +29,7 @@ public class GameMgr : MonoBehaviour
     private RoomMgr startRoom;
 
     private GameObject player;
+    public GameObject Player { get { return player; } } 
 
     private CinemachineConfiner2D cineConfiner;
 

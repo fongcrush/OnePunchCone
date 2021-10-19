@@ -11,12 +11,14 @@ public class PlayerDash : PlayerAction
     private const float MaxDashGodModeTimer = 0.3f;
     public float MaxDashTimer = 10.0f;
     private const float DashSpeed = 10.0f;
+    private Animator anim;
 
     Coroutine UpdateDashCountCoroutine = null;
 
     private void Awake()
     {
-
+        player = GM.Player.GetComponent<PlayerController>();
+        anim = player.GetComponent<Animator>();
     }
 
     public override void Quit()
@@ -26,7 +28,7 @@ public class PlayerDash : PlayerAction
 
     public override bool Ready()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        //player = GameObject.Find("Player").GetComponent<PlayerController>();
         return player.DashCount > 0;
     }
 
@@ -45,6 +47,8 @@ public class PlayerDash : PlayerAction
         }
         CheckPerfectTiming();
 
+        anim.SetTrigger("Dodge");
+
         if (hAxis != 0 || vAxis != 0)
             movePos = player.transform.position + new Vector3(hAxis, vAxis, 0f).normalized * DashSpeed;
         else
@@ -57,6 +61,9 @@ public class PlayerDash : PlayerAction
         movePos.x = Mathf.Clamp(movePos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
         movePos.y = Mathf.Clamp(movePos.y, GM.CurRoomMgr.MapSizeMin.y, GM.CurRoomMgr.MapSizeMax.y);
         player.transform.position = movePos;
+
+        yield return new WaitForSeconds(1.5f);
+
         Quit();
         yield return null;
     }

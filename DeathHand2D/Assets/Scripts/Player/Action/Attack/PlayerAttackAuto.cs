@@ -9,16 +9,26 @@ using static PlayerEffectMgr;
 public class PlayerAttackAuto : PlayerAction
 {
 	private AttackInfo attackInfo;
+
     private SkeletonAnimation skelAnim;
+
     private Animator anim;
+
     private BoxCollider2D boxColl;
+
+    private List<GameObject> effectList;
+
+    private List<ParticleSystem> particleSyetemList = new List<ParticleSystem>();
 
     private void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GM.Player.GetComponent<PlayerController>();
         skelAnim = player.GetComponent<SkeletonAnimation>();
         anim = player.GetComponent<Animator>();
         boxColl = GetComponent<BoxCollider2D>();
+        effectList = PlayerEffect.Attack_Effect;
+        foreach(var effect in effectList)
+            particleSyetemList.Add(effect.GetComponent<ParticleSystem>());
 
         curTime = 0;
         isDone = false;
@@ -37,9 +47,20 @@ public class PlayerAttackAuto : PlayerAction
         actionState = ActionState.Skill1;
         isDone = false;
 
+
         yield return new WaitForSeconds(attackInfo.fDelay);
-        GameObject effect =  Instantiate(PlayerEffect.Attack_Effect[Random.Range(0, 1)], player.transform.position, player.transform.rotation, player.transform);
-        Destroy(effect ,effect.GetComponent<ParticleSystem>().main.duration);
+        Debug.Log("attackInfo.fDelay : " + attackInfo.fDelay);
+
+        Quaternion effectQuaternion = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
+        Vector3 effectPosition = new Vector3(boxColl.transform.position.x - 0.5f, boxColl.transform.position.y +1.5f, 0f);
+
+        int randomIndex = Random.Range(0, 1);
+        Destroy(
+            Instantiate(effectList[randomIndex],
+            effectPosition,
+            effectQuaternion,
+            player.transform), particleSyetemList[randomIndex].main.duration
+        );
 
         RaycastHit2D[] hitResults = new RaycastHit2D[100];
         for(int i = 0; i < boxColl.Cast(Vector2.left, hitResults, 0); i++)
@@ -67,6 +88,7 @@ public class PlayerAttackAuto : PlayerAction
         }
 
         yield return new WaitForSeconds(attackInfo.sDelay);
+        Debug.Log("attackInfo.fDelay : " + attackInfo.sDelay);
 
         actionState = ActionState.None;
         isDone = true;

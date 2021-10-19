@@ -19,7 +19,11 @@ public class PlayerAttackSkill02 : PlayerAction
     private AttackInfo attackInfo;
     public AttackInfo Info { get { return attackInfo; } }
 
-    private Vector3 dir;
+    private List<GameObject> effectList;
+
+    private List<ParticleSystem> particleSyetemList = new List<ParticleSystem>();
+
+    private Vector3 startPos, dirPos;
 
     private bool canCombo = false;
     public bool CanCombo { get { return canCombo; } set { canCombo = value; } }
@@ -31,12 +35,16 @@ public class PlayerAttackSkill02 : PlayerAction
 
 	public void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GM.Player.GetComponent<PlayerController>();
         skelAnim = player.GetComponent<SkeletonAnimation>();
         anim = player.GetComponent<Animator>();
         rigid = player.GetComponent<Rigidbody2D>();
         boxColl = GetComponent<BoxCollider2D>();
-        dir = Vector3.zero;
+        effectList = PlayerEffect.Skill02_Effect;
+        foreach(var effect in effectList)
+            particleSyetemList.Add(effect.GetComponent<ParticleSystem>());
+        dirPos = Vector3.zero;
+        startPos = Vector3.zero; ;
     }
 
     private void Start()
@@ -48,24 +56,47 @@ public class PlayerAttackSkill02 : PlayerAction
     public override IEnumerator ActionRoutine()
     {
         StartCoroutine(SkillTimer(attackInfo.code));
-        anim.SetTrigger("Skill1");
+        anim.SetTrigger("Skill2");
         actionState = ActionState.Skill2;
         isDone = true;
 
+        startPos = player.transform.position;
+
         // 돌진 목표 지점 계산
         if(player.LeftOrRight())
-            dir = new Vector3(player.transform.position.x - 5f, player.transform.position.y, 0);
+            dirPos = new Vector3(player.transform.position.x - 5f, player.transform.position.y, 0);
         else
-            dir = new Vector3(player.transform.position.x + 5f, player.transform.position.y, 0);
-        dir.x = Mathf.Clamp(dir.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+            dirPos = new Vector3(player.transform.position.x + 5f, player.transform.position.y, 0);
+        dirPos.x = Mathf.Clamp(dirPos.x, GM.CurRoomMgr.MapSizeMin.x, GM.CurRoomMgr.MapSizeMax.x);
+
+        Vector3 effectPostion = (startPos + player.transform.position) / 2;
+        Quaternion effectQuaternion = Quaternion.Euler(-90, 0f, 0f);
 
         yield return new WaitForSeconds(attackInfo.fDelay);
-        GameObject effect = PlayerEffect.Skill02_Effect[0];
-        GameObject effectObj = Instantiate(
-            effect, 
+        Destroy(
+            Instantiate(
+            effectList[0],
             player.transform.position,
-            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
-            );
+            effectQuaternion
+            ), particleSyetemList[0].main.duration
+        );
+
+
+        Destroy(
+            Instantiate(
+            effectList[1],
+            effectPostion,
+            effectQuaternion
+            ), particleSyetemList[1].main.duration
+        );
+
+        Destroy(
+            Instantiate(
+            effectList[2],
+            effectPostion,
+            effectQuaternion
+            ), particleSyetemList[2].main.duration
+        );
 
         Vector2 castDir;
         if(player.LeftOrRight())
@@ -86,31 +117,13 @@ public class PlayerAttackSkill02 : PlayerAction
                     obj.transform.position = new Vector3(player.transform.position.x + castDir.x, obj.transform.position.y, 0);
                 }
             }
-            rigid.MovePosition(Vector3.Lerp(rigid.position, dir, Time.deltaTime * 20));
+            rigid.MovePosition(Vector3.Lerp(rigid.position, dirPos, Time.deltaTime * 20));
             curTime += Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
         on = false;
         actionState = ActionState.None;
         isDone = true;
-
-
-        effect = PlayerEffect.Skill02_Effect[1];
-        Destroy(
-            Instantiate(
-            effect,
-            effectObj.transform.position,
-            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
-            ), effect.GetComponent<ParticleSystem>().main.duration);
-
-        effect = PlayerEffect.Skill02_Effect[2];
-        Destroy(
-            Instantiate(
-            effect,
-            effectObj.transform.position,
-            new Quaternion(effect.transform.rotation.x, player.transform.rotation.y, effect.transform.rotation.z, effect.transform.rotation.w)
-            ), effect.GetComponent<ParticleSystem>().main.duration);
-        Destroy(effectObj);
 
         yield return CheckCombo(5f);
     }

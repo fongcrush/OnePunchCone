@@ -16,12 +16,19 @@ public class PlayerAttackSkill01 : PlayerAction
 
     private BoxCollider2D boxColl;
 
+    private List<GameObject> effectList;
+
+    private List<ParticleSystem> particleSyetemList = new List<ParticleSystem>();
+
     public void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GM.Player.GetComponent<PlayerController>();
         skelAnim = player.GetComponent<SkeletonAnimation>();
         anim = player.GetComponent<Animator>();
         boxColl = GetComponent<BoxCollider2D>();
+        effectList = PlayerEffect.Skill01_Effect;
+        foreach(var effect in effectList)
+            particleSyetemList.Add(effect.GetComponent<ParticleSystem>());
     }
 
     private void Start()
@@ -38,7 +45,21 @@ public class PlayerAttackSkill01 : PlayerAction
         isDone = false;
 
         yield return new WaitForSeconds(attackInfo.fDelay);
-        PlayerEffect.PlayEffect(PlayerEffect.Skill01_Effect[0]);
+
+        Quaternion effectQuaternion = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
+        Vector3 effectPosition = boxColl.transform.position;
+        effectPosition.y += 1.5f;
+
+        for(int i = 0;i< effectList.Count; i++)
+        {
+            Destroy(
+            Instantiate(
+            effectList[i],
+            effectPosition,
+            effectQuaternion,
+            player.transform
+            ), particleSyetemList[i].main.duration);
+        }
 
         RaycastHit2D[] hitResults = new RaycastHit2D[100];
         for(int i = 0; i < boxColl.Cast(Vector2.left, hitResults, 0); i++)

@@ -16,14 +16,21 @@ public class PlayerAttackSkill03 : PlayerAction
 
     private BoxCollider2D boxColl;
 
+    private List<GameObject> effectList;
+
+    private List<ParticleSystem> particleSyetemList = new List<ParticleSystem>();
+
     private int count;
 
     public void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GM.Player.GetComponent<PlayerController>();
         skelAnim = player.GetComponent<SkeletonAnimation>();
         anim = player.GetComponent<Animator>();
         boxColl = GetComponent<BoxCollider2D>();
+        effectList = PlayerEffect.Skill03_Effect;
+        foreach(var effect in effectList)
+            particleSyetemList.Add(effect.GetComponent<ParticleSystem>());
 
         count = 0;
     }
@@ -43,8 +50,24 @@ public class PlayerAttackSkill03 : PlayerAction
         isDone = false;
 
 
+        Quaternion effectQuaternion = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
+        Vector3 effectPosition = boxColl.transform.position;
+        effectPosition.y += 1.5f;
+
+
         yield return new WaitForSeconds(attackInfo.fDelay);
-        PlayerEffect.PlayEffect(PlayerEffect.Skill03_Effect[0]);
+
+        for(int i = 0; i < effectList.Count; i++)
+        {
+            Destroy(
+            Instantiate(
+            effectList[i],
+            effectPosition,
+            effectQuaternion,
+            player.transform
+            ), particleSyetemList[i].main.duration);
+        }
+
         while(count < 4)
         {
             anim.SetTrigger("Skill3");

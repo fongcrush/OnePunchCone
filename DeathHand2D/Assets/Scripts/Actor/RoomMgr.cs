@@ -86,7 +86,7 @@ public class RoomMgr : MonoBehaviour
 		mapSizeMax = mapSizeMin + GetSpriteSize(background) + new Vector2(-4.0f, -0.5f);
 	}
 
-	public Vector2 GetSpriteSize(GameObject _target)
+	public static Vector2 GetSpriteSize(GameObject _target)
 	{
 		Vector2 worldSize = Vector2.zero;
 		if(_target.GetComponent<SpriteRenderer>())

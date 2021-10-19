@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerStatesData;
 using static InputManager;
+using static GameMgr;
 
 public class PlayerActionMgr : MonoBehaviour
 {
 	private PlayerController player;
+
+	private Animator anim;
 
 	private PlayerAction curAction;
 
@@ -35,7 +38,8 @@ public class PlayerActionMgr : MonoBehaviour
 
 	void Awake()
 	{
-		player = GameObject.Find("Player").GetComponent<PlayerController>();
+		player = GM.Player.GetComponent<PlayerController>();
+		anim = player.GetComponent<Animator>();
 		PlayerAttackData.ReadAttackData();
 
 		dash = GetComponent<PlayerDash>();
@@ -71,6 +75,8 @@ public class PlayerActionMgr : MonoBehaviour
 
 		playerState = PlayerState.Action;
 		player.GetComponent<PlayerMove>().enabled = false;
+		moveMode = MoveMode.Idle;
+		anim.SetInteger("Move", 0);
 
 		if (curAction != null)
 			StartCoroutine(curAction.ActionRoutine());
@@ -87,7 +93,7 @@ public class PlayerActionMgr : MonoBehaviour
 	public void End()
 	{
 		playerState = PlayerState.Move;
-		player.GetComponent<PlayerMove>().enabled = true;	
+		player.GetComponent<PlayerMove>().enabled = true;
 	}
 
 	public void ChangeAction(PlayerAction action)

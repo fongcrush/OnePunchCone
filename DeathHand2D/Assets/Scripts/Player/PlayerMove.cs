@@ -13,6 +13,7 @@ public class PlayerMove : MonoBehaviour
 
     private PlayerController player;
     private Rigidbody2D rigid;
+    private Animator anim;
     private BuffMgr buffMgr;
 
     private ArrowKey curDoubleCheckKey;
@@ -24,6 +25,7 @@ public class PlayerMove : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         curDoubleCheckKey = ArrowKey.None;
         moveDirection = Vector3.zero;
         curRunCheckTime = 0;
@@ -47,7 +49,10 @@ public class PlayerMove : MonoBehaviour
         Turn();
 
         if(curActionKey != ActionKey.None)
+        {
+            moveDirection = Vector3.zero;
             player.ActionMgr.Begin();
+        }
     }
 
     private void FixedUpdate()
@@ -61,10 +66,12 @@ public class PlayerMove : MonoBehaviour
         if (moveDirection == Vector3.zero)
         {
             moveMode = MoveMode.Idle;
+            anim.SetInteger("Move", 0);
         }
         else if (moveMode != MoveMode.Run)
         {
             moveMode = MoveMode.Walk;
+            anim.SetInteger("Move", 1);
         }
         if (!canRun)
         {
@@ -95,6 +102,7 @@ public class PlayerMove : MonoBehaviour
 
                 if(moveMode == MoveMode.Run)
                 {
+                    anim.SetInteger("Move", 2);
                     Destroy(Instantiate(PlayerEffect.Run_Effect[0], player.transform.position, Quaternion.identity),
                         PlayerEffect.Run_Effect[0].GetComponent<ParticleSystem>().main.duration);
                 }
