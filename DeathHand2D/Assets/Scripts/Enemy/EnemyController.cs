@@ -158,13 +158,6 @@ public class EnemyController : MonoBehaviour
 
         float randomValue = Random.Range(1f, 100f);
 
-        if (prevState == IdleState && state == TraceState)
-        {
-            if(randomValue <= enemyStateProbability.idleToEscapeProbability)
-            {
-                state = EscapeState;
-            }
-        }
         if (prevState == EscapeState)
         {
             isEscape = false;
@@ -199,7 +192,8 @@ public class EnemyController : MonoBehaviour
 
         if (state == IdleState)
         {
-            enemyAnimator.SetTrigger("isIdle");
+            if(prevState != IdleState)
+                enemyAnimator.SetTrigger("isIdle");
         }
         else if (state == TraceState || state == EscapeState)
         {

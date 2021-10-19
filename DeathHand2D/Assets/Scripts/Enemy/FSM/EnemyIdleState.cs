@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class EnemyIdleState : EnemyBaseState
 {
+	float randomValue = 0f;
 	public override void Begin(EnemyController ctrl)
 	{
-		
+		randomValue = Random.Range(1f, 100f);
 	}
 	public override void Update(EnemyController ctrl)
 	{
@@ -21,6 +22,11 @@ public class EnemyIdleState : EnemyBaseState
         }
 		if (!ctrl.GetIsChangeState() && ctrl.CheckInTraceRange())
 		{
+			if (randomValue <= ctrl.GetEnemyStateProbability().idleToEscapeProbability)
+			{
+				ctrl.ChangeState(ctrl.IdleState);
+				return;
+			}
 			ctrl.ChangeState(ctrl.TraceState);
 			return;
 		}
