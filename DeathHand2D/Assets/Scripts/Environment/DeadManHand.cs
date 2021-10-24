@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 
 public class DeadManHand : IEnvironment
 {
-    Vignette vignette;
+   // Vignette vignette;
 
     bool isDone;
     bool canTrigger;
@@ -28,7 +28,7 @@ public class DeadManHand : IEnvironment
             {
                 if (buffManager.DarkDebuffCount < 3)
                 {
-                    Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
+                   // Camera.main.GetComponent<PostProcessVolume>().profile.TryGetSettings(out vignette);
                     StartCoroutine(DarkDebuff());
                 }
             }
@@ -56,23 +56,23 @@ public class DeadManHand : IEnvironment
         while (!isDone)
         {
             Vector2 pos = Camera.main.WorldToViewportPoint(playerObject.transform.position);
-            vignette.center.value = pos;
+            //vignette.center.value = pos;
             yield return null;
         }
     }
 
-    IEnumerator FadeOut(float time)
-    {
-        float intensity = vignette.intensity.value;
+    //IEnumerator FadeOut(float time)
+    //{
+        //float intensity = vignette.intensity.value;
 
-        while (intensity > 0f)
-        {
-            vignette.intensity.value = intensity;
-            intensity -= Time.deltaTime / time;
-            if (intensity <= 0f) vignette.intensity.value = 0;
-            yield return null;
-        }
-    }
+        //while (intensity > 0f)
+        //{
+           // vignette.intensity.value = intensity;
+        //    intensity -= Time.deltaTime / time;
+            //if (intensity <= 0f) vignette.intensity.value = 0;
+        //    yield return null;
+        //}
+    //}
 
     IEnumerator DarkDebuff()
     {
@@ -88,19 +88,19 @@ public class DeadManHand : IEnvironment
         switch (buffManager.DarkDebuffCount)
         {
             case 1:
-                vignette.intensity.value = 0.55f;
+               // vignette.intensity.value = 0.55f;
                 break;
             case 2:
-                vignette.intensity.value = 0.6f;
+               // vignette.intensity.value = 0.6f;
                 break;
             case 3:
-                vignette.intensity.value = 0.63f;
+               // vignette.intensity.value = 0.63f;
                 break;
         }
         yield return new WaitForSeconds(15 * buffManager.DarkDebuffCount - 1);
         if (canTrigger && curCount == buffManager.DarkDebuffCount)
         {
-            StartCoroutine(FadeOut(1));
+            //StartCoroutine(FadeOut(1));
             yield return new WaitForSeconds(1);
             isDone = true;
             if (isDone)
