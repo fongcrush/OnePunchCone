@@ -151,7 +151,7 @@ public class EnemyController : MonoBehaviour
     }
     IEnumerator ChangeStateDelay(EnemyBaseState state)
     {
-        float delayTime = 0.5f;
+        float delayTime = 2f;
 
         if (state != DeadState && state != HitState && currentState != HitState && state != EscapeState)
             yield return new WaitForSeconds(delayTime);
@@ -162,6 +162,7 @@ public class EnemyController : MonoBehaviour
         {
             isEscape = false;
         }
+        
 
         currentState.End(this);
         prevState = currentState;

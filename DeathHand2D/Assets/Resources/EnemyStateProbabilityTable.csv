@@ -1,5 +1,5 @@
 ﻿monster_Code,Name(참고용),idleToTraceProbability,idleToAttackProbability,idleToEscapeProbability,traceToAttackProbability,traceToIdleProbability,traceToEscapeProbability,attackToIdleProbability,attackToAttackProbability,attackToEscapeProbability,hitToEscapeProbability,hitToIdleProbability
-1,근접 몬스터,65,10,25,70,20,10,20,75,5,65,35
-2,원거리 몬스터,85,10,5,85,10,5,20,75,5,30,70
-3,근접 엘리트 몬스터,60,35,5,70,20,10,20,75,5,30,70
-4,원거리 엘리트 몬스터,85,10,5,85,10,5,5,90,5,30,70
+1,근접 몬스터,65,10,25,50,30,20,50,30,20,30,50,20,65,35
+2,원거리 몬스터,55,30,15,50,25,25,50,25,25,20,50,30,30,70
+3,근접 엘리트 몬스터,60,35,5,70,20,10,70,20,10,50,40,10,30,70
+4,원거리 엘리트 몬스터,40,50,10,70,25,5,70,25,5,60,30,10,40,60
