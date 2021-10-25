@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: melee_Monster_Walking_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: ad3f2665a917bd340ac87bb3d7d96676, type: 2}
+  - {fileID: 11400000, guid: 1e18a4f68fe0aa647be6d80e5f1f2e33, type: 2}
   scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: f55559e9b5bceb24582bdcc6cf42be13, type: 3}
+  skeletonJSON: {fileID: 4900000, guid: 70ff4031a16506a4993e2ac17c5db7a5, type: 3}
   isUpgradingBlendModeMaterials: 0
   blendModeMaterials:
     requiresBlendModeMaterials: 0
