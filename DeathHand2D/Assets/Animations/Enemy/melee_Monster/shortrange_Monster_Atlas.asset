@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
   m_Name: shortrange_Monster_Atlas
   m_EditorClassIdentifier: 
-  atlasFile: {fileID: 4900000, guid: 62f977dc3f66115459922945cb57a84b, type: 3}
+  atlasFile: {fileID: 4900000, guid: 9536397c6559b68499f7170ce7ba3915, type: 3}
   materials:
-  - {fileID: 2100000, guid: ecc697a864627764e9d3ade2976f68a6, type: 2}
+  - {fileID: 2100000, guid: c7a96137a16dc9848917af7d4146b317, type: 2}
